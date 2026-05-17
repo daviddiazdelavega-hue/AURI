@@ -15,28 +15,24 @@
   --bg: #0d1b2a; --bg2: #162535; --bg3: rgba(255,255,255,0.06);
   --bdr: rgba(255,255,255,0.1); --txt: #ffffff;
   --txt2: rgba(255,255,255,0.6); --txt3: rgba(255,255,255,0.3);
-  --red: #e04444; --green: #22c87a;
+  --red: #e04444;
 }
 html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: -apple-system,'Segoe UI',sans-serif; overflow: hidden; }
 
-/* ── SETUP SCREEN ── */
 #setup { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; z-index: 999; overflow-y: auto; }
 .s-icon { font-size: 60px; margin-bottom: 6px; }
 .s-title { font-size: 28px; font-weight: 700; letter-spacing: 3px; color: var(--blue); margin-bottom: 4px; }
 .s-sub { font-size: 13px; color: var(--txt2); text-align: center; margin-bottom: 24px; line-height: 1.7; }
 .s-label { font-size: 12px; color: var(--txt2); margin-bottom: 5px; margin-top: 14px; align-self: flex-start; width: 100%; }
-.s-input { width: 100%; padding: 13px 15px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 12px; font-size: 14px; color: var(--txt); outline: none; font-family: monospace; }
+.s-input { width: 100%; padding: 13px 15px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 12px; font-size: 14px; color: var(--txt); outline: none; }
 .s-input:focus { border-color: var(--blue); }
-.s-input-normal { font-family: -apple-system,'Segoe UI',sans-serif; }
 .s-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--blue2), var(--blue)); color: white; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 18px; }
-.s-btn:active { opacity: .85; }
 .s-err { color: var(--red); font-size: 12px; margin-top: 8px; text-align: center; min-height: 16px; }
 .s-note { font-size: 11px; color: var(--txt3); text-align: center; margin-top: 14px; line-height: 1.8; }
 .s-link { color: var(--blue); }
 .s-sep { width: 100%; height: 1px; background: var(--bdr); margin: 18px 0 4px; }
 .s-section { font-size: 12px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; align-self: flex-start; }
 
-/* ── APP ── */
 #app { display: none; flex-direction: column; height: 100dvh; max-width: 540px; margin: 0 auto; }
 
 #hdr { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
@@ -69,7 +65,6 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
 
-/* MAIL CARD */
 .ecard { margin-top: 8px; max-width: 80%; margin-left: 38px; background: rgba(0,180,219,.08); border: 1px solid rgba(0,180,219,.25); border-radius: 12px; padding: 11px 13px; font-size: 13px; }
 .elabel { font-size: 11px; font-weight: 600; color: var(--blue); letter-spacing: .5px; margin-bottom: 6px; }
 .efield { color: var(--txt2); margin-bottom: 3px; }
@@ -80,7 +75,6 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 .ebtn-mail { background: linear-gradient(135deg, var(--blue2), var(--blue)); }
 .ebtn-wa   { background: linear-gradient(135deg, #128C7E, #25D366); }
 
-/* WHATSAPP CARD */
 .wacard { margin-top: 8px; max-width: 80%; margin-left: 38px; background: rgba(37,211,102,.08); border: 1px solid rgba(37,211,102,.25); border-radius: 12px; padding: 11px 13px; font-size: 13px; }
 .walabel { font-size: 11px; font-weight: 600; color: #25D366; letter-spacing: .5px; margin-bottom: 6px; }
 
@@ -103,34 +97,28 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 </head>
 <body>
 
-<!-- PANTALLA DE CONFIGURACIÓN -->
 <div id="setup">
   <div class="s-icon">🤖</div>
   <div class="s-title">MIGUE</div>
   <div class="s-sub">Asistente personal municipal<br>San Miguel de Tucumán</div>
-
   <div class="s-section">IA — Groq (obligatorio)</div>
-  <div class="s-label">API Key de Groq — gratis en console.groq.com</div>
+  <div class="s-label">API Key de Groq</div>
   <input class="s-input" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
-
   <div class="s-sep"></div>
   <div class="s-section">Email (opcional)</div>
-  <div class="s-label">Tu dirección de email (para enviar mails reales)</div>
-  <input class="s-input s-input-normal" id="mi-email" type="email" placeholder="tu@email.com" autocomplete="email"/>
-  <div class="s-label">Nombre que aparece al enviar</div>
-  <input class="s-input s-input-normal" id="mi-nombre" type="text" placeholder="Tu nombre completo"/>
-
+  <div class="s-label">Tu dirección de email</div>
+  <input class="s-input" id="mi-email" type="email" placeholder="tu@email.com"/>
+  <div class="s-label">Tu nombre completo</div>
+  <input class="s-input" id="mi-nombre" type="text" placeholder="Tu nombre"/>
   <div class="s-sep"></div>
   <div class="s-section">WhatsApp (opcional)</div>
-  <div class="s-label">Tu número de WhatsApp (con código de país, sin el +)</div>
-  <input class="s-input s-input-normal" id="mi-wa" type="tel" placeholder="5493811234567"/>
-
+  <div class="s-label">Tu número con código de país, sin el +</div>
+  <input class="s-input" id="mi-wa" type="tel" placeholder="5493811234567"/>
   <button class="s-btn" onclick="guardarConfig()">Comenzar →</button>
   <div class="s-err" id="serr"></div>
-  <p class="s-note">Todo se guarda solo en este dispositivo, nunca sale a ningún servidor.</p>
+  <p class="s-note">Todo se guarda solo en este dispositivo.</p>
 </div>
 
-<!-- APP PRINCIPAL -->
 <div id="app">
   <div id="hdr">
     <div id="avatar">M</div>
@@ -141,16 +129,13 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
     <div id="wpill">⏳ clima...</div>
     <button id="abtn" onclick="toggleAg()">📅</button>
   </div>
-
   <div id="agpanel">
     <div id="aginner">
       <div class="aglabel">📅 Mi Agenda</div>
       <div id="aglist"></div>
     </div>
   </div>
-
   <div id="msgs"></div>
-
   <div id="qwrap">
     <button class="qbtn" onclick="enviar('¿Hace frío hoy? ¿Llevo campera o remera?')">🌤️ Clima</button>
     <button class="qbtn" onclick="enviar('¿Qué hora y fecha es hoy?')">🕐 Hora</button>
@@ -160,7 +145,6 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
     <button class="qbtn" onclick="enviar('¿Cómo está el tránsito en el centro de Tucumán?')">🚗 Tránsito</button>
     <button class="qbtn" onclick="enviar('Quiero hacer una denuncia')">📢 Denuncia</button>
   </div>
-
   <div id="iarea">
     <button id="micbtn" onclick="toggleVoz()">🎤</button>
     <input id="tinput" type="text" placeholder="Escribí o dictá a MIGUE..." autocomplete="off" onkeydown="if(event.key==='Enter')enviar(this.value)"/>
@@ -173,23 +157,17 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 const LAT=-26.8083, LON=-65.2176;
 let apiKey="", miEmail="", miNombre="", miWA="";
 let clima=null, agenda=[], historial=[], vozSeleccionada=null;
+const MAX_HISTORIAL = 10; // Máximo de mensajes en memoria para evitar loops
 
-/* ══════════════════════════════
-   INICIO
-══════════════════════════════ */
 function init(){
-  apiKey   = localStorage.getItem("mg_groq")    || "";
-  miEmail  = localStorage.getItem("mg_email")   || "";
-  miNombre = localStorage.getItem("mg_nombre")  || "";
-  miWA     = localStorage.getItem("mg_wa")      || "";
-
+  apiKey   = localStorage.getItem("mg_groq")   || "";
+  miEmail  = localStorage.getItem("mg_email")  || "";
+  miNombre = localStorage.getItem("mg_nombre") || "";
+  miWA     = localStorage.getItem("mg_wa")     || "";
   if(apiKey){ mostrarApp(); return; }
-
-  // Pre-rellenar campos si ya existían
   if(miEmail)  document.getElementById("mi-email").value  = miEmail;
   if(miNombre) document.getElementById("mi-nombre").value = miNombre;
   if(miWA)     document.getElementById("mi-wa").value     = miWA;
-
   document.getElementById("groq-key").addEventListener("keydown",e=>{ if(e.key==="Enter") guardarConfig(); });
 }
 
@@ -211,38 +189,25 @@ function mostrarApp(){
   document.getElementById("setup").style.display="none";
   document.getElementById("app").style.display="flex";
   cargarAgenda(); fetchClima(); cargarVoces();
-  addMsg("assistant","Hola, soy MIGUE, tu asistente personal. Podés escribirme o usar el micrófono. ¿En qué te puedo ayudar hoy?");
+  addMsg("assistant","Hola, soy MIGUE, tu asistente personal. Podés escribirme o usar el micrófono. ¿En qué te puedo ayudar?");
 }
 
-/* ══════════════════════════════
-   VOZ MASCULINA NEUTRA
-══════════════════════════════ */
+/* VOZ */
 function cargarVoces(){
   if(!window.speechSynthesis) return;
   const intentar = () => {
     const voces = speechSynthesis.getVoices();
     if(!voces.length) return;
-
-    // Preferencia: voz masculina, español latinoamericano
-    const preferidas = ["es-US","es-MX","es-419","es-CO","es-CL","es-PE","es-AR","es-ES"];
-    const keysMasc   = ["male","hombre","jorge","diego","miguel","carlos","javier","pablo","rodrigo","juan","andrés","andres"];
-
-    // Intentar encontrar voz masculina en español
-    for(const lang of preferidas){
-      for(const key of keysMasc){
-        const v = voces.find(v => v.lang.toLowerCase().startsWith(lang.toLowerCase().substring(0,5)) && v.name.toLowerCase().includes(key));
+    const prefLang = ["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
+    const prefMasc = ["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres","andrés","hombre"];
+    for(const lang of prefLang){
+      for(const key of prefMasc){
+        const v = voces.find(v => v.lang.toLowerCase().startsWith(lang.toLowerCase().slice(0,5)) && v.name.toLowerCase().includes(key));
         if(v){ vozSeleccionada=v; return; }
       }
     }
-    // Cualquier voz en español
-    for(const lang of preferidas){
-      const v = voces.find(v => v.lang.toLowerCase().startsWith(lang.toLowerCase().substring(0,5)));
-      if(v){ vozSeleccionada=v; return; }
-    }
-    // Fallback: cualquier español
     vozSeleccionada = voces.find(v=>v.lang.startsWith("es")) || null;
   };
-
   if(speechSynthesis.getVoices().length) intentar();
   else speechSynthesis.onvoiceschanged = intentar;
 }
@@ -252,16 +217,11 @@ function hablar(texto){
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(texto.slice(0,280));
   if(vozSeleccionada) u.voice = vozSeleccionada;
-  u.lang  = "es-MX";   // Acento neutro latinoamericano
-  u.pitch = 0.85;       // Tono más grave (masculino)
-  u.rate  = 1.05;       // Velocidad natural
-  u.volume = 1;
+  u.lang="es-MX"; u.pitch=0.85; u.rate=1.05; u.volume=1;
   speechSynthesis.speak(u);
 }
 
-/* ══════════════════════════════
-   CLIMA
-══════════════════════════════ */
+/* CLIMA */
 async function fetchClima(){
   try{
     const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code,apparent_temperature,relative_humidity_2m,wind_speed_10m&timezone=America%2FArgentina%2FBuenos_Aires`);
@@ -273,13 +233,24 @@ async function fetchClima(){
   }catch(e){document.getElementById("wpill").textContent="🌡️ sin datos";}
 }
 
-/* ══════════════════════════════
-   AGENDA
-══════════════════════════════ */
+/* AGENDA */
 function cargarAgenda(){
   try{agenda=JSON.parse(localStorage.getItem("mg_agenda")||"[]");}catch(e){agenda=[];}
+  // Limpiar duplicados al cargar
+  agenda = deduplicar(agenda);
+  guardarAg();
   renderAg();
 }
+
+function deduplicar(lista){
+  const vistos = new Set();
+  return lista.filter(a => {
+    const clave = `${a.item}|${a.dt}`;
+    if(vistos.has(clave)) return false;
+    vistos.add(clave); return true;
+  });
+}
+
 function guardarAg(){localStorage.setItem("mg_agenda",JSON.stringify(agenda));}
 function toggleAg(){document.getElementById("agpanel").classList.toggle("open");}
 function renderAg(){
@@ -299,15 +270,12 @@ function fdt(dt){
 }
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 
-/* ══════════════════════════════
-   MENSAJES UI
-══════════════════════════════ */
+/* MENSAJES */
 function addMsg(role,text,extra){
   const msgs=document.getElementById("msgs");
   const row=document.createElement("div"); row.className=`mrow ${role}`;
   let html = role==="assistant" ? `<div class="mavatar">M</div>` : "";
   html += `<div><div class="bubble ${role}">${text.replace(/\n/g,"<br>")}</div>`;
-
   if(extra?.email){
     const em=extra.email;
     html+=`<div class="ecard">
@@ -317,26 +285,20 @@ function addMsg(role,text,extra){
       <div class="ebody">${em.body}</div>
       <div class="ebtns">
         <button class="ebtn ebtn-mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
-        ${miWA?`<button class="ebtn ebtn-wa" onclick="enviarWA('${esc(em.body)}')">💬 Mandar por WhatsApp</button>`:""}
-      </div>
-    </div>`;
+        ${miWA?`<button class="ebtn ebtn-wa" onclick="enviarWA('${esc(em.body)}')">💬 Enviar por WhatsApp</button>`:""}
+      </div></div>`;
   }
-
   if(extra?.wa){
     html+=`<div class="wacard">
       <div class="walabel">💬 MENSAJE DE WHATSAPP</div>
       <div class="efield" style="color:var(--txt);white-space:pre-wrap">${extra.wa.body}</div>
       <div class="ebtns">
         <button class="ebtn ebtn-wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button>
-      </div>
-    </div>`;
+      </div></div>`;
   }
-
   html+=`</div>`; row.innerHTML=html; msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
 }
-
-function esc(s){ return (s||"").replace(/'/g,"\\'"); }
-
+function esc(s){return (s||"").replace(/'/g,"\\'");}
 function addTyping(){
   const msgs=document.getElementById("msgs"); const row=document.createElement("div");
   row.className="mrow assistant"; row.id="typing";
@@ -345,105 +307,80 @@ function addTyping(){
 }
 function qTyping(){const t=document.getElementById("typing");if(t)t.remove();}
 function setSt(m){document.getElementById("stbar").textContent=m;}
-
-function abrirMail(to,sub,body){
-  window.open(`mailto:${decodeURIComponent(to)}?subject=${sub}&body=${body}`);
-}
+function abrirMail(to,sub,body){window.open(`mailto:${decodeURIComponent(to)}?subject=${sub}&body=${body}`);}
 function enviarWA(body){
-  const num = miWA.replace(/\D/g,"");
-  const url = `https://wa.me/${num}?text=${encodeURIComponent(decodeURIComponent(body))}`;
-  window.open(url);
+  const num=miWA.replace(/\D/g,"");
+  window.open(`https://wa.me/${num}?text=${encodeURIComponent(decodeURIComponent(body))}`);
 }
 
-/* ══════════════════════════════
-   PROMPT DE SISTEMA
-══════════════════════════════ */
+/* PROMPT */
 function buildSys(){
   const now=new Date();
-  const diaSemana=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"][now.getDay()];
+  const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
   const fecha=now.toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
   const hora=now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
-  const isoHoy=now.toISOString().split("T")[0]; // YYYY-MM-DD
-  const yr=now.getFullYear(), mo=String(now.getMonth()+1).padStart(2,"0"), dy=String(now.getDate()).padStart(2,"0");
+  const isoHoy=now.toISOString().split("T")[0];
 
-  // Calcular fechas de la semana
-  const diasSemana=[];
+  // Fechas de esta semana
+  const semana=[];
   for(let i=0;i<7;i++){
     const d=new Date(now); d.setDate(now.getDate()-now.getDay()+i);
-    diasSemana.push({nombre:["domingo","lunes","martes","miércoles","jueves","viernes","sábado"][i], fecha:d.toISOString().split("T")[0]});
+    semana.push(`${dias[i]}=${d.toISOString().split("T")[0]}`);
   }
-  const refDias=diasSemana.map(d=>`${d.nombre}=${d.fecha}`).join(", ");
+  // Mañana
+  const manana=new Date(now); manana.setDate(now.getDate()+1);
+  const isoManana=manana.toISOString().split("T")[0];
 
   const codes={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Neblina",51:"Llovizna",61:"Lluvia leve",63:"Lluvia moderada",80:"Chaparrones",95:"Tormenta"};
   let wstr="No disponible";
-  if(clima){const c=clima.weather_code;const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
-    wstr=`${Math.round(clima.temperature_2m)}°C (sensación ${Math.round(clima.apparent_temperature)}°C), ${codes[k]||"Variable"}, Humedad ${clima.relative_humidity_2m}%, Viento ${Math.round(clima.wind_speed_10m)} km/h`;}
-  const agstr=agenda.length?agenda.map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n"):"Sin eventos agendados";
+  if(clima){
+    const c=clima.weather_code;
+    const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
+    wstr=`${Math.round(clima.temperature_2m)}°C (sensación ${Math.round(clima.apparent_temperature)}°C), ${codes[k]||"Variable"}, Humedad ${clima.relative_humidity_2m}%, Viento ${Math.round(clima.wind_speed_10m)} km/h`;
+  }
 
-  return `Sos MIGUE, asistente personal e institucional de San Miguel de Tucumán, Argentina.
+  // Agenda sin duplicados
+  const agSinDup = deduplicar(agenda);
+  const agstr = agSinDup.length ? agSinDup.map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n") : "Sin eventos agendados";
 
-PERSONALIDAD:
-- Tono masculino, jovial, amigable y profesional
-- Español latinoamericano neutro (sin expresiones rioplatenses como "che", "pibe", "boludo", "dale")
-- Sin abreviaciones (no: "info", "docs", "tmb", "xq"). Usá siempre palabras completas
-- Respuestas concisas: máximo 3-4 oraciones, salvo que pidan redactar algo largo
-- Natural y cercano, como un asistente de confianza
+  return `Sos MIGUE, asistente personal de San Miguel de Tucumán, Argentina.
 
-FECHA Y HORA ACTUAL:
-- Hoy es: ${fecha} (${isoHoy})
-- Hora actual: ${hora}
-- Día de hoy: ${diaSemana}
-- Esta semana: ${refDias}
+PERSONALIDAD: masculino, jovial, amigable y profesional. Español latinoamericano neutro. Sin expresiones rioplatenses (sin "che", "pibe", "dale"). Sin abreviaciones. Respuestas CORTAS: máximo 2-3 oraciones. Si hay un solo evento en agenda, mencionalo UNA SOLA VEZ.
 
-CLIMA REAL EN TUCUMÁN AHORA:
-${wstr}
-- Regla de vestimenta: menos de 15°C = frío (abrigo), 15-21°C = fresco (campera), 22-27°C = templado (remera larga), más de 27°C = calor (remera)
+FECHA Y HORA: ${fecha} (${isoHoy}), ${hora}
+MAÑANA: ${isoManana}
+ESTA SEMANA: ${semana.join(", ")}
 
-AGENDA DEL USUARIO:
+CLIMA REAL TUCUMÁN: ${wstr}
+Vestimenta: menos de 15°C=abrigo, 15-21°C=campera, 22-27°C=remera larga, más de 27°C=remera.
+
+AGENDA (sin repetir eventos): 
 ${agstr}
 
-DATOS DEL USUARIO:
-- Email: ${miEmail||"no configurado"}
-- Nombre: ${miNombre||"no configurado"}
-- WhatsApp: ${miWA||"no configurado"}
+USUARIO: Email=${miEmail||"no configurado"}, Nombre=${miNombre||"no configurado"}, WhatsApp=${miWA||"no configurado"}
 
-INSTRUCCIONES PARA AGENDA:
-Cuando el usuario quiera agregar un evento, calculá la fecha REAL usando las referencias de esta semana.
-Por ejemplo: "el lunes a las 10" → usá la fecha real del lunes de esta semana.
-"Mañana a las 15" → calculá la fecha de mañana.
-Incluí al final de tu respuesta (sin texto después):
-<AGENDA>{"item":"descripción clara del evento","dt":"YYYY-MM-DDTHH:MM"}</AGENDA>
-Reemplazá YYYY-MM-DD con la fecha real calculada y HH:MM con la hora real.
-
-INSTRUCCIONES PARA MAIL:
-Cuando el usuario pida redactar un mail, incluí al final:
-<EMAIL>{"to":"destinatario@mail.com","subject":"asunto concreto","body":"cuerpo completo del mail"}</EMAIL>
-El cuerpo debe estar bien redactado, formal pero cordial. Firmá con el nombre del usuario si está configurado.
-
-INSTRUCCIONES PARA WHATSAPP:
-Cuando el usuario pida mandar un mensaje de WhatsApp, incluí al final:
-<WA>{"body":"texto del mensaje listo para enviar"}</WA>
-
-CAPACIDADES:
-- Clima con recomendación de vestimenta
-- Hora y fecha
-- Agenda personal (agregar, consultar, eliminar)
-- Redactar y enviar mails
-- Redactar mensajes de WhatsApp
-- Información municipal: actividades culturales, calles cortadas, tránsito, trámites
-- Denuncias ciudadanas
-- Consultas generales
-
-Nunca menciones que sos una inteligencia artificial salvo que te lo pregunten directamente.`;
+REGLAS IMPORTANTES:
+1. Nunca repitas la misma información dos veces en una respuesta.
+2. Si hay un evento agendado, mencionalo una sola vez de forma concisa.
+3. Para agregar agenda: incluí AL FINAL (una sola vez): <AGENDA>{"item":"descripción","dt":"YYYY-MM-DDTHH:MM"}</AGENDA>
+4. Para mail: incluí AL FINAL: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo"}</EMAIL>
+5. Para WhatsApp: incluí AL FINAL: <WA>{"body":"mensaje"}</WA>
+6. Usá la fecha REAL calculada de las referencias de esta semana.
+7. Nunca digas que sos una inteligencia artificial salvo que te lo pregunten.`;
 }
 
-/* ══════════════════════════════
-   ENVIAR A GROQ
-══════════════════════════════ */
+/* ENVIAR */
 async function enviar(texto){
   texto=(texto||"").trim(); if(!texto)return;
   document.getElementById("tinput").value="";
-  addMsg("user",texto); historial.push({role:"user",content:texto});
+  addMsg("user",texto);
+  historial.push({role:"user",content:texto});
+
+  // Limitar historial para evitar loops y confusión
+  if(historial.length > MAX_HISTORIAL){
+    historial = historial.slice(historial.length - MAX_HISTORIAL);
+  }
+
   addTyping(); setSt("MIGUE está pensando...");
   try{
     const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
@@ -452,16 +389,16 @@ async function enviar(texto){
       body:JSON.stringify({
         model:"llama-3.3-70b-versatile",
         messages:[{role:"system",content:buildSys()},...historial],
-        max_tokens:900, temperature:0.65
+        max_tokens:400,
+        temperature:0.5
       })
     });
     const data=await res.json();
     if(!res.ok){
       if(res.status===401){localStorage.removeItem("mg_groq");qTyping();addMsg("assistant","La API key no es válida. Cerrá la aplicación y volvé a configurarla.");setSt("");return;}
-      throw new Error(data?.error?.message||"Error de API");
+      throw new Error(data?.error?.message||"Error");
     }
     let reply=data.choices[0].message.content;
-    let emailObj=null, waObj=null;
 
     // Procesar AGENDA
     const aM=reply.match(/<AGENDA>([\s\S]*?)<\/AGENDA>/);
@@ -469,22 +406,26 @@ async function enviar(texto){
       try{
         const a=JSON.parse(aM[1]);
         if(a.item && a.dt && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)){
-          agenda.push({id:uid(),item:a.item,dt:a.dt});
-          guardarAg(); renderAg();
+          // Verificar que no sea duplicado antes de agregar
+          const existe = agenda.some(x=> x.item===a.item && x.dt===a.dt);
+          if(!existe){
+            agenda.push({id:uid(),item:a.item,dt:a.dt});
+            guardarAg(); renderAg();
+          }
         }
-      }catch(e){ console.error("Agenda parse error",e); }
+      }catch(e){console.error("Agenda:",e);}
       reply=reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/,"").trim();
     }
 
     // Procesar EMAIL
+    let emailObj=null;
     const eM=reply.match(/<EMAIL>([\s\S]*?)<\/EMAIL>/);
-    if(eM){try{emailObj=JSON.parse(eM[1]);}catch(e){}
-      reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
+    if(eM){try{emailObj=JSON.parse(eM[1]);}catch(e){} reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
 
     // Procesar WHATSAPP
+    let waObj=null;
     const wM=reply.match(/<WA>([\s\S]*?)<\/WA>/);
-    if(wM){try{waObj=JSON.parse(wM[1]);}catch(e){}
-      reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
+    if(wM){try{waObj=JSON.parse(wM[1]);}catch(e){} reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
 
     historial.push({role:"assistant",content:reply});
     qTyping();
@@ -502,27 +443,16 @@ async function enviar(texto){
   }
 }
 
-/* ══════════════════════════════
-   VOZ — ENTRADA
-══════════════════════════════ */
+/* VOZ ENTRADA */
 let escuchando=false, recog=null;
 function toggleVoz(){
   if(escuchando){detVoz();return;}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert("El reconocimiento de voz requiere Chrome.");return;}
   recog=new SR(); recog.lang="es-AR"; recog.continuous=false; recog.interimResults=false;
-  recog.onstart=()=>{
-    escuchando=true;
-    document.getElementById("micbtn").className="on";
-    document.getElementById("micbtn").textContent="⏹️";
-    setSt("🎙️ Escuchando... hablá ahora");
-  };
+  recog.onstart=()=>{escuchando=true;document.getElementById("micbtn").className="on";document.getElementById("micbtn").textContent="⏹️";setSt("🎙️ Escuchando... hablá ahora");};
   recog.onend=()=>detVoz();
-  recog.onresult=e=>{
-    const t=e.results[0][0].transcript;
-    document.getElementById("tinput").value=t;
-    detVoz(); setTimeout(()=>enviar(t),150);
-  };
+  recog.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById("tinput").value=t;detVoz();setTimeout(()=>enviar(t),150);};
   recog.onerror=()=>detVoz();
   recog.start();
 }
