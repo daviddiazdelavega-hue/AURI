@@ -5,140 +5,453 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AURI">
-<meta name="theme-color" content="#0d1b2a">
-<title>AURI — Asistente Municipal</title>
+<meta name="apple-mobile-web-app-title" content="AURI · SMT">
+<meta name="theme-color" content="#001f5b">
+<title>AURI — Municipalidad de San Miguel de Tucumán</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
 :root {
-  --blue: #00b4db; --blue2: #0083b0;
-  --gold: #f0a500; --gold2: #c8880a;
-  --bg: #0d1b2a; --bg2: #162535; --bg3: rgba(255,255,255,0.06);
-  --bdr: rgba(255,255,255,0.1); --txt: #ffffff;
-  --txt2: rgba(255,255,255,0.6); --txt3: rgba(255,255,255,0.3);
-  --red: #e04444;
+  /* Colores Municipalidad SMT */
+  --smt-azul:    #001f5b;
+  --smt-azul2:   #0033a0;
+  --smt-celeste: #009fe3;
+  --smt-verde:   #00a651;
+  --smt-blanco:  #ffffff;
+  --smt-gris:    #f0f4f8;
+  --smt-gris2:   #d0d9e8;
+  --smt-oro:     #f0a500;
+
+  /* UI */
+  --bg:    #001233;
+  --bg2:   #001a4d;
+  --bg3:   rgba(255,255,255,0.05);
+  --bdr:   rgba(255,255,255,0.10);
+  --txt:   #ffffff;
+  --txt2:  rgba(255,255,255,0.65);
+  --txt3:  rgba(255,255,255,0.35);
+  --red:   #e04444;
+  --green: #00a651;
+
+  --font-title: 'Bebas Neue', sans-serif;
+  --font-body:  'Inter', sans-serif;
 }
-html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: -apple-system,'Segoe UI',sans-serif; overflow: hidden; }
 
-#setup { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; z-index: 999; overflow-y: auto; }
-.s-icon { font-size: 60px; margin-bottom: 6px; }
-.s-title { font-size: 32px; font-weight: 800; letter-spacing: 5px; background: linear-gradient(135deg, var(--gold), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-.s-sub { font-size: 13px; color: var(--txt2); text-align: center; margin-bottom: 24px; line-height: 1.7; }
-.s-section { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; margin-top: 16px; align-self: flex-start; }
-.s-label { font-size: 12px; color: var(--txt2); margin-bottom: 5px; align-self: flex-start; width: 100%; }
-.s-input { width: 100%; padding: 13px 15px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 12px; font-size: 14px; color: var(--txt); outline: none; margin-bottom: 4px; }
-.s-input:focus { border-color: var(--gold); }
-.s-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--gold2), var(--gold)); color: white; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; letter-spacing: .5px; }
-.s-btn:active { opacity: .85; }
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+/* ══════════════════════════════
+   PANTALLA DE CONFIGURACIÓN
+══════════════════════════════ */
+#setup {
+  position: fixed; inset: 0;
+  background: linear-gradient(160deg, #001233 0%, #001a4d 50%, #002066 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding: 40px 28px 28px; z-index: 999; overflow-y: auto;
+}
+
+/* Escudo SMT simplificado como SVG inline */
+.smt-shield {
+  width: 64px; height: 64px;
+  margin-bottom: 12px;
+}
+
+.setup-brand {
+  display: flex; flex-direction: column; align-items: center; margin-bottom: 6px;
+}
+
+.setup-auri {
+  font-family: var(--font-title);
+  font-size: 52px; letter-spacing: 8px;
+  background: linear-gradient(135deg, var(--smt-celeste), var(--smt-blanco));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.setup-muni {
+  font-size: 10px; font-weight: 500; letter-spacing: 2.5px;
+  color: var(--txt2); text-transform: uppercase; margin-top: 4px;
+  text-align: center;
+}
+
+.setup-tagline {
+  font-size: 13px; color: var(--txt2); text-align: center;
+  margin: 14px 0 28px; line-height: 1.7;
+}
+
+.s-section {
+  font-size: 10px; font-weight: 700; color: var(--smt-celeste);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 8px; margin-top: 18px; align-self: flex-start;
+}
+
+.s-label {
+  font-size: 12px; color: var(--txt2); margin-bottom: 5px; align-self: flex-start; width: 100%;
+}
+
+.s-input {
+  width: 100%; padding: 14px 16px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; font-size: 14px; color: var(--txt);
+  outline: none; transition: border-color .2s;
+  font-family: var(--font-body); margin-bottom: 4px;
+}
+.s-input:focus { border-color: var(--smt-celeste); }
+.s-input.mono { font-family: monospace; }
+
+.s-sep { width: 100%; height: 1px; background: var(--bdr); margin: 16px 0; }
+
+.s-btn {
+  width: 100%; padding: 15px; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste));
+  color: white; font-size: 15px; font-weight: 700; font-family: var(--font-body);
+  cursor: pointer; margin-top: 22px; letter-spacing: .5px;
+  box-shadow: 0 8px 24px rgba(0,159,227,.25);
+  transition: transform .15s, box-shadow .15s;
+}
+.s-btn:active { transform: scale(.98); box-shadow: none; }
 .s-err { color: var(--red); font-size: 12px; margin-top: 8px; text-align: center; min-height: 16px; }
-.s-note { font-size: 11px; color: var(--txt3); text-align: center; margin-top: 14px; line-height: 1.8; }
-.s-sep { width: 100%; height: 1px; background: var(--bdr); margin: 14px 0; }
+.s-note { font-size: 11px; color: var(--txt3); text-align: center; margin-top: 14px; line-height: 1.9; }
+.s-link { color: var(--smt-celeste); }
 
-#app { display: none; flex-direction: column; height: 100dvh; max-width: 540px; margin: 0 auto; }
+/* ══════════════════════════════
+   APP PRINCIPAL
+══════════════════════════════ */
+#app {
+  display: none; flex-direction: column;
+  height: 100dvh; max-width: 560px; margin: 0 auto;
+  background: linear-gradient(180deg, #001233 0%, #001a4d 100%);
+}
 
-#hdr { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
-#avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--gold2), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; flex-shrink: 0; color: white; box-shadow: 0 0 16px rgba(240,165,0,0.3); }
-#hinfo { flex: 1; }
-#hname { font-size: 17px; font-weight: 800; letter-spacing: 2px; background: linear-gradient(135deg, var(--gold), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-#hsub  { font-size: 11px; color: var(--txt2); margin-top: 1px; }
-#wpill { background: var(--bg3); border: 1px solid var(--bdr); border-radius: 20px; padding: 5px 11px; font-size: 13px; white-space: nowrap; }
-#abtn  { background: var(--bg3); border: 1px solid var(--bdr); border-radius: 10px; padding: 7px 9px; font-size: 18px; cursor: pointer; color: var(--txt2); }
+/* HEADER */
+#hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px 10px;
+  background: var(--smt-azul);
+  border-bottom: 2px solid var(--smt-azul2);
+  flex-shrink: 0;
+  box-shadow: 0 2px 20px rgba(0,0,0,.4);
+}
 
-#agpanel { max-height: 0; overflow: hidden; transition: max-height .3s ease; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
-#agpanel.open { max-height: 210px; overflow-y: auto; }
-#aginner { padding: 10px 14px; }
-.aglabel { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 7px; }
-.agitem { display: flex; align-items: center; gap: 8px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 10px; padding: 7px 10px; margin-bottom: 5px; font-size: 13px; }
+#hdr-logo {
+  display: flex; align-items: center; gap: 8px; flex: 1;
+}
+
+#hdr-escudo {
+  width: 36px; height: 36px; flex-shrink: 0;
+}
+
+#hdr-brand { display: flex; flex-direction: column; }
+
+#hname {
+  font-family: var(--font-title);
+  font-size: 22px; letter-spacing: 3px; line-height: 1;
+  background: linear-gradient(135deg, var(--smt-celeste), #fff);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+#hsub { font-size: 9px; color: var(--txt2); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+
+#hdr-right { display: flex; align-items: center; gap: 8px; }
+
+#wpill {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px; padding: 5px 11px;
+  font-size: 13px; font-weight: 600; white-space: nowrap; cursor: default;
+}
+
+#abtn {
+  width: 34px; height: 34px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--txt2); transition: background .15s;
+}
+#abtn:active { background: rgba(0,159,227,.2); }
+
+/* FRANJA VERDE SMT */
+#smt-stripe {
+  height: 3px;
+  background: linear-gradient(90deg, var(--smt-verde), var(--smt-celeste), var(--smt-azul2));
+  flex-shrink: 0;
+}
+
+/* AGENDA */
+#agpanel {
+  max-height: 0; overflow: hidden; transition: max-height .35s ease;
+  background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+}
+#agpanel.open { max-height: 200px; overflow-y: auto; }
+#aginner { padding: 10px 16px; }
+.aglabel {
+  font-size: 10px; font-weight: 700; color: var(--smt-celeste);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;
+}
+.agitem {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,159,227,.08); border: 1px solid rgba(0,159,227,.2);
+  border-radius: 10px; padding: 7px 10px; margin-bottom: 5px; font-size: 13px;
+}
 .agtext { flex: 1; }
 .agtime { font-size: 11px; color: var(--txt3); white-space: nowrap; }
 .agdel  { background: none; border: none; color: var(--red); font-size: 17px; cursor: pointer; padding: 0 2px; }
 .agempty { font-size: 12px; color: var(--txt3); padding: 8px 0; text-align: center; }
 
-#msgs { flex: 1; overflow-y: auto; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
+/* MENSAJES */
+#msgs {
+  flex: 1; overflow-y: auto; padding: 16px 14px 8px;
+  display: flex; flex-direction: column; gap: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+#msgs::-webkit-scrollbar { width: 3px; }
+#msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
 .mrow { display: flex; align-items: flex-end; gap: 8px; }
 .mrow.user { flex-direction: row-reverse; }
-.mavatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--gold2), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; color: white; }
-.bubble { max-width: 80%; padding: 10px 14px; font-size: 15px; line-height: 1.55; word-break: break-word; border-radius: 18px; }
-.bubble.assistant { background: var(--bg3); border: 1px solid var(--bdr); border-radius: 4px 18px 18px 18px; }
-.bubble.user { background: linear-gradient(135deg, var(--blue2), var(--blue)); border-radius: 18px 4px 18px 18px; }
-.bubble.searching { background: rgba(240,165,0,0.08); border: 1px solid rgba(240,165,0,0.2); border-radius: 4px 18px 18px 18px; font-size: 13px; color: var(--gold); }
-.typing { display: flex; gap: 5px; padding: 3px 0; }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--txt2); animation: bop .9s infinite; }
+
+.mavatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-title); font-size: 11px; letter-spacing: 1px;
+  flex-shrink: 0; color: white;
+  box-shadow: 0 0 12px rgba(0,159,227,0.3);
+}
+
+.bubble {
+  max-width: 78%; padding: 11px 15px;
+  font-size: 14px; line-height: 1.6; word-break: break-word;
+}
+
+.bubble.assistant {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px 18px 18px 18px;
+  color: var(--txt);
+}
+
+.bubble.user {
+  background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste));
+  border-radius: 18px 4px 18px 18px;
+  color: white; font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,159,227,0.2);
+}
+
+.bubble.searching {
+  background: rgba(0,166,81,0.08);
+  border: 1px solid rgba(0,166,81,0.25);
+  border-radius: 4px 18px 18px 18px;
+  color: #4cda8a; font-size: 13px; font-style: italic;
+}
+
+.typing { display: flex; gap: 5px; padding: 4px 0; align-items: center; }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--smt-celeste); animation: bop .9s infinite;
+}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
 
-.ecard { margin-top: 8px; max-width: 80%; margin-left: 38px; background: rgba(0,180,219,.08); border: 1px solid rgba(0,180,219,.25); border-radius: 12px; padding: 11px 13px; font-size: 13px; }
-.elabel { font-size: 11px; font-weight: 600; color: var(--blue); letter-spacing: .5px; margin-bottom: 6px; }
-.efield { color: var(--txt2); margin-bottom: 3px; }
+/* CARDS */
+.ecard {
+  margin-top: 8px; max-width: 78%; margin-left: 40px;
+  background: rgba(0,51,160,0.15);
+  border: 1px solid rgba(0,159,227,0.3);
+  border-radius: 14px; padding: 12px 14px; font-size: 13px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.card-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.card-label.mail-label { color: var(--smt-celeste); }
+.card-label.wa-label { color: #25D366; }
+.efield { color: var(--txt2); margin-bottom: 3px; font-size: 13px; }
 .efield b { color: var(--txt); }
-.ebody { color: var(--txt); margin-top: 7px; white-space: pre-wrap; border-top: 1px solid var(--bdr); padding-top: 7px; }
+.ebody {
+  color: var(--txt); margin-top: 8px; white-space: pre-wrap;
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;
+  font-size: 13px; line-height: 1.6;
+}
 .ebtns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.ebtn { padding: 7px 13px; border: none; border-radius: 20px; color: white; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ebtn-mail { background: linear-gradient(135deg, var(--blue2), var(--blue)); }
+.ebtn {
+  padding: 8px 14px; border: none; border-radius: 20px;
+  color: white; font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: var(--font-body);
+  transition: transform .1s;
+}
+.ebtn:active { transform: scale(.97); }
+.ebtn-mail { background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); }
 .ebtn-wa   { background: linear-gradient(135deg, #128C7E, #25D366); }
 
-.wacard { margin-top: 8px; max-width: 80%; margin-left: 38px; background: rgba(37,211,102,.08); border: 1px solid rgba(37,211,102,.25); border-radius: 12px; padding: 11px 13px; font-size: 13px; }
-.walabel { font-size: 11px; font-weight: 600; color: #25D366; letter-spacing: .5px; margin-bottom: 6px; }
+.wacard {
+  margin-top: 8px; max-width: 78%; margin-left: 40px;
+  background: rgba(0,166,81,0.08);
+  border: 1px solid rgba(37,211,102,0.3);
+  border-radius: 14px; padding: 12px 14px; font-size: 13px;
+}
 
-#qwrap { padding: 8px 14px; overflow-x: auto; display: flex; gap: 7px; flex-shrink: 0; scrollbar-width: none; border-top: 1px solid var(--bdr); }
+/* QUICK ACTIONS */
+#qwrap {
+  padding: 10px 14px; overflow-x: auto; display: flex; gap: 7px;
+  flex-shrink: 0; scrollbar-width: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.2);
+}
 #qwrap::-webkit-scrollbar { display: none; }
-.qbtn { white-space: nowrap; padding: 6px 12px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 20px; font-size: 12px; color: var(--txt2); cursor: pointer; }
-.qbtn:active { background: rgba(240,165,0,.2); color: white; }
+.qbtn {
+  white-space: nowrap; padding: 7px 13px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px; font-size: 12px; font-weight: 500;
+  color: var(--txt2); cursor: pointer; font-family: var(--font-body);
+  transition: all .15s;
+}
+.qbtn:active {
+  background: rgba(0,159,227,0.2);
+  border-color: rgba(0,159,227,0.4);
+  color: var(--smt-celeste);
+}
 
-#iarea { display: flex; align-items: center; gap: 9px; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: var(--bg2); border-top: 1px solid var(--bdr); flex-shrink: 0; }
-#micbtn { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--bdr); background: var(--bg3); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .2s; }
-#micbtn.on { background: rgba(224,68,68,.2); border-color: var(--red); animation: pulse 1.1s infinite; }
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,68,68,.3)}50%{box-shadow:0 0 0 9px rgba(224,68,68,0)}}
-#tinput { flex: 1; padding: 11px 15px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 24px; font-size: 15px; color: var(--txt); outline: none; }
+/* INPUT */
+#iarea {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: var(--smt-azul);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+#micbtn {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  font-size: 19px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s;
+}
+#micbtn.on {
+  background: rgba(224,68,68,.25);
+  border-color: var(--red);
+  animation: pulse 1.1s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,68,68,.3)}50%{box-shadow:0 0 0 10px rgba(224,68,68,0)}}
+
+#tinput {
+  flex: 1; padding: 12px 16px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 24px; font-size: 14px; color: var(--txt);
+  outline: none; font-family: var(--font-body);
+  transition: border-color .2s;
+}
 #tinput::placeholder { color: var(--txt3); }
-#tinput:focus { border-color: rgba(240,165,0,.45); }
-#sendbtn { width: 46px; height: 46px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--gold2), var(--gold)); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; }
-#sendbtn:active { opacity: .8; }
-#stbar { text-align: center; font-size: 11px; color: var(--txt3); min-height: 15px; padding: 2px 0; flex-shrink: 0; }
+#tinput:focus { border-color: rgba(0,159,227,0.5); }
+
+#sendbtn {
+  width: 46px; height: 46px; border-radius: 50%; border: none;
+  background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste));
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: white;
+  box-shadow: 0 4px 14px rgba(0,159,227,0.3);
+  transition: transform .15s;
+}
+#sendbtn:active { transform: scale(.93); }
+
+#stbar {
+  text-align: center; font-size: 11px; color: var(--smt-celeste);
+  min-height: 14px; padding: 2px 0; flex-shrink: 0;
+  background: var(--smt-azul);
+  letter-spacing: .5px;
+}
+
+/* Escudo SVG */
+.escudo-svg { width: 100%; height: 100%; }
 </style>
 </head>
 <body>
 
+<!-- SETUP -->
 <div id="setup">
-  <div class="s-icon">✨</div>
-  <div class="s-title">AURI</div>
-  <div class="s-sub">Asistente personal municipal<br>San Miguel de Tucumán</div>
+  <!-- Escudo SMT -->
+  <svg class="smt-shield" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M40 2 L78 18 L78 50 C78 68 60 82 40 88 C20 82 2 68 2 50 L2 18 Z" fill="#001a4d" stroke="#009fe3" stroke-width="2"/>
+    <path d="M40 12 L70 25 L70 50 C70 65 55 77 40 82 C25 77 10 65 10 50 L10 25 Z" fill="#0033a0"/>
+    <text x="40" y="40" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#009fe3" letter-spacing="1">SMT</text>
+    <text x="40" y="56" text-anchor="middle" font-family="'Inter',sans-serif" font-size="7" fill="rgba(255,255,255,0.7)" letter-spacing="0.5">MUNICIPALIDAD</text>
+    <line x1="15" y1="44" x2="65" y2="44" stroke="#009fe3" stroke-width="0.8" opacity="0.5"/>
+  </svg>
 
-  <div class="s-section">IA — Groq (obligatorio)</div>
-  <div class="s-label">API Key de Groq — gratis en console.groq.com</div>
-  <input class="s-input" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="setup-brand">
+    <div class="setup-auri">AURI</div>
+    <div class="setup-muni">Municipalidad de San Miguel de Tucumán</div>
+  </div>
+  <div class="setup-tagline">Tu asistente personal municipal.<br>Información, trámites y servicios al instante.</div>
+
+  <div class="s-section">Acceso IA — Groq (obligatorio)</div>
+  <div class="s-label">API Key de Groq — Gratis en console.groq.com</div>
+  <input class="s-input mono" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
 
   <div class="s-sep"></div>
   <div class="s-section">Tu perfil</div>
-  <div class="s-label">Tu nombre (AURI te llamará así)</div>
+  <div class="s-label">Nombre (AURI te llamará así)</div>
   <input class="s-input" id="mi-nombre" type="text" placeholder="Tu nombre"/>
-  <div class="s-label">Tu email</div>
+  <div class="s-label">Email</div>
   <input class="s-input" id="mi-email" type="email" placeholder="tu@email.com"/>
-  <div class="s-label">Tu WhatsApp (con código de país, sin el +)</div>
+  <div class="s-label">WhatsApp (con código de país, sin el +)</div>
   <input class="s-input" id="mi-wa" type="tel" placeholder="5493811234567"/>
 
-  <button class="s-btn" onclick="guardarConfig()">Comenzar con AURI →</button>
+  <button class="s-btn" onclick="guardarConfig()">Ingresar a AURI →</button>
   <div class="s-err" id="serr"></div>
-  <p class="s-note">Todo se guarda solo en este dispositivo.</p>
+  <p class="s-note">Tu información se guarda únicamente en este dispositivo.<br>Nunca es enviada a servidores externos.</p>
 </div>
 
+<!-- APP -->
 <div id="app">
   <div id="hdr">
-    <div id="avatar">AU</div>
-    <div id="hinfo">
-      <div id="hname">AURI</div>
-      <div id="hsub">Asistente municipal · Tucumán</div>
+    <div id="hdr-logo">
+      <!-- Escudo pequeño -->
+      <svg id="hdr-escudo" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 2 L78 18 L78 50 C78 68 60 82 40 88 C20 82 2 68 2 50 L2 18 Z" fill="#001a4d" stroke="#009fe3" stroke-width="3"/>
+        <path d="M40 12 L70 25 L70 50 C70 65 55 77 40 82 C25 77 10 65 10 50 L10 25 Z" fill="#0033a0"/>
+        <text x="40" y="42" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#009fe3" letter-spacing="1">SMT</text>
+        <line x1="15" y1="47" x2="65" y2="47" stroke="#009fe3" stroke-width="1" opacity="0.5"/>
+      </svg>
+      <div id="hdr-brand">
+        <div id="hname">AURI</div>
+        <div id="hsub">Asistente Municipal · Tucumán</div>
+      </div>
     </div>
-    <div id="wpill">⏳ clima...</div>
-    <button id="abtn" onclick="toggleAg()">📅</button>
+    <div id="hdr-right">
+      <div id="wpill">⏳ cargando</div>
+      <button id="abtn" onclick="toggleAg()" title="Agenda">📅</button>
+    </div>
   </div>
+
+  <div id="smt-stripe"></div>
+
   <div id="agpanel">
     <div id="aginner">
-      <div class="aglabel">📅 Mi Agenda</div>
+      <div class="aglabel">📅 Mi Agenda Personal</div>
       <div id="aglist"></div>
     </div>
   </div>
+
   <div id="msgs"></div>
+
   <div id="qwrap">
     <button class="qbtn" onclick="enviar('¿Hace frío hoy? ¿Llevo campera o remera?')">🌤️ Clima</button>
     <button class="qbtn" onclick="enviar('¿Qué hora y fecha es hoy?')">🕐 Hora</button>
@@ -149,9 +462,11 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
     <button class="qbtn" onclick="enviar('Quiero hacer una denuncia')">📢 Denuncia</button>
     <button class="qbtn" onclick="enviar('¿Qué trámites puedo hacer en la municipalidad?')">🏛️ Trámites</button>
   </div>
+
   <div id="iarea">
     <button id="micbtn" onclick="toggleVoz()">🎤</button>
-    <input id="tinput" type="text" placeholder="Hablá con AURI..." autocomplete="off" onkeydown="if(event.key==='Enter')enviar(this.value)"/>
+    <input id="tinput" type="text" placeholder="Hablá con AURI..." autocomplete="off"
+           onkeydown="if(event.key==='Enter')enviar(this.value)"/>
     <button id="sendbtn" onclick="enviar(document.getElementById('tinput').value)">➤</button>
   </div>
   <div id="stbar"></div>
@@ -159,30 +474,30 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 
 <script>
 const LAT=-26.8083, LON=-65.2176;
-const PROXY = "https://api.allorigins.win/raw?url=";
-const MAX_HIST = 10;
+const PROXY="https://api.allorigins.win/raw?url=";
+const MAX_HIST=10;
 
-let apiKey="", miNombre="David", miEmail="", miWA="";
+let apiKey="", miNombre="", miEmail="", miWA="";
 let clima=null, agenda=[], historial=[], vozSel=null;
 
 /* ══ INICIO ══ */
 function init(){
-  apiKey    = localStorage.getItem("auri_groq")    || "";
-  miNombre  = localStorage.getItem("auri_nombre")  || "";
-  miEmail   = localStorage.getItem("auri_email")   || "";
-  miWA      = localStorage.getItem("auri_wa")      || "";
+  apiKey   = localStorage.getItem("auri_groq")   || "";
+  miNombre = localStorage.getItem("auri_nombre") || "";
+  miEmail  = localStorage.getItem("auri_email")  || "";
+  miWA     = localStorage.getItem("auri_wa")     || "";
   if(apiKey){ mostrarApp(); return; }
   if(miNombre) document.getElementById("mi-nombre").value = miNombre;
   if(miEmail)  document.getElementById("mi-email").value  = miEmail;
   if(miWA)     document.getElementById("mi-wa").value     = miWA;
-  document.getElementById("groq-key").addEventListener("keydown",e=>{ if(e.key==="Enter") guardarConfig(); });
+  document.getElementById("groq-key").addEventListener("keydown", e=>{ if(e.key==="Enter") guardarConfig(); });
 }
 
 function guardarConfig(){
   const key = document.getElementById("groq-key").value.trim();
   if(!key.startsWith("gsk_")){ document.getElementById("serr").textContent="La API key debe comenzar con gsk_"; return; }
   apiKey   = key;
-  miNombre = document.getElementById("mi-nombre").value.trim() || "David";
+  miNombre = document.getElementById("mi-nombre").value.trim() || "Usuario";
   miEmail  = document.getElementById("mi-email").value.trim();
   miWA     = document.getElementById("mi-wa").value.trim();
   localStorage.setItem("auri_groq",   apiKey);
@@ -193,10 +508,10 @@ function guardarConfig(){
 }
 
 function mostrarApp(){
-  document.getElementById("setup").style.display="none";
-  document.getElementById("app").style.display="flex";
+  document.getElementById("setup").style.display = "none";
+  document.getElementById("app").style.display   = "flex";
   cargarAgenda(); fetchClima(); cargarVoces();
-  addMsg("assistant", `Hola, ${miNombre}. Soy AURI, tu asistente personal. ¿En qué te puedo ayudar hoy?`);
+  addMsg("assistant", `Buenas, ${miNombre}. Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucumán. ¿En qué te puedo ayudar hoy?`);
 }
 
 /* ══ VOZ ══ */
@@ -204,9 +519,9 @@ function cargarVoces(){
   if(!window.speechSynthesis) return;
   const intentar=()=>{
     const vs=speechSynthesis.getVoices(); if(!vs.length) return;
-    const pLang=["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
-    const pMasc=["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres","andrés"];
-    for(const l of pLang) for(const m of pMasc){
+    const pL=["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
+    const pM=["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres","andrés"];
+    for(const l of pL) for(const m of pM){
       const v=vs.find(v=>v.lang.toLowerCase().startsWith(l.slice(0,5).toLowerCase())&&v.name.toLowerCase().includes(m));
       if(v){vozSel=v;return;}
     }
@@ -215,6 +530,7 @@ function cargarVoces(){
   if(speechSynthesis.getVoices().length) intentar();
   else speechSynthesis.onvoiceschanged=intentar;
 }
+
 function hablar(txt){
   if(!window.speechSynthesis) return;
   speechSynthesis.cancel();
@@ -236,54 +552,42 @@ async function fetchClima(){
   }catch(e){document.getElementById("wpill").textContent="🌡️ sin datos";}
 }
 
-/* ══ BÚSQUEDA WEB ══ */
+/* ══ BÚSQUEDA ══ */
 async function buscarWikipedia(query){
   try{
-    const term=encodeURIComponent(query.slice(0,80));
-    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${term}`);
+    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.slice(0,80))}`);
     if(!r.ok) return "";
     const d=await r.json();
-    return d.extract ? `Wikipedia: ${d.extract.slice(0,800)}` : "";
+    return d.extract ? `Información de Wikipedia sobre "${query}": ${d.extract.slice(0,1000)}` : "";
   }catch(e){return "";}
 }
 
 async function buscarMunicipalidad(query){
   try{
     setSt("🔍 Buscando en smt.gob.ar...");
-    // Buscar en Google con site: filter via allorigins
-    const searchUrl=`https://www.google.com/search?q=${encodeURIComponent(query+" site:smt.gob.ar")}&hl=es`;
-    const r=await fetch(PROXY+encodeURIComponent(searchUrl));
+    const r=await fetch(PROXY+encodeURIComponent(`https://www.smt.gob.ar/?s=${encodeURIComponent(query)}`));
     const html=await r.text();
-    // Extraer snippets de texto relevante
-    const texto=html.replace(/<[^>]+>/g," ").replace(/\s+/g," ").slice(0,2000);
-    return `Información encontrada en smt.gob.ar: ${texto}`;
-  }catch(e){
-    // Fallback: fetch directo de la página
-    try{
-      const r=await fetch(PROXY+encodeURIComponent("https://www.smt.gob.ar"));
-      const html=await r.text();
-      const texto=html.replace(/<[^>]+>/g," ").replace(/\s+/g," ").slice(0,1500);
-      return `Contenido de smt.gob.ar: ${texto}`;
-    }catch(e2){return "";}
-  }
+    const txt=html.replace(/<script[\s\S]*?<\/script>/gi,"")
+                  .replace(/<style[\s\S]*?<\/style>/gi,"")
+                  .replace(/<[^>]+>/g," ")
+                  .replace(/\s+/g," ").trim().slice(0,2000);
+    return txt ? `Contenido de smt.gob.ar sobre "${query}": ${txt}` : "";
+  }catch(e){return "";}
 }
 
 async function buscarNoticias(query){
   try{
-    setSt("🔍 Buscando información actual...");
+    setSt("🔍 Buscando noticias actuales...");
     const url=`https://news.google.com/rss/search?q=${encodeURIComponent(query+" Argentina")}&hl=es-419&gl=AR&ceid=AR:es`;
     const r=await fetch(PROXY+encodeURIComponent(url));
     const xml=await r.text();
-    // Extraer títulos y descripciones del RSS
     const items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];
-    const resultado=items.slice(0,5).map(item=>{
-      const titulo=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||[])[1]||
-                   (item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
-      const desc=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||[])[1]||
-                 (item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
-      return `- ${titulo}: ${desc.replace(/<[^>]+>/g,"").slice(0,150)}`;
+    const res=items.slice(0,5).map(item=>{
+      const t=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
+      const d=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
+      return `• ${t}: ${d.replace(/<[^>]+>/g,"").slice(0,120)}`;
     }).join("\n");
-    return resultado ? `Noticias recientes:\n${resultado}` : "";
+    return res ? `Noticias recientes sobre "${query}":\n${res}` : "";
   }catch(e){return "";}
 }
 
@@ -292,7 +596,7 @@ function cargarAgenda(){
   try{agenda=JSON.parse(localStorage.getItem("auri_agenda")||"[]");}catch(e){agenda=[];}
   agenda=dedup(agenda); guardarAg(); renderAg();
 }
-function dedup(l){ const v=new Set(); return l.filter(a=>{const k=`${a.item}|${a.dt}`;if(v.has(k))return false;v.add(k);return true;}); }
+function dedup(l){const v=new Set();return l.filter(a=>{const k=`${a.item}|${a.dt}`;if(v.has(k))return false;v.add(k);return true;});}
 function guardarAg(){localStorage.setItem("auri_agenda",JSON.stringify(agenda));}
 function toggleAg(){document.getElementById("agpanel").classList.toggle("open");}
 function renderAg(){
@@ -312,31 +616,33 @@ function addMsg(role,text,extra){
   const msgs=document.getElementById("msgs");
   const row=document.createElement("div"); row.className=`mrow ${role}`;
   let html=role==="assistant"?`<div class="mavatar">AU</div>`:"";
-  const cls=extra?.searching?"bubble searching":"bubble "+role;
+  const cls=extra?.searching?"bubble searching":`bubble ${role}`;
   html+=`<div><div class="${cls}">${text.replace(/\n/g,"<br>")}</div>`;
   if(extra?.email){
     const em=extra.email;
-    html+=`<div class="ecard"><div class="elabel">📧 BORRADOR DE MAIL</div>
-    <div class="efield"><b>Para:</b> ${em.to}</div>
-    <div class="efield"><b>Asunto:</b> ${em.subject}</div>
-    <div class="ebody">${em.body}</div>
-    <div class="ebtns">
-      <button class="ebtn ebtn-mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
-      ${miWA?`<button class="ebtn ebtn-wa" onclick="enviarWA('${esc(em.body)}')">💬 Enviar por WhatsApp</button>`:""}
-    </div></div>`;
+    html+=`<div class="ecard">
+      <div class="card-label mail-label">📧 Borrador de Mail</div>
+      <div class="efield"><b>Para:</b> ${em.to}</div>
+      <div class="efield"><b>Asunto:</b> ${em.subject}</div>
+      <div class="ebody">${em.body}</div>
+      <div class="ebtns">
+        <button class="ebtn ebtn-mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
+        ${miWA?`<button class="ebtn ebtn-wa" onclick="enviarWA('${esc(em.body)}')">💬 Enviar por WhatsApp</button>`:""}
+      </div></div>`;
   }
   if(extra?.wa){
-    html+=`<div class="wacard"><div class="walabel">💬 MENSAJE DE WHATSAPP</div>
-    <div class="efield" style="color:var(--txt);white-space:pre-wrap">${extra.wa.body}</div>
-    <div class="ebtns"><button class="ebtn ebtn-wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button></div></div>`;
+    html+=`<div class="wacard">
+      <div class="card-label wa-label">💬 Mensaje de WhatsApp</div>
+      <div style="color:var(--txt);white-space:pre-wrap;font-size:13px">${extra.wa.body}</div>
+      <div class="ebtns"><button class="ebtn ebtn-wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button></div></div>`;
   }
-  html+=`</div>`; row.innerHTML=html; msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
-  return row;
+  html+=`</div>`;
+  row.innerHTML=html; msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
 }
 function esc(s){return(s||"").replace(/'/g,"\\'");}
 function addTyping(){
-  const msgs=document.getElementById("msgs"); const row=document.createElement("div");
-  row.className="mrow assistant"; row.id="typing";
+  const msgs=document.getElementById("msgs");
+  const row=document.createElement("div"); row.className="mrow assistant"; row.id="typing";
   row.innerHTML=`<div class="mavatar">AU</div><div class="bubble assistant"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
 }
@@ -346,7 +652,7 @@ function abrirMail(to,sub,body){window.open(`mailto:${decodeURIComponent(to)}?su
 function enviarWA(body){const n=miWA.replace(/\D/g,"");window.open(`https://wa.me/${n}?text=${encodeURIComponent(decodeURIComponent(body))}`);}
 
 /* ══ PROMPT SISTEMA ══ */
-function buildSys(contextoExtra){
+function buildSys(extra){
   const now=new Date();
   const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
   const fecha=now.toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
@@ -358,80 +664,73 @@ function buildSys(contextoExtra){
   let wstr="No disponible";
   if(clima){const c=clima.weather_code;const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
     wstr=`${Math.round(clima.temperature_2m)}°C (sensación ${Math.round(clima.apparent_temperature)}°C), ${codes[k]||"Variable"}, Humedad ${clima.relative_humidity_2m}%, Viento ${Math.round(clima.wind_speed_10m)} km/h`;}
-  const agstr=dedup(agenda).length?dedup(agenda).map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n"):"Sin eventos";
+  const agstr=dedup(agenda).map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n")||"Sin eventos";
 
-  return `Sos AURI, asistente personal e institucional de San Miguel de Tucumán, Argentina.
+  return `Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucumán, Argentina.
 
-IDENTIDAD:
-- Nombre del asistente: AURI
-- Usuario: ${miNombre} (siempre llamalo por su nombre en cada respuesta, salvo que él indique lo contrario)
-- Email usuario: ${miEmail||"no configurado"}
-- WhatsApp usuario: ${miWA||"no configurado"}
+USUARIO: ${miNombre} (siempre llamalo por su nombre, una sola vez por respuesta)
+EMAIL: ${miEmail||"no configurado"} | WHATSAPP: ${miWA||"no configurado"}
 
-PERSONALIDAD:
-- Jovial, amigable, profesional y cercano
-- Español latinoamericano neutro. Sin expresiones rioplatenses (sin "che", "pibe", "dale")
-- Sin abreviaciones. Palabras completas siempre
-- Respuestas CORTAS: máximo 3 oraciones. Si hay un evento en agenda, mencionalo UNA sola vez
+PERSONALIDAD: jovial, amigable, profesional. Español latinoamericano neutro. Sin expresiones rioplatenses (sin "che", "pibe"). Sin abreviaciones. Máximo 3 oraciones por respuesta.
 
-FECHA Y HORA: ${fecha} (${isoHoy}), ${hora}
+FECHA: ${fecha} (${isoHoy}), ${hora}
 MAÑANA: ${manana.toISOString().split("T")[0]}
-ESTA SEMANA: ${semana.join(", ")}
+SEMANA: ${semana.join(", ")}
 
 CLIMA REAL TUCUMÁN: ${wstr}
-Vestimenta: menos de 15°C=abrigo, 15-21°C=campera, 22-27°C=remera larga, más de 27°C=remera.
+REGLA DE VESTIMENTA (importante, aplicar siempre correctamente):
+- Menos de 8°C → abrigo pesado o campera gruesa
+- 8°C a 14°C → campera (no es momento para remera)
+- 15°C a 21°C → remera manga larga o campera liviana
+- 22°C a 27°C → remera
+- Más de 27°C → remera, hace calor
 
 AGENDA: ${agstr}
 
-${contextoExtra ? `INFORMACIÓN OBTENIDA DE INTERNET:\n${contextoExtra}\nUsá esta información para responder con precisión.\n` : ""}
+${extra?`INFORMACIÓN DE INTERNET PARA RESPONDER:\n${extra}\n`:""}
 
-RESTRICCIONES — AURI NUNCA debe:
+RESTRICCIONES — NUNCA hacer:
 ❌ Opinar sobre política partidaria o candidatos
-❌ Opinar sobre funcionarios públicos (solo informar datos oficiales)
-❌ Dar diagnósticos o consejos médicos específicos
-❌ Dar asesoramiento legal o financiero específico
-❌ Revelar datos personales de terceros ciudadanos
-❌ Generar contenido inapropiado para menores
-❌ Facilitar o tolerar grooming o contacto inadecuado con menores
-❌ Responder a insultos o lenguaje violento (responder con calma y redirigir)
-❌ Generar contenido discriminatorio o violento
+❌ Opinar sobre funcionarios (solo datos oficiales)
+❌ Diagnósticos o consejos médicos específicos
+❌ Asesoramiento legal o financiero específico
+❌ Revelar datos personales de terceros
+❌ Contenido inapropiado para menores de edad
+❌ Facilitar grooming o contacto inadecuado con menores
+❌ Contenido discriminatorio, violento o de odio
 ❌ Suplantar identidad de personas reales
-❌ Responder sobre actividades ilegales
-❌ Dar información fuera del ámbito municipal y personal del usuario
+❌ Información sobre actividades ilegales
+❌ Contenido sexual de cualquier tipo
 
-Ante cualquier consulta fuera de estas restricciones, AURI responde:
-"Eso está fuera de mis funciones, ${miNombre}. ¿Puedo ayudarte con algo relacionado a la municipalidad o a tu agenda personal?"
+DEPORTES Y NOTICIAS: SÍ puede responder sobre resultados deportivos, partidos, torneos y noticias generales. Si no tiene datos actuales, buscá en internet.
 
-BÚSQUEDA WEB — Cuándo necesitás buscar:
-Si la pregunta requiere información actual (noticias, resultados deportivos, funcionarios actuales, eventos recientes) o información de la municipalidad (trámites, dependencias, programas), incluí AL FINAL:
-<BUSCAR_WEB>términos de búsqueda concretos</BUSCAR_WEB>
-o para info municipal:
-<BUSCAR_MUNI>tema a buscar en smt.gob.ar</BUSCAR_MUNI>
+Si algo viola las restricciones: "Eso está fuera de mis funciones, ${miNombre}. ¿Puedo ayudarte con algo de la municipalidad o tu agenda?"
 
-INSTRUCCIONES ESPECIALES:
+CUÁNDO BUSCAR EN INTERNET:
+- Información actual (noticias, resultados deportivos, funcionarios, eventos): <BUSCAR_WEB>términos</BUSCAR_WEB>
+- Info municipal (trámites, dependencias, programas de smt.gob.ar): <BUSCAR_MUNI>tema</BUSCAR_MUNI>
+
+INSTRUCCIONES:
 1. Agregar agenda: <AGENDA>{"item":"descripción","dt":"YYYY-MM-DDTHH:MM"}</AGENDA>
-2. Redactar mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo completo"}</EMAIL>
-3. Mensaje WhatsApp: <WA>{"body":"mensaje completo"}</WA>
-4. Nunca repetir la misma información dos veces en una respuesta
-5. Nunca mencionar que sos una inteligencia artificial salvo que te lo pregunten`;
+2. Redactar mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo"}</EMAIL>
+3. Mensaje WhatsApp: <WA>{"body":"mensaje"}</WA>
+4. Nunca repetir la misma info dos veces en una respuesta
+5. Nunca decir que sos IA salvo que te lo pregunten directamente`;
 }
 
 /* ══ LLAMADA A GROQ ══ */
-async function llamarGroq(mensajes, maxTokens=400){
-  const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+async function llamarGroq(msgs, tokens=350){
+  const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
     method:"POST",
     headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},
-    body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:mensajes,max_tokens:maxTokens,temperature:0.5})
+    body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,max_tokens:tokens,temperature:0.5})
   });
-  const data=await res.json();
-  if(!res.ok){
-    if(res.status===401){localStorage.removeItem("auri_groq");throw new Error("API key inválida");}
-    throw new Error(data?.error?.message||"Error de API");
-  }
-  return data.choices[0].message.content;
+  const d=await r.json();
+  if(!r.ok){if(r.status===401){localStorage.removeItem("auri_groq");throw new Error("key_invalida");}throw new Error(d?.error?.message||"Error");}
+  return d.choices[0].message.content;
 }
 
-/* ══ ENVIAR MENSAJE ══ */
+/* ══ ENVIAR ══ */
 async function enviar(texto){
   texto=(texto||"").trim(); if(!texto) return;
   document.getElementById("tinput").value="";
@@ -441,44 +740,36 @@ async function enviar(texto){
   addTyping(); setSt("AURI está pensando...");
 
   try{
-    // PASO 1: Primera respuesta de AURI
     let reply=await llamarGroq([{role:"system",content:buildSys()},...historial]);
 
-    // PASO 2: Verificar si necesita búsqueda web
-    const buscarWebMatch=reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
-    const buscarMuniMatch=reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
+    const bwM=reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
+    const bmM=reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
 
-    if(buscarWebMatch || buscarMuniMatch){
+    if(bwM||bmM){
       qTyping();
-      let contexto="";
-
-      if(buscarMuniMatch){
-        const query=buscarMuniMatch[1].trim();
-        addMsg("assistant",`Buscando "${query}" en smt.gob.ar...`,{searching:true});
-        contexto=await buscarMunicipalidad(query);
-        if(!contexto) contexto=await buscarWikipedia(query);
+      let ctx="";
+      if(bmM){
+        const q=bmM[1].trim();
+        addMsg("assistant",`Buscando "${q}" en smt.gob.ar...`,{searching:true});
+        ctx=await buscarMunicipalidad(q);
+        if(!ctx) ctx=await buscarWikipedia(q);
       } else {
-        const query=buscarWebMatch[1].trim();
-        // Detectar si es noticia actual o dato enciclopédico
-        const esNoticia=/presidente|ministro|gobernador|resultado|partido|elección|deporte|fútbol|news|hoy|actual/i.test(query);
-        if(esNoticia){
-          addMsg("assistant",`Buscando noticias sobre "${query}"...`,{searching:true});
-          contexto=await buscarNoticias(query);
-          if(!contexto) contexto=await buscarWikipedia(query);
+        const q=bwM[1].trim();
+        const esDeporte=/fútbol|futbol|partido|resultado|gol|liga|torneo|deporte|racing|river|boca|tucumán|atletico/i.test(q);
+        const esNoticia=/presidente|ministro|gobernador|elección|noticias|actual|hoy/i.test(q);
+        if(esDeporte||esNoticia){
+          addMsg("assistant",`Buscando noticias sobre "${q}"...`,{searching:true});
+          ctx=await buscarNoticias(q);
+          if(!ctx) ctx=await buscarWikipedia(q);
         } else {
-          addMsg("assistant",`Buscando información sobre "${query}"...`,{searching:true});
-          contexto=await buscarWikipedia(query);
+          addMsg("assistant",`Buscando información sobre "${q}"...`,{searching:true});
+          ctx=await buscarWikipedia(q);
+          if(!ctx) ctx=await buscarNoticias(q);
         }
       }
-
-      setSt("AURI está procesando la información...");
+      setSt("AURI está procesando...");
       addTyping();
-
-      // PASO 3: Segunda llamada con el contexto obtenido
-      reply=await llamarGroq([
-        {role:"system",content:buildSys(contexto)},
-        ...historial
-      ]);
+      reply=await llamarGroq([{role:"system",content:buildSys(ctx)},...historial]);
     }
 
     // Procesar AGENDA
@@ -486,44 +777,34 @@ async function enviar(texto){
     if(aM){
       try{
         const a=JSON.parse(aM[1]);
-        if(a.item&&a.dt&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)){
-          if(!agenda.some(x=>x.item===a.item&&x.dt===a.dt)){
-            agenda.push({id:uid(),item:a.item,dt:a.dt});
-            guardarAg(); renderAg();
-          }
+        if(a.item&&a.dt&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)&&!agenda.some(x=>x.item===a.item&&x.dt===a.dt)){
+          agenda.push({id:uid(),item:a.item,dt:a.dt}); guardarAg(); renderAg();
         }
       }catch(e){}
       reply=reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/,"").trim();
     }
 
-    // Procesar EMAIL
-    let emailObj=null;
+    let eo=null, wo=null;
     const eM=reply.match(/<EMAIL>([\s\S]*?)<\/EMAIL>/);
-    if(eM){try{emailObj=JSON.parse(eM[1]);}catch(e){} reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
-
-    // Procesar WHATSAPP
-    let waObj=null;
+    if(eM){try{eo=JSON.parse(eM[1]);}catch(e){} reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
     const wM=reply.match(/<WA>([\s\S]*?)<\/WA>/);
-    if(wM){try{waObj=JSON.parse(wM[1]);}catch(e){} reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
+    if(wM){try{wo=JSON.parse(wM[1]);}catch(e){} reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
 
-    // Limpiar tags sobrantes
     reply=reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g,"")
                .replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g,"").trim();
 
     historial.push({role:"assistant",content:reply});
     qTyping();
-    const extra={};
-    if(emailObj) extra.email=emailObj;
-    if(waObj) extra.wa=waObj;
+    const extra={}; if(eo) extra.email=eo; if(wo) extra.wa=wo;
     addMsg("assistant",reply,Object.keys(extra).length?extra:null);
     setSt(""); hablar(reply);
 
   }catch(e){
     qTyping();
-    const msg=e.message.includes("inválida")
-      ?"La API key no es válida. Cerrá la aplicación y volvé a configurarla."
+    const m=e.message==="key_invalida"
+      ?"La API key no es válida. Por favor cerrá la aplicación y volvé a configurarla."
       :`Lo siento, ${miNombre}. Tuve un problema técnico. Por favor intentá de nuevo.`;
-    addMsg("assistant",msg); setSt(""); console.error(e);
+    addMsg("assistant",m); setSt(""); console.error(e);
   }
 }
 
@@ -534,7 +815,7 @@ function toggleVoz(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert("El reconocimiento de voz requiere Chrome.");return;}
   recog=new SR(); recog.lang="es-AR"; recog.continuous=false; recog.interimResults=false;
-  recog.onstart=()=>{escuchando=true;document.getElementById("micbtn").className="on";document.getElementById("micbtn").textContent="⏹️";setSt("🎙️ Escuchando... hablá ahora");};
+  recog.onstart=()=>{escuchando=true;document.getElementById("micbtn").className="on";document.getElementById("micbtn").textContent="⏹️";setSt("🎙️ Escuchando...");};
   recog.onend=()=>detVoz();
   recog.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById("tinput").value=t;detVoz();setTimeout(()=>enviar(t),150);};
   recog.onerror=()=>detVoz();
