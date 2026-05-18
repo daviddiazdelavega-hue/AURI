@@ -664,7 +664,7 @@ async function enviar(texto) {
         addMsg("assistant", "Buscando informacion sobre \"" + q + "\"...", {searching:true});
         ctx = await buscarGoogle(q, false);
       }
-      if (!ctx) ctx = "No se encontraron resultados. Responde con tu mejor conocimiento de forma directa y concreta.";
+      if (!ctx) ctx = "La busqueda no encontro resultados especificos. IMPORTANTE: NO digas 'puedo buscar' ni 'podria buscar'. Responde directamente con lo que sabes sobre el tema. Si no tenes informacion actual, decilo en una sola oracion concreta y ofrece informacion relacionada que si conozcas.";
       setSt("AURI esta procesando...");
       addTyping();
       reply = await llamarGroq([{role:"system", content:buildSys(ctx)}].concat(historial));
@@ -681,6 +681,8 @@ async function enviar(texto) {
             ultimoAgendado = {id:uid(), item:a.item, dt:a.dt};
             agenda.push(ultimoAgendado);
             guardarAg(); renderAg();
+            // Abrir Google Calendar automaticamente
+            setTimeout(function() { abrirCalendar(a.item, a.dt); }, 800);
           }
         }
       } catch(e) {}
@@ -711,7 +713,7 @@ async function enviar(texto) {
     if (!reply) {
       if (emailObj)         reply = "Aca esta el borrador del mail, " + miNombre + ".";
       else if (waObj)       reply = "Aca esta el mensaje listo para WhatsApp, " + miNombre + ".";
-      else if (ultimoAgendado) reply = "Listo, " + miNombre + ". Agendado: " + ultimoAgendado.item + " para el " + fdt(ultimoAgendado.dt) + ". Toca el icono 📆 para agregarlo a Google Calendar.";
+      else if (ultimoAgendado) reply = "Listo, " + miNombre + ". Agendado: " + ultimoAgendado.item + " para el " + fdt(ultimoAgendado.dt) + ". Te abri Google Calendar para que confirmes el evento con un toque.";
       else                  reply = "Listo, " + miNombre + ".";
     }
 
