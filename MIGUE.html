@@ -15,119 +15,77 @@
   Celeste     : #3FA2D8
   Amarillo    : #F7C200
   Logo blanco : https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png
-  Logo color  : https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_pos_1.png
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --smt-azul-osc: #122f65;
-  --smt-azul:     #1C4EA0;
-  --smt-celeste:  #3FA2D8;
-  --smt-amarillo: #F7C200;
-  --smt-verde:    #00a651;
-  --bg:  #0d1e3d;
-  --bg2: #122f65;
-  --bg3: rgba(255,255,255,0.06);
-  --bdr: rgba(255,255,255,0.12);
-  --txt:  #ffffff;
-  --txt2: rgba(255,255,255,0.65);
-  --txt3: rgba(255,255,255,0.35);
-  --red:  #e04444;
-  --ff: 'Nunito', sans-serif;
-  --ft: 'Bebas Neue', sans-serif;
+  --smt-azul-osc:#122f65;--smt-azul:#1C4EA0;--smt-celeste:#3FA2D8;
+  --smt-amarillo:#F7C200;--smt-verde:#00a651;
+  --bg:#0d1e3d;--bg2:#122f65;--bg3:rgba(255,255,255,.06);
+  --bdr:rgba(255,255,255,.12);--txt:#fff;
+  --txt2:rgba(255,255,255,.65);--txt3:rgba(255,255,255,.35);
+  --red:#e04444;--ff:'Nunito',sans-serif;--ft:'Bebas Neue',sans-serif;
 }
 html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff);overflow:hidden}
 
-/* ══ SETUP ══ */
-#setup{
-  position:fixed;inset:0;
-  background:linear-gradient(160deg,#0d1e3d 0%,#122f65 60%,#1C4EA0 100%);
-  display:flex;flex-direction:column;align-items:center;
-  padding:36px 28px 28px;z-index:999;overflow-y:auto;
-}
-.setup-logo{height:56px;width:auto;margin-bottom:16px;filter:brightness(0) invert(1)}
-.setup-logo-fallback{display:none;font-family:var(--ft);font-size:32px;letter-spacing:4px;
-  color:var(--smt-amarillo);margin-bottom:16px}
-.setup-auri{font-family:var(--ft);font-size:52px;letter-spacing:8px;
-  background:linear-gradient(135deg,var(--smt-celeste),#fff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.setup-muni{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txt2);
-  text-transform:uppercase;margin-top:4px;text-align:center}
-.setup-tag{font-size:13px;color:var(--txt2);text-align:center;margin:14px 0 26px;line-height:1.7}
-.s-sec{font-size:10px;font-weight:800;color:var(--smt-amarillo);text-transform:uppercase;
-  letter-spacing:2px;margin-bottom:7px;margin-top:18px;align-self:flex-start}
-.s-lbl{font-size:12px;color:var(--txt2);margin-bottom:5px;align-self:flex-start;width:100%}
-.s-inp{width:100%;padding:13px 16px;background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.2);border-radius:12px;
-  font-size:14px;color:var(--txt);outline:none;font-family:var(--ff);margin-bottom:4px;
-  transition:border-color .2s}
-.s-inp:focus{border-color:var(--smt-celeste)}
-.s-inp.mono{font-family:monospace}
-.s-sep{width:100%;height:1px;background:rgba(255,255,255,.12);margin:16px 0}
-.s-btn{width:100%;padding:15px;border:none;border-radius:12px;
+/* SETUP */
+#setup{position:fixed;inset:0;background:linear-gradient(160deg,#0d1e3d,#122f65 60%,#1C4EA0);
+  display:flex;flex-direction:column;align-items:center;padding:32px 28px 28px;z-index:999;overflow-y:auto}
+.sl{height:54px;width:auto;margin-bottom:14px;filter:brightness(0) invert(1)}
+.sl-fb{display:none;font-family:var(--ft);font-size:28px;letter-spacing:3px;color:var(--smt-amarillo);margin-bottom:14px}
+.sa{font-family:var(--ft);font-size:48px;letter-spacing:8px;line-height:1;
+  background:linear-gradient(135deg,var(--smt-celeste),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sm{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txt2);text-transform:uppercase;margin-top:4px;text-align:center}
+.st{font-size:13px;color:var(--txt2);text-align:center;margin:12px 0 22px;line-height:1.7}
+.ss{font-size:10px;font-weight:800;color:var(--smt-amarillo);text-transform:uppercase;letter-spacing:2px;
+  margin-bottom:6px;margin-top:16px;align-self:flex-start}
+.sl2{font-size:12px;color:var(--txt2);margin-bottom:4px;align-self:flex-start;width:100%}
+.si{width:100%;padding:12px 15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;font-size:14px;color:var(--txt);outline:none;font-family:var(--ff);margin-bottom:4px;transition:border-color .2s}
+.si:focus{border-color:var(--smt-celeste)}.si.mono{font-family:monospace}
+.sep{width:100%;height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+.sbtn{width:100%;padding:14px;border:none;border-radius:12px;
   background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
-  color:#fff;font-size:15px;font-weight:800;font-family:var(--ff);
-  cursor:pointer;margin-top:22px;letter-spacing:.5px;
+  color:#fff;font-size:15px;font-weight:800;font-family:var(--ff);cursor:pointer;margin-top:20px;
   box-shadow:0 8px 24px rgba(63,162,216,.3)}
-.s-btn:active{opacity:.9}
-.s-err{color:var(--red);font-size:12px;margin-top:8px;text-align:center;min-height:16px}
-.s-note{font-size:11px;color:var(--txt3);text-align:center;margin-top:14px;line-height:1.9}
+.sbtn:active{opacity:.9}
+.serr{color:var(--red);font-size:12px;margin-top:7px;text-align:center;min-height:16px}
+.snote{font-size:11px;color:var(--txt3);text-align:center;margin-top:12px;line-height:1.9}
 
-/* ══ APP ══ */
+/* APP */
 #app{display:none;flex-direction:column;height:100dvh;max-width:560px;margin:0 auto}
 
 /* HEADER */
-#hdr{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 14px 9px;
-  background:var(--smt-azul);
-  border-bottom:3px solid var(--smt-amarillo);
-  flex-shrink:0;
-  box-shadow:0 3px 20px rgba(0,0,0,.5);
-}
-#hdr-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-/* Logo oficial SMT */
-#hdr-logo{
-  height:36px;width:auto;flex-shrink:0;
-  filter:brightness(0) invert(1);
-}
-#hdr-logo-fallback{
-  display:none;font-family:var(--ft);font-size:20px;letter-spacing:2px;
-  color:var(--smt-amarillo);flex-shrink:0;
-}
-#hdr-brand{display:flex;flex-direction:column;min-width:0}
-#hname{
-  font-family:var(--ft);font-size:24px;letter-spacing:4px;line-height:1;
-  background:linear-gradient(135deg,var(--smt-celeste),#fff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-#hsub{font-size:9px;color:var(--txt2);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;white-space:nowrap}
-#hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-#wpill{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  border-radius:20px;padding:5px 10px;font-size:13px;font-weight:700;white-space:nowrap;
-}
-#abtn{
-  width:34px;height:34px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);border-radius:10px;
-  font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-}
+#hdr{display:flex;align-items:center;gap:10px;padding:9px 14px;
+  background:var(--smt-azul);border-bottom:3px solid var(--smt-amarillo);flex-shrink:0;
+  box-shadow:0 3px 20px rgba(0,0,0,.5)}
+#hl{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+#hlogo{height:34px;width:auto;flex-shrink:0;filter:brightness(0) invert(1)}
+#hlogo-fb{display:none;font-family:var(--ft);font-size:18px;letter-spacing:2px;color:var(--smt-amarillo);flex-shrink:0}
+#hb{display:flex;flex-direction:column;min-width:0}
+#hname{font-family:var(--ft);font-size:22px;letter-spacing:3px;line-height:1;
+  background:linear-gradient(135deg,var(--smt-celeste),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#hsub{font-size:9px;color:var(--txt2);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+#hr2{display:flex;align-items:center;gap:8px;flex-shrink:0}
+#wpill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+#abtn{width:34px;height:34px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* FRANJA TRICOLOR */
 #stripe{height:4px;background:linear-gradient(90deg,var(--smt-verde),var(--smt-celeste),var(--smt-azul));flex-shrink:0}
 
-/* AGENDA */
-#agpanel{max-height:0;overflow:hidden;transition:max-height .3s ease;
+/* AGENDA PANEL */
+#agp{max-height:0;overflow:hidden;transition:max-height .3s ease;
   background:rgba(0,0,0,.4);border-bottom:1px solid var(--bdr);flex-shrink:0}
-#agpanel.open{max-height:200px;overflow-y:auto}
-#aginner{padding:10px 14px}
-.aglabel{font-size:10px;font-weight:800;color:var(--smt-celeste);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
-.agitem{display:flex;align-items:center;gap:8px;background:rgba(63,162,216,.1);
+#agp.open{max-height:200px;overflow-y:auto}
+#agi{padding:10px 14px}
+.agl{font-size:10px;font-weight:800;color:var(--smt-celeste);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+.agi{display:flex;align-items:center;gap:6px;background:rgba(63,162,216,.1);
   border:1px solid rgba(63,162,216,.25);border-radius:10px;padding:7px 10px;margin-bottom:5px;font-size:13px}
-.agtext{flex:1}.agtime{font-size:11px;color:var(--txt3);white-space:nowrap}
+.agt{flex:1}.agd{font-size:11px;color:var(--txt3);white-space:nowrap}
+.agcal{background:none;border:none;cursor:pointer;font-size:14px;padding:0 2px}
 .agdel{background:none;border:none;color:var(--red);font-size:17px;cursor:pointer;padding:0 2px}
 .agempty{font-size:12px;color:var(--txt3);padding:8px 0;text-align:center}
 
@@ -135,23 +93,18 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 #msgs{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:13px;-webkit-overflow-scrolling:touch}
 #msgs::-webkit-scrollbar{width:3px}
 #msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
-.mrow{display:flex;align-items:flex-end;gap:8px}
-.mrow.user{flex-direction:row-reverse}
-.mavatar{
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--ft);font-size:10px;letter-spacing:1px;
-  flex-shrink:0;color:#fff;box-shadow:0 0 10px rgba(63,162,216,.3);
-}
-.bubble{max-width:80%;padding:11px 15px;font-size:14px;line-height:1.6;word-break:break-word}
-.bubble.assistant{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:4px 18px 18px 18px}
-.bubble.user{background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
-  border-radius:18px 4px 18px 18px;color:#fff;font-weight:600;
-  box-shadow:0 4px 14px rgba(63,162,216,.25)}
-.bubble.searching{background:rgba(0,166,81,.08);border:1px solid rgba(0,166,81,.3);
+.mr{display:flex;align-items:flex-end;gap:8px}
+.mr.user{flex-direction:row-reverse}
+.mav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
+  display:flex;align-items:center;justify-content:center;font-family:var(--ft);font-size:10px;letter-spacing:1px;
+  flex-shrink:0;color:#fff;box-shadow:0 0 10px rgba(63,162,216,.25)}
+.bub{max-width:80%;padding:11px 15px;font-size:14px;line-height:1.6;word-break:break-word}
+.bub.assistant{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:4px 18px 18px 18px}
+.bub.user{background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
+  border-radius:18px 4px 18px 18px;color:#fff;font-weight:600;box-shadow:0 4px 14px rgba(63,162,216,.2)}
+.bub.srch{background:rgba(0,166,81,.08);border:1px solid rgba(0,166,81,.3);
   border-radius:4px 18px 18px 18px;color:#4cda8a;font-size:13px;font-style:italic}
-.typing{display:flex;gap:5px;padding:3px 0}
+.dots{display:flex;gap:5px;padding:3px 0}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--smt-celeste);animation:bop .9s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
@@ -160,527 +113,666 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 .card{margin-top:8px;max-width:80%;margin-left:40px;border-radius:14px;padding:12px 14px;font-size:13px}
 .card.mail{background:rgba(28,78,160,.15);border:1px solid rgba(63,162,216,.35)}
 .card.wa{background:rgba(0,166,81,.08);border:1px solid rgba(37,211,102,.3)}
-.card-lbl{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
-.card.mail .card-lbl{color:var(--smt-celeste)}.card.wa .card-lbl{color:#25D366}
-.ef{color:var(--txt2);margin-bottom:3px}.ef b{color:var(--txt)}
-.ebody{color:var(--txt);margin-top:8px;white-space:pre-wrap;
-  border-top:1px solid rgba(255,255,255,.08);padding-top:8px;line-height:1.6}
-.ebtns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.ebtn{padding:8px 14px;border:none;border-radius:20px;color:#fff;
-  font-size:12px;font-weight:700;cursor:pointer;font-family:var(--ff)}
-.ebtn.mail{background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste))}
-.ebtn.wa{background:linear-gradient(135deg,#128C7E,#25D366)}
+.clbl{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+.card.mail .clbl{color:var(--smt-celeste)}.card.wa .clbl{color:#25D366}
+.cf{color:var(--txt2);margin-bottom:3px}.cf b{color:var(--txt)}
+.cbody{color:var(--txt);margin-top:8px;white-space:pre-wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:8px;line-height:1.6}
+.cbtns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.cbtn{padding:8px 14px;border:none;border-radius:20px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--ff)}
+.cbtn.mail{background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste))}
+.cbtn.wa{background:linear-gradient(135deg,#128C7E,#25D366)}
 
 /* QUICK */
-#qwrap{padding:9px 14px;overflow-x:auto;display:flex;gap:7px;
-  flex-shrink:0;scrollbar-width:none;
+#qw{padding:9px 14px;overflow-x:auto;display:flex;gap:7px;flex-shrink:0;scrollbar-width:none;
   border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2)}
-#qwrap::-webkit-scrollbar{display:none}
-.qbtn{white-space:nowrap;padding:7px 13px;background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.15);border-radius:20px;
-  font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;font-family:var(--ff)}
-.qbtn:active{background:rgba(63,162,216,.25);color:var(--smt-celeste)}
+#qw::-webkit-scrollbar{display:none}
+.qb{white-space:nowrap;padding:7px 13px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.15);border-radius:20px;font-size:12px;font-weight:600;
+  color:var(--txt2);cursor:pointer;font-family:var(--ff)}
+.qb:active{background:rgba(63,162,216,.25);color:var(--smt-celeste)}
 
 /* INPUT */
-#iarea{display:flex;align-items:center;gap:10px;padding:10px 14px;
+#ia{display:flex;align-items:center;gap:10px;padding:10px 14px;
   padding-bottom:max(10px,env(safe-area-inset-bottom));
   background:var(--smt-azul);border-top:1px solid rgba(255,255,255,.1);flex-shrink:0}
-#micbtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+#mic{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
   background:rgba(255,255,255,.1);font-size:18px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-#micbtn.on{background:rgba(224,68,68,.25);border-color:var(--red);animation:pulse 1.1s infinite}
+#mic.on{background:rgba(224,68,68,.25);border-color:var(--red);animation:pulse 1.1s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,68,68,.3)}50%{box-shadow:0 0 0 10px rgba(224,68,68,0)}}
-#tinput{flex:1;padding:11px 16px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);border-radius:24px;
-  font-size:14px;color:var(--txt);outline:none;font-family:var(--ff);transition:border-color .2s}
-#tinput::placeholder{color:var(--txt3)}
-#tinput:focus{border-color:rgba(63,162,216,.6)}
-#sendbtn{width:44px;height:44px;border-radius:50%;border:none;
+#ti{flex:1;padding:11px 16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  border-radius:24px;font-size:14px;color:var(--txt);outline:none;font-family:var(--ff)}
+#ti::placeholder{color:var(--txt3)}
+#ti:focus{border-color:rgba(63,162,216,.6)}
+#sb{width:44px;height:44px;border-radius:50%;border:none;
   background:linear-gradient(135deg,var(--smt-azul),var(--smt-celeste));
   font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;
   flex-shrink:0;color:#fff;box-shadow:0 4px 14px rgba(63,162,216,.35)}
-#sendbtn:active{transform:scale(.93)}
-#stbar{text-align:center;font-size:11px;color:var(--smt-celeste);
-  min-height:14px;padding:2px 0;flex-shrink:0;background:var(--smt-azul);letter-spacing:.3px}
+#sb:active{transform:scale(.93)}
+#stb{text-align:center;font-size:11px;color:var(--smt-celeste);min-height:14px;
+  padding:2px 0;flex-shrink:0;background:var(--smt-azul);letter-spacing:.3px}
 
-/* ══ FOOTER — igual estilo a todos los sistemas TMF ══ */
-#footer{
-  background:var(--smt-azul-osc);
-  border-top:3px solid var(--smt-amarillo);
-  padding:5px 14px 6px;flex-shrink:0;
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-}
-.footer-l1{
-  font-size:10px;font-weight:800;color:var(--smt-amarillo);
-  letter-spacing:1px;text-transform:uppercase;text-align:center;
-}
-.footer-l2{
-  font-size:9px;color:rgba(255,255,255,.5);
-  letter-spacing:.3px;text-align:center;
-}
+/* FOOTER */
+#footer{background:var(--smt-azul-osc);border-top:3px solid var(--smt-amarillo);
+  padding:5px 14px 6px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.fl1{font-size:10px;font-weight:800;color:var(--smt-amarillo);letter-spacing:1px;text-transform:uppercase;text-align:center}
+.fl2{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.3px;text-align:center}
 </style>
 </head>
 <body>
 
 <!-- SETUP -->
 <div id="setup">
-  <img class="setup-logo"
-    src="https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png"
-    alt="Municipalidad de San Miguel de Tucumán"
-    onerror="this.style.display='none';document.querySelector('.setup-logo-fallback').style.display='block'"/>
-  <div class="setup-logo-fallback">SMT</div>
+  <img class="sl" src="https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png" alt="SMT"
+    onerror="this.style.display='none';document.querySelector('.sl-fb').style.display='block'"/>
+  <div class="sl-fb">SMT</div>
+  <div class="sa">AURI</div>
+  <div class="sm">Asistente Personal Municipal</div>
+  <div class="st">Tu asistente virtual de la Municipalidad de San Miguel de Tucumán.<br>Información, trámites y servicios al instante.</div>
 
-  <div class="setup-auri">AURI</div>
-  <div class="setup-muni">Asistente personal municipal</div>
-  <div class="setup-tag">Tu asistente personal municipal.<br>Información, trámites y servicios al instante.</div>
+  <div class="ss">IA — Groq (obligatorio)</div>
+  <div class="sl2">API Key de Groq — gratis en console.groq.com</div>
+  <input class="si mono" id="k-groq" type="password" placeholder="gsk_..." autocomplete="off" spellcheck="false"/>
 
-  <div class="s-sec">Acceso IA — Groq (obligatorio)</div>
-  <div class="s-lbl">API Key — Gratis en console.groq.com</div>
-  <input class="s-inp mono" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="sep"></div>
+  <div class="ss">Google — Búsquedas y Calendario (obligatorio)</div>
+  <div class="sl2">API Key de Google Cloud — gratis en console.cloud.google.com</div>
+  <input class="si mono" id="k-gcse" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false"/>
 
-  <div class="s-sep"></div>
-  <div class="s-sec">Google Custom Search (obligatorio para búsquedas)</div>
-  <div class="s-lbl">API Key de Google Cloud — gratis en console.cloud.google.com</div>
-  <input class="s-inp mono" id="gcse-key" type="password" placeholder="AIza..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="sep"></div>
+  <div class="ss">Tu perfil</div>
+  <div class="sl2">Nombre (AURI te llamará así)</div>
+  <input class="si" id="p-nombre" type="text" placeholder="Tu nombre"/>
+  <div class="sl2">Email</div>
+  <input class="si" id="p-email" type="email" placeholder="tu@email.com"/>
+  <div class="sl2">WhatsApp (código de país + número, sin el +)</div>
+  <input class="si" id="p-wa" type="tel" placeholder="5493811234567"/>
 
-  <div class="s-sep"></div>
-  <div class="s-sec">Tu perfil</div>
-  <div class="s-lbl">Nombre (AURI te llamará así)</div>
-  <input class="s-inp" id="mi-nombre" type="text" placeholder="Tu nombre"/>
-  <div class="s-lbl">Email</div>
-  <input class="s-inp" id="mi-email" type="email" placeholder="tu@email.com"/>
-  <div class="s-lbl">WhatsApp (código de país + número, sin el +)</div>
-  <input class="s-inp" id="mi-wa" type="tel" placeholder="5493811234567"/>
-
-  <button class="s-btn" onclick="guardarConfig()">Ingresar a AURI →</button>
-  <div class="s-err" id="serr"></div>
-  <p class="s-note">Tu información se guarda únicamente en este dispositivo.<br>Nunca es enviada a servidores externos.</p>
+  <button class="sbtn" onclick="guardarConfig()">Ingresar a AURI →</button>
+  <div class="serr" id="serr"></div>
+  <p class="snote">Todo se guarda únicamente en este dispositivo.<br>Nunca es enviado a servidores externos.</p>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div id="hdr">
-    <div id="hdr-left">
-      <img id="hdr-logo"
-        src="https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png"
-        alt="SMT"
-        onerror="this.style.display='none';document.getElementById('hdr-logo-fallback').style.display='block'"/>
-      <div id="hdr-logo-fallback">SMT</div>
-      <div id="hdr-brand">
+    <div id="hl">
+      <img id="hlogo" src="https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png" alt="SMT"
+        onerror="this.style.display='none';document.getElementById('hlogo-fb').style.display='block'"/>
+      <div id="hlogo-fb">SMT</div>
+      <div id="hb">
         <div id="hname">AURI</div>
         <div id="hsub">Asistente Municipal · Tucumán</div>
       </div>
     </div>
-    <div id="hdr-right">
+    <div id="hr2">
       <div id="wpill">⏳ clima</div>
       <button id="abtn" onclick="toggleAg()">📅</button>
     </div>
   </div>
   <div id="stripe"></div>
 
-  <div id="agpanel">
-    <div id="aginner">
-      <div class="aglabel">📅 Mi Agenda Personal</div>
+  <div id="agp">
+    <div id="agi">
+      <div class="agl">📅 Mi Agenda Personal</div>
       <div id="aglist"></div>
     </div>
   </div>
 
   <div id="msgs"></div>
 
-  <div id="qwrap">
-    <button class="qbtn" onclick="enviar('¿Hace frío hoy? ¿Llevo campera o remera?')">🌤️ Clima</button>
-    <button class="qbtn" onclick="enviar('¿Qué hora y fecha es hoy?')">🕐 Hora</button>
-    <button class="qbtn" onclick="enviar('¿Qué tengo agendado hoy?')">📅 Agenda</button>
-    <button class="qbtn" onclick="enviar('¿Qué actividades culturales hay en Tucumán hoy?')">🎭 Actividades</button>
-    <button class="qbtn" onclick="enviar('¿Hay calles cortadas en Tucumán hoy?')">🚧 Calles</button>
-    <button class="qbtn" onclick="enviar('¿Cómo está el tránsito en el centro?')">🚗 Tránsito</button>
-    <button class="qbtn" onclick="enviar('Quiero hacer una denuncia')">📢 Denuncia</button>
-    <button class="qbtn" onclick="enviar('¿Qué trámites puedo hacer en la municipalidad?')">🏛️ Trámites</button>
+  <div id="qw">
+    <button class="qb" onclick="enviar('Hace frio hoy? Llevo campera o remera?')">🌤️ Clima</button>
+    <button class="qb" onclick="enviar('Que hora y fecha es hoy?')">🕐 Hora</button>
+    <button class="qb" onclick="enviar('Que tengo agendado hoy?')">📅 Agenda</button>
+    <button class="qb" onclick="enviar('Que actividades culturales hay en Tucuman hoy?')">🎭 Actividades</button>
+    <button class="qb" onclick="enviar('Hay calles cortadas en Tucuman hoy?')">🚧 Calles</button>
+    <button class="qb" onclick="enviar('Como esta el transito en el centro?')">🚗 Tránsito</button>
+    <button class="qb" onclick="enviar('Quiero hacer una denuncia')">📢 Denuncia</button>
+    <button class="qb" onclick="enviar('Que tramites puedo hacer en la municipalidad?')">🏛️ Trámites</button>
   </div>
 
-  <div id="iarea">
-    <button id="micbtn" onclick="toggleVoz()">🎤</button>
-    <input id="tinput" type="text" placeholder="Hablá con AURI..." autocomplete="off"
+  <div id="ia">
+    <button id="mic" onclick="toggleVoz()">🎤</button>
+    <input id="ti" type="text" placeholder="Hablá con AURI..." autocomplete="off"
            onkeydown="if(event.key==='Enter')enviar(this.value)"/>
-    <button id="sendbtn" onclick="enviar(document.getElementById('tinput').value)">➤</button>
+    <button id="sb" onclick="enviar(document.getElementById('ti').value)">➤</button>
   </div>
-  <div id="stbar"></div>
+  <div id="stb"></div>
 
-  <!-- FOOTER igual a los sistemas del Tribunal -->
   <div id="footer">
-    <div class="footer-l1">AURI v1.0 &nbsp;·&nbsp; Municipalidad de San Miguel de Tucumán &nbsp;·&nbsp; 2026</div>
-    <div class="footer-l2">Desarrollado por David Díaz de la Vega &nbsp;|&nbsp; Sección Cómputos</div>
+    <div class="fl1">AURI v1.0 &nbsp;·&nbsp; Municipalidad de San Miguel de Tucumán &nbsp;·&nbsp; 2026</div>
+    <div class="fl2">Desarrollado por David Díaz de la Vega &nbsp;|&nbsp; Sección Cómputos</div>
   </div>
 </div>
 
 <script>
-const LAT=-26.8083,LON=-65.2176;
-const PROXY="https://api.allorigins.win/raw?url=";
-const MAX_HIST=10;
-let apiKey="",miNombre="",miEmail="",miWA="";
-let climaActual=null,pronostico=[],agenda=[],historial=[],vozSel=null;
+/* ══ CONSTANTES ══ */
+const LAT = -26.8083;
+const LON = -65.2176;
+const GCSE_CX = "57eff6debc2ae4eb7";
+const MAX_HIST = 10;
 
-function init(){
-  apiKey  =localStorage.getItem("auri_groq")    ||"";
-  miNombre=localStorage.getItem("auri_nombre")  ||"";
-  miEmail =localStorage.getItem("auri_email")   ||"";
-  miWA    =localStorage.getItem("auri_wa")      ||"";
-  const gcseKey=localStorage.getItem("auri_gcse_key")||"";
-  if(apiKey){mostrarApp();return;}
-  if(miNombre)document.getElementById("mi-nombre").value=miNombre;
-  if(miEmail) document.getElementById("mi-email").value=miEmail;
-  if(miWA)    document.getElementById("mi-wa").value=miWA;
-  if(gcseKey) document.getElementById("gcse-key").value=gcseKey;
-  document.getElementById("groq-key").addEventListener("keydown",e=>{if(e.key==="Enter")guardarConfig();});
+/* ══ ESTADO ══ */
+var apiKey = "";
+var gcseKey = "";
+var miNombre = "";
+var miEmail = "";
+var miWA = "";
+var climaActual = null;
+var pronostico = null;
+var agenda = [];
+var historial = [];
+var vozSel = null;
+
+/* ══ INICIO ══ */
+function init() {
+  apiKey   = localStorage.getItem("auri_groq")   || "";
+  gcseKey  = localStorage.getItem("auri_gcse")   || "";
+  miNombre = localStorage.getItem("auri_nombre") || "";
+  miEmail  = localStorage.getItem("auri_email")  || "";
+  miWA     = localStorage.getItem("auri_wa")     || "";
+
+  if (apiKey) {
+    mostrarApp();
+    return;
+  }
+
+  // Prellenar campos si existen
+  if (miNombre) document.getElementById("p-nombre").value = miNombre;
+  if (miEmail)  document.getElementById("p-email").value  = miEmail;
+  if (miWA)     document.getElementById("p-wa").value     = miWA;
+  if (gcseKey)  document.getElementById("k-gcse").value   = gcseKey;
+
+  document.getElementById("k-groq").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") guardarConfig();
+  });
 }
-function guardarConfig(){
-  const key=document.getElementById("groq-key").value.trim();
-  if(!key.startsWith("gsk_")){document.getElementById("serr").textContent="La API key de Groq debe comenzar con gsk_";return;}
-  const gcseKey=document.getElementById("gcse-key").value.trim();
-  apiKey=key;
-  miNombre=document.getElementById("mi-nombre").value.trim()||"Usuario";
-  miEmail =document.getElementById("mi-email").value.trim();
-  miWA    =document.getElementById("mi-wa").value.trim();
-  localStorage.setItem("auri_groq",apiKey);
-  localStorage.setItem("auri_gcse_key",gcseKey);
-  localStorage.setItem("auri_nombre",miNombre);
-  localStorage.setItem("auri_email",miEmail);
-  localStorage.setItem("auri_wa",miWA);
+
+function guardarConfig() {
+  var kg = document.getElementById("k-groq").value.trim();
+  if (!kg.startsWith("gsk_")) {
+    document.getElementById("serr").textContent = "La API key de Groq debe comenzar con gsk_";
+    return;
+  }
+  apiKey   = kg;
+  gcseKey  = document.getElementById("k-gcse").value.trim();
+  miNombre = document.getElementById("p-nombre").value.trim() || "Usuario";
+  miEmail  = document.getElementById("p-email").value.trim();
+  miWA     = document.getElementById("p-wa").value.trim();
+
+  localStorage.setItem("auri_groq",   apiKey);
+  localStorage.setItem("auri_gcse",   gcseKey);
+  localStorage.setItem("auri_nombre", miNombre);
+  localStorage.setItem("auri_email",  miEmail);
+  localStorage.setItem("auri_wa",     miWA);
+
   mostrarApp();
 }
-function mostrarApp(){
-  document.getElementById("setup").style.display="none";
-  document.getElementById("app").style.display="flex";
-  cargarAgenda();fetchClima();cargarVoces();
-  addMsg("assistant",`Buenas, ${miNombre}. Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucumán. ¿En qué te puedo ayudar hoy?`);
+
+function mostrarApp() {
+  document.getElementById("setup").style.display = "none";
+  document.getElementById("app").style.display   = "flex";
+  cargarAgenda();
+  fetchClima();
+  cargarVoces();
+  addMsg("assistant", "Buenas, " + miNombre + ". Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucuman. En que te puedo ayudar hoy?");
 }
 
-/* VOZ */
-function cargarVoces(){
-  if(!window.speechSynthesis)return;
-  const intentar=()=>{
-    const vs=speechSynthesis.getVoices();if(!vs.length)return;
-    const pL=["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
-    const pM=["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres","andrés"];
-    for(const l of pL)for(const m of pM){
-      const v=vs.find(v=>v.lang.toLowerCase().startsWith(l.slice(0,5).toLowerCase())&&v.name.toLowerCase().includes(m));
-      if(v){vozSel=v;return;}
+/* ══ VOZ ══ */
+function cargarVoces() {
+  if (!window.speechSynthesis) return;
+  function intentar() {
+    var vs = speechSynthesis.getVoices();
+    if (!vs.length) return;
+    var pL = ["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
+    var pM = ["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres"];
+    for (var i = 0; i < pL.length; i++) {
+      for (var j = 0; j < pM.length; j++) {
+        var v = vs.find(function(v) {
+          return v.lang.toLowerCase().startsWith(pL[i].slice(0,5).toLowerCase()) &&
+                 v.name.toLowerCase().includes(pM[j]);
+        });
+        if (v) { vozSel = v; return; }
+      }
     }
-    vozSel=vs.find(v=>v.lang.startsWith("es"))||null;
-  };
-  if(speechSynthesis.getVoices().length)intentar();
-  else speechSynthesis.onvoiceschanged=intentar;
+    vozSel = vs.find(function(v) { return v.lang.startsWith("es"); }) || null;
+  }
+  if (speechSynthesis.getVoices().length) intentar();
+  else speechSynthesis.onvoiceschanged = intentar;
 }
-function hablar(txt){
-  if(!window.speechSynthesis)return;
+
+function hablar(txt) {
+  if (!window.speechSynthesis) return;
   speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(txt.slice(0,280));
-  if(vozSel)u.voice=vozSel;
-  u.lang="es-MX";u.pitch=0.85;u.rate=1.05;u.volume=1;
+  var u = new SpeechSynthesisUtterance(txt.slice(0, 280));
+  if (vozSel) u.voice = vozSel;
+  u.lang = "es-MX"; u.pitch = 0.85; u.rate = 1.05; u.volume = 1;
   speechSynthesis.speak(u);
 }
 
-/* CLIMA */
-async function fetchClima(){
-  try{
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`+
-      `&current=temperature_2m,weather_code,apparent_temperature,relative_humidity_2m,wind_speed_10m`+
-      `&hourly=temperature_2m,weather_code,precipitation_probability`+
-      `&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=3`);
-    const d=await r.json();climaActual=d.current;pronostico=d.hourly;
-    const ic={0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",51:"🌦️",61:"🌧️",63:"🌧️",80:"🌦️",95:"⛈️"};
-    const c=climaActual.weather_code;
-    const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
-    document.getElementById("wpill").textContent=`${ic[k]||"🌡️"} ${Math.round(climaActual.temperature_2m)}°C`;
-  }catch(e){document.getElementById("wpill").textContent="🌡️ sin datos";}
+/* ══ CLIMA ══ */
+async function fetchClima() {
+  try {
+    var r = await fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=" + LAT + "&longitude=" + LON +
+      "&current=temperature_2m,weather_code,apparent_temperature,relative_humidity_2m,wind_speed_10m" +
+      "&hourly=temperature_2m,weather_code,precipitation_probability" +
+      "&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=3"
+    );
+    var d = await r.json();
+    climaActual = d.current;
+    pronostico  = d.hourly;
+    var ic = {0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",51:"🌦️",61:"🌧️",63:"🌧️",80:"🌦️",95:"⛈️"};
+    var c = climaActual.weather_code;
+    var k = [0,1,2,3,45,51,61,63,80,95].reduce(function(a,b) { return Math.abs(b-c)<Math.abs(a-c)?b:a; });
+    document.getElementById("wpill").textContent = (ic[k]||"🌡️") + " " + Math.round(climaActual.temperature_2m) + "°C";
+  } catch(e) {
+    document.getElementById("wpill").textContent = "🌡️ sin datos";
+  }
 }
-function buildPronostico(){
-  if(!pronostico||!pronostico.time)return"Pronóstico no disponible";
-  const cn={0:"Despejado",1:"Mayorm. despejado",2:"Parc. nublado",3:"Nublado",45:"Neblina",
-    51:"Llovizna",61:"Lluvia leve",63:"Lluvia mod.",80:"Chaparrones",95:"Tormenta"};
-  const ahora=new Date();let res="PRONÓSTICO próximas 48hs:\n";let n=0;
-  for(let i=0;i<pronostico.time.length&&n<48;i++){
-    const dt=new Date(pronostico.time[i]);
-    if(dt>=ahora){
-      const h=dt.toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-      const c=pronostico.weather_code[i];
-      const kk=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
-      res+=`${h}: ${Math.round(pronostico.temperature_2m[i])}°C ${cn[kk]||"Variable"} lluvia:${pronostico.precipitation_probability[i]}%\n`;
+
+function getPronostico() {
+  if (!pronostico || !pronostico.time) return "Pronostico no disponible";
+  var cn = {0:"Despejado",1:"Mayorm. despejado",2:"Parc. nublado",3:"Nublado",
+    45:"Neblina",51:"Llovizna",61:"Lluvia leve",63:"Lluvia mod.",80:"Chaparrones",95:"Tormenta"};
+  var ahora = new Date();
+  var res = "PRONOSTICO proximas 48hs:\n";
+  var n = 0;
+  for (var i = 0; i < pronostico.time.length && n < 48; i++) {
+    var dt = new Date(pronostico.time[i]);
+    if (dt >= ahora) {
+      var h = dt.toLocaleString("es-AR", {weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+      var c = pronostico.weather_code[i];
+      var k = [0,1,2,3,45,51,61,63,80,95].reduce(function(a,b) { return Math.abs(b-c)<Math.abs(a-c)?b:a; });
+      res += h + ": " + Math.round(pronostico.temperature_2m[i]) + "C " + (cn[k]||"Variable") + " lluvia:" + pronostico.precipitation_probability[i] + "%\n";
       n++;
     }
   }
   return res;
 }
 
-/* ══ GOOGLE CUSTOM SEARCH ══ */
-const GCSE_KEY = localStorage.getItem("auri_gcse_key") || "";
-const GCSE_CX  = "57eff6debc2ae4eb7";
-
-async function buscarGoogle(q, soloMuni=false){
-  const key = localStorage.getItem("auri_gcse_key") || "";
-  if(!key) return await buscarWikipedia(q);
-  try{
-    const query = soloMuni ? `${q} site:smt.gob.ar` : q;
-    const url = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${GCSE_CX}&q=${encodeURIComponent(query)}&lr=lang_es&num=5`;
-    const r = await fetch(url, {signal:AbortSignal.timeout(6000)});
-    const d = await r.json();
-    if(!d.items||!d.items.length) return "";
-    const res = d.items.map(item=>
-      `• ${item.title}: ${(item.snippet||"").replace(/\n/g," ").slice(0,200)}`
-    ).join("\n");
-    return `Resultados de Google para "${q}":\n${res}`;
-  }catch(e){return await buscarWikipedia(q);}
+/* ══ BÚSQUEDA GOOGLE ══ */
+async function buscarGoogle(query, soloMuni) {
+  var key = gcseKey || localStorage.getItem("auri_gcse") || "";
+  if (!key) return buscarWiki(query);
+  try {
+    var q = soloMuni ? (query + " site:smt.gob.ar") : query;
+    var url = "https://www.googleapis.com/customsearch/v1?key=" + key +
+              "&cx=" + GCSE_CX + "&q=" + encodeURIComponent(q) + "&lr=lang_es&num=5";
+    var r = await fetch(url);
+    var d = await r.json();
+    if (!d.items || !d.items.length) {
+      if (soloMuni) return buscarGoogle(query, false);
+      return buscarWiki(query);
+    }
+    var res = d.items.map(function(item) {
+      return "- " + item.title + ": " + (item.snippet||"").replace(/\n/g," ").slice(0,200);
+    }).join("\n");
+    return "Resultados de Google para \"" + query + "\":\n" + res;
+  } catch(e) {
+    return buscarWiki(query);
+  }
 }
 
-async function buscarWikipedia(q){
-  try{
-    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.slice(0,80))}`);
-    if(!r.ok)return"";const d=await r.json();
-    return d.extract?`Wikipedia "${q}": ${d.extract.slice(0,1000)}`:"";
-  }catch(e){return"";}
+async function buscarWiki(query) {
+  try {
+    var r = await fetch("https://es.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(query.slice(0,80)));
+    if (!r.ok) return "";
+    var d = await r.json();
+    return d.extract ? ("Wikipedia: " + d.extract.slice(0,800)) : "";
+  } catch(e) { return ""; }
 }
 
 /* ══ GOOGLE CALENDAR ══ */
-function abrirGoogleCalendar(item, dt){
-  try{
-    const inicio = new Date(dt);
-    const fin    = new Date(inicio.getTime() + 60*60*1000); // +1 hora
-    const fmt = d => d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
-    const url = `https://calendar.google.com/calendar/r/eventedit?`+
-      `text=${encodeURIComponent(item)}`+
-      `&dates=${fmt(inicio)}/${fmt(fin)}`+
-      `&details=${encodeURIComponent("Agendado por AURI - Asistente Municipal SMT")}`;
+function abrirCalendar(item, dt) {
+  try {
+    var inicio = new Date(dt);
+    var fin = new Date(inicio.getTime() + 3600000);
+    function fmt(d) { return d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z"; }
+    var url = "https://calendar.google.com/calendar/r/eventedit?" +
+      "text=" + encodeURIComponent(item) +
+      "&dates=" + fmt(inicio) + "/" + fmt(fin) +
+      "&details=" + encodeURIComponent("Agendado por AURI - Municipalidad SMT");
     window.open(url, "_blank");
-  }catch(e){console.error(e);}
+  } catch(e) {}
 }
 
-/* AGENDA */
-function cargarAgenda(){
-  try{agenda=JSON.parse(localStorage.getItem("auri_agenda")||"[]");}catch(e){agenda=[];}
-  agenda=dedup(agenda);guardarAg();renderAg();
-}
-function dedup(l){const v=new Set();return l.filter(a=>{const k=`${a.item}|${a.dt}`;if(v.has(k))return false;v.add(k);return true;});}
-function guardarAg(){localStorage.setItem("auri_agenda",JSON.stringify(agenda));}
-function toggleAg(){document.getElementById("agpanel").classList.toggle("open");}
-function renderAg(){
-  const el=document.getElementById("aglist");
-  if(!agenda.length){el.innerHTML='<div class="agempty">Sin eventos. Pedile a AURI que agregue uno.</div>';return;}
-  el.innerHTML=[...agenda].sort((a,b)=>new Date(a.dt)-new Date(b.dt)).map(a=>
-    `<div class="agitem">
-      <span class="agtext">${a.item}</span>
-      <span class="agtime">${fdt(a.dt)}</span>
-      <button onclick="abrirGoogleCalendar('${a.item.replace(/'/g,"\\'")}','${a.dt}')" title="Agregar a Google Calendar" style="background:none;border:none;cursor:pointer;font-size:14px">📆</button>
-      <button class="agdel" onclick="borrarAg('${a.id}')">×</button>
-    </div>`).join("");
-}
-function borrarAg(id){agenda=agenda.filter(a=>a.id!==id);guardarAg();renderAg();}
-function fdt(dt){try{return new Date(dt).toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return dt||"";}}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-
-/* UI */
-function addMsg(role,text,extra){
-  const msgs=document.getElementById("msgs");
-  const row=document.createElement("div");row.className=`mrow ${role}`;
-  let html=role==="assistant"?`<div class="mavatar">AU</div>`:"";
-  const cls=extra?.searching?"bubble searching":`bubble ${role}`;
-  html+=`<div><div class="${cls}">${text.replace(/\n/g,"<br>")}</div>`;
-  if(extra?.email){
-    const em=extra.email;
-    html+=`<div class="card mail"><div class="card-lbl">📧 Borrador de Mail</div>
-    <div class="ef"><b>Para:</b> ${em.to}</div><div class="ef"><b>Asunto:</b> ${em.subject}</div>
-    <div class="ebody">${em.body}</div>
-    <div class="ebtns">
-      <button class="ebtn mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
-      ${miWA?`<button class="ebtn wa" onclick="enviarWA('${esc(em.body)}')">💬 WhatsApp</button>`:""}
-    </div></div>`;
-  }
-  if(extra?.wa){
-    html+=`<div class="card wa"><div class="card-lbl">💬 Mensaje de WhatsApp</div>
-    <div style="color:var(--txt);white-space:pre-wrap;font-size:13px;line-height:1.5">${extra.wa.body}</div>
-    <div class="ebtns"><button class="ebtn wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button></div></div>`;
-  }
-  html+=`</div>`;row.innerHTML=html;msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
-}
-function esc(s){return(s||"").replace(/'/g,"\\'").replace(/\n/g,"\\n");}
-function addTyping(){
-  const msgs=document.getElementById("msgs");
-  const row=document.createElement("div");row.className="mrow assistant";row.id="typing";
-  row.innerHTML=`<div class="mavatar">AU</div><div class="bubble assistant"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
-  msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
-}
-function qTyping(){const t=document.getElementById("typing");if(t)t.remove();}
-function setSt(m){document.getElementById("stbar").textContent=m;}
-function abrirMail(to,sub,body){window.open(`mailto:${decodeURIComponent(to)}?subject=${sub}&body=${encodeURIComponent(decodeURIComponent(body))}`);}
-function enviarWA(body){const n=miWA.replace(/\D/g,"");window.open(`https://wa.me/${n}?text=${encodeURIComponent(decodeURIComponent(body))}`);}
-
-/* PROMPT */
-function buildSys(extra){
-  const now=new Date();
-  const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-  const fecha=now.toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-  const hora=now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
-  const isoHoy=now.toISOString().split("T")[0];
-  const manana=new Date(now);manana.setDate(now.getDate()+1);
-  const semana=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-now.getDay()+i);return`${dias[i]}=${d.toISOString().split("T")[0]}`;});
-  const cn={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Neblina",
-    51:"Llovizna",61:"Lluvia leve",63:"Lluvia moderada",80:"Chaparrones",95:"Tormenta"};
-  let wstr="No disponible";
-  if(climaActual){const c=climaActual.weather_code;const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
-    wstr=`${Math.round(climaActual.temperature_2m)}°C (sensación ${Math.round(climaActual.apparent_temperature)}°C), ${cn[k]||"Variable"}, Humedad ${climaActual.relative_humidity_2m}%, Viento ${Math.round(climaActual.wind_speed_10m)} km/h`;}
-  const agstr=dedup(agenda).map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n")||"Sin eventos";
-
-  return`Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucumán (SMT), Argentina.
-
-USUARIO: ${miNombre} (mencioná su nombre UNA sola vez por respuesta)
-EMAIL: ${miEmail||"no configurado"} | WHATSAPP: ${miWA||"no configurado"}
-
-PERSONALIDAD: jovial, amigable, profesional. Español latinoamericano neutro. Sin "che", "pibe". Sin abreviaciones. MÁXIMO 3 oraciones. RESPUESTAS DIRECTAS Y CONCRETAS.
-
-REGLA DE ORO: NUNCA preguntar al usuario si quiere que busques. NUNCA decir "podés consultar en internet" ni "te sugiero verificar en otro sitio". Si necesitás info actual, usá la etiqueta de búsqueda DIRECTAMENTE en tu respuesta. Si no encontrás nada, respondé con tu mejor conocimiento.
-
-FECHA: ${fecha} (${isoHoy}), ${hora}
-MAÑANA: ${manana.toISOString().split("T")[0]}
-SEMANA: ${semana.join(", ")}
-
-CLIMA ACTUAL TUCUMÁN: ${wstr}
-VESTIMENTA:
-- Menos de 8°C → campera gruesa o abrigo (NO es para remera ni campera liviana)
-- 8°C a 14°C → campera (NO es para remera)
-- 15°C a 21°C → remera manga larga o campera liviana
-- 22°C a 27°C → remera
-- Más de 27°C → remera, hace calor
-
-${buildPronostico()}
-
-AGENDA: ${agstr}
-
-${extra?`INFORMACIÓN ENCONTRADA (usala para responder con datos concretos):\n${extra}\n`:""}
-
-RESTRICCIONES — lo que AURI NO hace:
-❌ Opinar sobre política partidaria o candidatos electorales
-❌ Opinar sobre funcionarios públicos (puede informar datos oficiales de su cargo)
-❌ Dar diagnósticos médicos (SÍ puede informar sobre servicios de salud de la municipalidad)
-❌ Asesoramiento legal o financiero específico
-❌ Datos personales de terceros ciudadanos
-❌ Contenido inapropiado para menores / grooming
-❌ Contenido discriminatorio, violento o de odio
-❌ Suplantar identidad / actividades ilegales / contenido sexual
-
-IMPORTANTE: Consultas sobre servicios municipales de salud (hospitales, centros de salud, asistencia pública, médicos disponibles) SON parte de las funciones de AURI y deben responderse buscando en smt.gob.ar.
-
-DEPORTES Y NOTICIAS: SÍ puede responder. Buscar si no tiene datos actuales.
-
-TRÁNSITO EN TIEMPO REAL: No hay API gratuita de tráfico en tiempo real para Tucumán. Respondé con información sobre horarios pico habituales del centro (7-9hs, 12-14hs, 17-20hs) y sugerí alternativas.
-
-Para lo que viole restricciones: "Eso está fuera de mis funciones, ${miNombre}. ¿Te ayudo con algo de la municipalidad o tu agenda?"
-
-CUÁNDO BUSCAR — incluí la etiqueta DIRECTAMENTE sin preguntar permiso:
-- Noticias actuales, deportes, resultados de partidos → <BUSCAR_WEB>términos</BUSCAR_WEB>
-- Servicios municipales, trámites, dependencias, salud pública, actividades → <BUSCAR_MUNI>tema</BUSCAR_MUNI>
-- CARGOS POLÍTICOS ACTUALES (presidente, gobernador, intendente, ministro, etc.) → SIEMPRE <BUSCAR_WEB>cargo actual Argentina</BUSCAR_WEB>. NUNCA respondas de memoria quién ocupa un cargo político hoy. El presidente actual de Argentina es Javier Milei desde diciembre 2023, Alberto Fernández ya NO es presidente.
-
-INSTRUCCIONES ESPECIALES:
-1. Agenda: SIEMPRE incluí texto de confirmación Y el tag. Ejemplo: "Listo, ${miNombre}, agendé tu reunión con el Dr. Balardini para mañana a las 10." <AGENDA>{"item":"Reunión con el Dr. Balardini","dt":"2026-05-18T10:00"}</AGENDA>
-2. Mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo completo"}</EMAIL>
-3. WhatsApp: SIEMPRE incluí texto de confirmación Y el tag. Ejemplo: "Acá está el mensaje listo para enviar, ${miNombre}." <WA>{"body":"mensaje completo"}</WA>
-4. Nunca repetir información dos veces en la misma respuesta
-5. Nunca mencionar que sos una IA salvo que te lo pregunten directamente
-6. Cada respuesta DEBE tener texto visible. Nunca respondas solo con tags sin texto.`;
+/* ══ AGENDA ══ */
+function cargarAgenda() {
+  try { agenda = JSON.parse(localStorage.getItem("auri_agenda") || "[]"); } catch(e) { agenda = []; }
+  agenda = dedup(agenda);
+  guardarAg();
+  renderAg();
 }
 
-/* GROQ */
-async function llamarGroq(msgs,tokens=350){
-  const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},
-    body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,max_tokens:tokens,temperature:0.4})
+function dedup(l) {
+  var v = new Set();
+  return l.filter(function(a) {
+    var k = a.item + "|" + a.dt;
+    if (v.has(k)) return false;
+    v.add(k); return true;
   });
-  const d=await r.json();
-  if(!r.ok){if(r.status===401){localStorage.removeItem("auri_groq");throw new Error("key_invalida");}throw new Error(d?.error?.message||"Error");}
+}
+
+function guardarAg() { localStorage.setItem("auri_agenda", JSON.stringify(agenda)); }
+function toggleAg()  { document.getElementById("agp").classList.toggle("open"); }
+
+function renderAg() {
+  var el = document.getElementById("aglist");
+  if (!agenda.length) {
+    el.innerHTML = '<div class="agempty">Sin eventos. Pedile a AURI que agregue uno.</div>';
+    return;
+  }
+  var sorted = agenda.slice().sort(function(a,b) { return new Date(a.dt) - new Date(b.dt); });
+  el.innerHTML = sorted.map(function(a) {
+    var safeDt = a.dt.replace(/'/g,"");
+    var safeItem = a.item.replace(/'/g,"&#39;");
+    return '<div class="agi">' +
+      '<span class="agt">' + a.item + '</span>' +
+      '<span class="agd">' + fdt(a.dt) + '</span>' +
+      '<button class="agcal" onclick="abrirCalendar(\'' + safeItem + '\',\'' + safeDt + '\')" title="Google Calendar">📆</button>' +
+      '<button class="agdel" onclick="borrarAg(\'' + a.id + '\')">×</button>' +
+      '</div>';
+  }).join("");
+}
+
+function borrarAg(id) {
+  agenda = agenda.filter(function(a) { return a.id !== id; });
+  guardarAg(); renderAg();
+}
+
+function fdt(dt) {
+  try { return new Date(dt).toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}); }
+  catch(e) { return dt || ""; }
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+/* ══ UI ══ */
+function addMsg(role, text, extra) {
+  var msgs = document.getElementById("msgs");
+  var row  = document.createElement("div");
+  row.className = "mr " + role;
+
+  var html = (role === "assistant") ? '<div class="mav">AU</div>' : "";
+  var cls  = (extra && extra.searching) ? "bub srch" : "bub " + role;
+  html += '<div><div class="' + cls + '">' + text.replace(/\n/g,"<br>") + '</div>';
+
+  if (extra && extra.email) {
+    var em = extra.email;
+    html += '<div class="card mail"><div class="clbl">📧 Borrador de Mail</div>' +
+      '<div class="cf"><b>Para:</b> ' + em.to + '</div>' +
+      '<div class="cf"><b>Asunto:</b> ' + em.subject + '</div>' +
+      '<div class="cbody">' + em.body + '</div>' +
+      '<div class="cbtns">' +
+      '<button class="cbtn mail" onclick="abrirMail(\'' + esc(em.to) + '\',\'' + esc(em.subject) + '\',\'' + esc(em.body) + '\')">✉️ Abrir en correo</button>' +
+      (miWA ? '<button class="cbtn wa" onclick="enviarWA(\'' + esc(em.body) + '\')">💬 WhatsApp</button>' : "") +
+      '</div></div>';
+  }
+
+  if (extra && extra.wa) {
+    html += '<div class="card wa"><div class="clbl">💬 Mensaje de WhatsApp</div>' +
+      '<div style="color:var(--txt);white-space:pre-wrap;font-size:13px;line-height:1.5">' + extra.wa.body + '</div>' +
+      '<div class="cbtns"><button class="cbtn wa" onclick="enviarWA(\'' + esc(extra.wa.body) + '\')">💬 Abrir en WhatsApp</button></div>' +
+      '</div>';
+  }
+
+  html += '</div>';
+  row.innerHTML = html;
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function esc(s) { return (s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n"); }
+
+function addTyping() {
+  var msgs = document.getElementById("msgs");
+  var row  = document.createElement("div");
+  row.className = "mr assistant";
+  row.id = "typing";
+  row.innerHTML = '<div class="mav">AU</div><div class="bub assistant"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function qTyping() { var t = document.getElementById("typing"); if (t) t.remove(); }
+function setSt(m)  { document.getElementById("stb").textContent = m; }
+
+function abrirMail(to, sub, body) {
+  window.open("mailto:" + decodeURIComponent(to) + "?subject=" + sub + "&body=" + encodeURIComponent(decodeURIComponent(body)));
+}
+function enviarWA(body) {
+  var n = miWA.replace(/\D/g,"");
+  window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(decodeURIComponent(body)));
+}
+
+/* ══ PROMPT ══ */
+function buildSys(ctx) {
+  var now   = new Date();
+  var dias  = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+  var fecha = now.toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  var hora  = now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+  var isoHoy = now.toISOString().split("T")[0];
+
+  var manana = new Date(now);
+  manana.setDate(now.getDate() + 1);
+  var isoManana = manana.toISOString().split("T")[0];
+
+  var semana = [];
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(now);
+    d.setDate(now.getDate() - now.getDay() + i);
+    semana.push(dias[i] + "=" + d.toISOString().split("T")[0]);
+  }
+
+  var cn = {0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",
+    45:"Neblina",51:"Llovizna",61:"Lluvia leve",63:"Lluvia moderada",80:"Chaparrones",95:"Tormenta"};
+  var wstr = "No disponible";
+  if (climaActual) {
+    var c = climaActual.weather_code;
+    var k = [0,1,2,3,45,51,61,63,80,95].reduce(function(a,b) { return Math.abs(b-c)<Math.abs(a-c)?b:a; });
+    wstr = Math.round(climaActual.temperature_2m) + "C (sensacion " + Math.round(climaActual.apparent_temperature) + "C), " +
+           (cn[k]||"Variable") + ", Humedad " + climaActual.relative_humidity_2m + "%, Viento " + Math.round(climaActual.wind_speed_10m) + " km/h";
+  }
+
+  var agstr = dedup(agenda).map(function(a) { return "- " + fdt(a.dt) + ": " + a.item; }).join("\n") || "Sin eventos";
+
+  var sys = "Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucuman (SMT), Argentina.\n\n" +
+    "USUARIO: " + miNombre + " (menciona su nombre UNA vez por respuesta)\n" +
+    "EMAIL: " + (miEmail||"no configurado") + " | WHATSAPP: " + (miWA||"no configurado") + "\n\n" +
+    "PERSONALIDAD: jovial, amigable, profesional. Espanol latinoamericano neutro. Sin 'che', 'pibe'. Sin abreviaciones. MAXIMO 3 oraciones. RESPUESTAS DIRECTAS.\n\n" +
+    "REGLA DE ORO: NUNCA preguntar si quiere que busques. NUNCA decir 'busca en internet'. Si necesitas info actual, usa la etiqueta de busqueda directamente.\n\n" +
+    "FECHA: " + fecha + " (" + isoHoy + "), " + hora + "\n" +
+    "MANANA: " + isoManana + "\n" +
+    "SEMANA: " + semana.join(", ") + "\n\n" +
+    "CLIMA ACTUAL TUCUMAN: " + wstr + "\n" +
+    "VESTIMENTA: menos de 8C=abrigo | 8-14C=campera | 15-21C=manga larga | 22-27C=remera | mas de 27C=calor\n\n" +
+    getPronostico() + "\n\n" +
+    "AGENDA: " + agstr + "\n\n" +
+    (ctx ? ("INFORMACION ENCONTRADA (usala para responder directamente):\n" + ctx + "\n\n") : "") +
+    "RESTRICCIONES - NUNCA hacer:\n" +
+    "NO: politica partidaria o candidatos | NO: opinar sobre funcionarios | NO: diagnosticos medicos\n" +
+    "NO: asesoramiento legal/financiero | NO: datos personales de terceros | NO: contenido para menores\n" +
+    "NO: grooming | NO: contenido discriminatorio o violento | NO: actividades ilegales | NO: contenido sexual\n" +
+    "SI PUEDE: servicios municipales de salud, hospitales, centros de salud, asistencia publica\n" +
+    "SI PUEDE: deportes, noticias, resultados de partidos, cultura general\n\n" +
+    "PRESIDENTE ACTUAL DE ARGENTINA: Javier Milei (asumio diciembre 2023). Alberto Fernandez YA NO es presidente.\n" +
+    "Para cualquier cargo politico actual, buscar primero con BUSCAR_WEB.\n\n" +
+    "TRANSITO: no hay datos en tiempo real. Informar horarios pico habituales (7-9hs, 12-14hs, 17-20hs).\n\n" +
+    "CUANDO BUSCAR (incluir la etiqueta SIN pedir permiso):\n" +
+    "- Noticias, deportes, resultados, cargos actuales: <BUSCAR_WEB>terminos</BUSCAR_WEB>\n" +
+    "- Info municipal, tramites, salud publica, actividades: <BUSCAR_MUNI>tema</BUSCAR_MUNI>\n\n" +
+    "INSTRUCCIONES:\n" +
+    "1. AGENDA: incluir texto Y tag. Ej: 'Agendado para el lunes.' <AGENDA>{\"item\":\"evento\",\"dt\":\"YYYY-MM-DDTHH:MM\"}</AGENDA>\n" +
+    "2. MAIL: <EMAIL>{\"to\":\"mail\",\"subject\":\"asunto\",\"body\":\"cuerpo\"}</EMAIL>\n" +
+    "3. WHATSAPP: <WA>{\"body\":\"mensaje\"}</WA>\n" +
+    "4. Nunca repetir info dos veces. Nunca decir que sos IA salvo que te lo pregunten. SIEMPRE incluir texto visible.";
+
+  return sys;
+}
+
+/* ══ GROQ ══ */
+async function llamarGroq(msgs, tokens) {
+  if (!tokens) tokens = 400;
+  var r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + apiKey
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: msgs,
+      max_tokens: tokens,
+      temperature: 0.4
+    })
+  });
+  var d = await r.json();
+  if (!r.ok) {
+    if (r.status === 401) { localStorage.removeItem("auri_groq"); throw new Error("key_invalida"); }
+    throw new Error(d && d.error && d.error.message ? d.error.message : "Error de API");
+  }
   return d.choices[0].message.content;
 }
 
-/* ENVIAR */
-async function enviar(texto){
-  texto=(texto||"").trim();if(!texto)return;
-  document.getElementById("tinput").value="";
-  addMsg("user",texto);
-  historial.push({role:"user",content:texto});
-  if(historial.length>MAX_HIST)historial=historial.slice(-MAX_HIST);
-  addTyping();setSt("AURI está pensando...");
-  try{
-    let reply=await llamarGroq([{role:"system",content:buildSys()},...historial]);
-    const bwM=reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
-    const bmM=reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
-    if(bwM||bmM){
-      qTyping();let ctx="";
-      if(bmM){
-        const q=bmM[1].trim();
-        addMsg("assistant",`🔍 Buscando "${q}" en smt.gob.ar...`,{searching:true});
-        ctx=await buscarGoogle(q, true);
-        if(!ctx) ctx=await buscarGoogle(q, false);
-      }else{
-        const q=bwM[1].trim();
-        const esDeporte=/fútbol|futbol|partido|resultado|gol|liga|torneo|deporte|moto|gp|racing|river|boca|atletico|basket|tenis|rugby|san martín|atletico tucuman/i.test(q);
-        addMsg("assistant",`🔍 Buscando ${esDeporte?"resultados de":"información sobre"} "${q}"...`,{searching:true});
-        ctx=await buscarGoogle(q, false);
-        if(!ctx) ctx=await buscarWikipedia(q);
+/* ══ ENVIAR ══ */
+async function enviar(texto) {
+  texto = (texto || "").trim();
+  if (!texto) return;
+  document.getElementById("ti").value = "";
+  addMsg("user", texto);
+  historial.push({role:"user", content:texto});
+  if (historial.length > MAX_HIST) historial = historial.slice(-MAX_HIST);
+  addTyping();
+  setSt("AURI esta pensando...");
+
+  try {
+    var reply = await llamarGroq([{role:"system", content:buildSys(null)}].concat(historial));
+
+    var bwM = reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
+    var bmM = reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
+
+    if (bwM || bmM) {
+      qTyping();
+      var ctx = "";
+      if (bmM) {
+        var q = bmM[1].trim();
+        addMsg("assistant", "Buscando \"" + q + "\" en smt.gob.ar...", {searching:true});
+        ctx = await buscarGoogle(q, true);
+      } else {
+        var q = bwM[1].trim();
+        addMsg("assistant", "Buscando informacion sobre \"" + q + "\"...", {searching:true});
+        ctx = await buscarGoogle(q, false);
       }
-      if(!ctx)ctx=`No se encontraron resultados. Respondé con tu conocimiento disponible de forma directa y concreta.`;
-      setSt("AURI está procesando...");addTyping();
-      reply=await llamarGroq([{role:"system",content:buildSys(ctx)},...historial]);
+      if (!ctx) ctx = "No se encontraron resultados. Responde con tu mejor conocimiento de forma directa y concreta.";
+      setSt("AURI esta procesando...");
+      addTyping();
+      reply = await llamarGroq([{role:"system", content:buildSys(ctx)}].concat(historial));
     }
-    const aM=reply.match(/<AGENDA>([\s\S]*?)<\/AGENDA>/);
-    if(aM){
-      try{const a=JSON.parse(aM[1]);
-        if(a.item&&a.dt&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)&&!agenda.some(x=>x.item===a.item&&x.dt===a.dt)){
-          agenda.push({id:uid(),item:a.item,dt:a.dt});guardarAg();renderAg();}
-      }catch(e){}
-      reply=reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/,"").trim();
+
+    // Procesar AGENDA
+    var aM = reply.match(/<AGENDA>([\s\S]*?)<\/AGENDA>/);
+    var ultimoAgendado = null;
+    if (aM) {
+      try {
+        var a = JSON.parse(aM[1]);
+        if (a.item && a.dt && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)) {
+          if (!agenda.some(function(x) { return x.item===a.item && x.dt===a.dt; })) {
+            ultimoAgendado = {id:uid(), item:a.item, dt:a.dt};
+            agenda.push(ultimoAgendado);
+            guardarAg(); renderAg();
+          }
+        }
+      } catch(e) {}
+      reply = reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/, "").trim();
     }
-    let eo=null,wo=null;
-    const eM=reply.match(/<EMAIL>([\s\S]*?)<\/EMAIL>/);
-    if(eM){try{eo=JSON.parse(eM[1]);}catch(e){}reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
-    const wM=reply.match(/<WA>([\s\S]*?)<\/WA>/);
-    if(wM){try{wo=JSON.parse(wM[1]);}catch(e){}reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
-    reply=reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g,"").replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g,"").trim();
-    // Si el reply quedó vacío después de procesar los tags, generar confirmación automática
-    if(!reply){
-      if(eo) reply=`Acá está el borrador del mail, ${miNombre}. Revisalo y envialo cuando quieras.`;
-      else if(wo) reply=`Acá está el mensaje listo para enviar por WhatsApp, ${miNombre}.`;
-      else if(agenda.length){const ult=agenda[agenda.length-1];reply=`Listo, ${miNombre}. Agendé "${ult.item}" para el ${fdt(ult.dt)}. Tocá 📆 en la agenda para abrirlo en Google Calendar.`;}
-      else reply=`Listo, ${miNombre}.`;
+
+    // Procesar EMAIL
+    var emailObj = null;
+    var eM = reply.match(/<EMAIL>([\s\S]*?)<\/EMAIL>/);
+    if (eM) {
+      try { emailObj = JSON.parse(eM[1]); } catch(e) {}
+      reply = reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/, "").trim();
     }
-    historial.push({role:"assistant",content:reply});
+
+    // Procesar WHATSAPP
+    var waObj = null;
+    var wM = reply.match(/<WA>([\s\S]*?)<\/WA>/);
+    if (wM) {
+      try { waObj = JSON.parse(wM[1]); } catch(e) {}
+      reply = reply.replace(/<WA>[\s\S]*?<\/WA>/, "").trim();
+    }
+
+    // Limpiar tags sobrantes
+    reply = reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g, "")
+                 .replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g, "").trim();
+
+    // Garantizar texto visible
+    if (!reply) {
+      if (emailObj)         reply = "Aca esta el borrador del mail, " + miNombre + ".";
+      else if (waObj)       reply = "Aca esta el mensaje listo para WhatsApp, " + miNombre + ".";
+      else if (ultimoAgendado) reply = "Listo, " + miNombre + ". Agendado: " + ultimoAgendado.item + " para el " + fdt(ultimoAgendado.dt) + ". Toca el icono 📆 para agregarlo a Google Calendar.";
+      else                  reply = "Listo, " + miNombre + ".";
+    }
+
+    historial.push({role:"assistant", content:reply});
     qTyping();
-    const extra={};if(eo)extra.email=eo;if(wo)extra.wa=wo;
-    addMsg("assistant",reply,Object.keys(extra).length?extra:null);
-    setSt("");hablar(reply);
-  }catch(e){
+
+    var extra = {};
+    if (emailObj) extra.email = emailObj;
+    if (waObj)    extra.wa    = waObj;
+
+    addMsg("assistant", reply, Object.keys(extra).length ? extra : null);
+    setSt("");
+    hablar(reply);
+
+  } catch(e) {
     qTyping();
-    addMsg("assistant",e.message==="key_invalida"
-      ?"La API key no es válida. Por favor cerrá la aplicación y volvé a configurarla."
-      :`Lo siento, ${miNombre}. Tuve un problema técnico. Por favor intentá de nuevo.`);
-    setSt("");console.error(e);
+    var msg = (e.message === "key_invalida")
+      ? "La API key no es valida. Cerra la aplicacion y vuelve a configurarla."
+      : "Lo siento, " + miNombre + ". Tuve un problema tecnico. Por favor intenta de nuevo.";
+    addMsg("assistant", msg);
+    setSt("");
+    console.error(e);
   }
 }
 
-/* VOZ ENTRADA */
-let escuchando=false,recog=null;
-function toggleVoz(){
-  if(escuchando){detVoz();return;}
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert("El reconocimiento de voz requiere Chrome.");return;}
-  recog=new SR();recog.lang="es-AR";recog.continuous=false;recog.interimResults=false;
-  recog.onstart=()=>{escuchando=true;document.getElementById("micbtn").className="on";document.getElementById("micbtn").textContent="⏹️";setSt("🎙️ Escuchando...");};
-  recog.onend=()=>detVoz();
-  recog.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById("tinput").value=t;detVoz();setTimeout(()=>enviar(t),150);};
-  recog.onerror=()=>detVoz();
+/* ══ VOZ ENTRADA ══ */
+var escuchando = false;
+var recog = null;
+
+function toggleVoz() {
+  if (escuchando) { detVoz(); return; }
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert("El reconocimiento de voz requiere Chrome."); return; }
+  recog = new SR();
+  recog.lang = "es-AR";
+  recog.continuous = false;
+  recog.interimResults = false;
+  recog.onstart = function() {
+    escuchando = true;
+    document.getElementById("mic").className = "on";
+    document.getElementById("mic").textContent = "⏹️";
+    setSt("Escuchando...");
+  };
+  recog.onend = function() { detVoz(); };
+  recog.onresult = function(e) {
+    var t = e.results[0][0].transcript;
+    document.getElementById("ti").value = t;
+    detVoz();
+    setTimeout(function() { enviar(t); }, 150);
+  };
+  recog.onerror = function() { detVoz(); };
   recog.start();
 }
-function detVoz(){
-  escuchando=false;if(recog)recog.stop();
-  const b=document.getElementById("micbtn");b.className="";b.textContent="🎤";setSt("");
+
+function detVoz() {
+  escuchando = false;
+  if (recog) recog.stop();
+  var b = document.getElementById("mic");
+  b.className = "";
+  b.textContent = "🎤";
+  setSt("");
 }
 
 init();
