@@ -180,6 +180,13 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   <input class="si mono" id="k-gcse" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false"/>
 
   <div class="sep"></div>
+  <div class="ss">CIDITUD — Portal Ciudad Digital SMT (opcional)</div>
+  <div class="sl2">Token JWT — copialo desde cidituc.smt.gob.ar → DevTools → Aplicación → localStorage → "token"</div>
+  <input class="si mono" id="k-ciditud" type="password" placeholder="eyJhbGci..." autocomplete="off" spellcheck="false"/>
+  <div class="sl2">Tu CUIL (sin guiones)</div>
+  <input class="si" id="p-cuil" type="text" placeholder="20287211644"/>
+
+  <div class="sep"></div>
   <div class="ss">Tu perfil</div>
   <div class="sl2">Nombre (AURI te llamará así)</div>
   <input class="si" id="p-nombre" type="text" placeholder="Tu nombre"/>
@@ -256,6 +263,8 @@ const MAX_HIST = 10;
 /* ══ ESTADO ══ */
 var apiKey = "";
 var gcseKey = "";
+var ciditudToken = "";
+var miCuil = "";
 var miNombre = "";
 var miEmail = "";
 var miWA = "";
@@ -296,16 +305,20 @@ function guardarConfig() {
     return;
   }
   apiKey   = kg;
-  gcseKey  = document.getElementById("k-gcse").value.trim();
-  miNombre = document.getElementById("p-nombre").value.trim() || "Usuario";
-  miEmail  = document.getElementById("p-email").value.trim();
-  miWA     = document.getElementById("p-wa").value.trim();
+  gcseKey       = document.getElementById("k-gcse").value.trim();
+  ciditudToken  = document.getElementById("k-ciditud").value.trim();
+  miCuil        = document.getElementById("p-cuil").value.trim();
+  miNombre      = document.getElementById("p-nombre").value.trim() || "Usuario";
+  miEmail       = document.getElementById("p-email").value.trim();
+  miWA          = document.getElementById("p-wa").value.trim();
 
-  localStorage.setItem("auri_groq",   apiKey);
-  localStorage.setItem("auri_gcse",   gcseKey);
-  localStorage.setItem("auri_nombre", miNombre);
-  localStorage.setItem("auri_email",  miEmail);
-  localStorage.setItem("auri_wa",     miWA);
+  localStorage.setItem("auri_groq",          apiKey);
+  localStorage.setItem("auri_gcse",          gcseKey);
+  localStorage.setItem("auri_ciditud_token", ciditudToken);
+  localStorage.setItem("auri_cuil",          miCuil);
+  localStorage.setItem("auri_nombre",        miNombre);
+  localStorage.setItem("auri_email",         miEmail);
+  localStorage.setItem("auri_wa",            miWA);
 
   mostrarApp();
 }
@@ -422,6 +435,99 @@ async function buscarWiki(query) {
     var d = await r.json();
     return d.extract ? ("Wikipedia: " + d.extract.slice(0,800)) : "";
   } catch(e) { return ""; }
+}
+
+/* ══ CIDITUD API ══ */
+var CIDITUD_BASE = "https://estadisticas.smt.gob.ar:5000";
+
+async function ciditudFetch(endpoint) {
+  var token = ciditudToken || localStorage.getItem("auri_ciditud_token") || "";
+  if (!token) return null;
+  try {
+    var r = await fetch(CIDITUD_BASE + endpoint, {
+      headers: {
+        "Authorization": token,
+        "Accept": "application/json",
+        "Origin": "https://cidituc.smt.gob.ar"
+      }
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+async function ciditudGetInfo() {
+  try {
+    var status = await ciditudFetch("/usuarios/authStatus");
+    if (!status) return "Token CIDITUD no disponible o expirado. El usuario debe renovarlo desde cidituc.smt.gob.ar";
+    var info = await ciditudFetch("/usuarios/informeCidituc");
+    var perms = await ciditudFetch("/usuarios/permisos/4/" + (miCuil ? miCuil.slice(-5) : "27202"));
+    var res = "CIDITUD - Ciudad Digital SMT\nEstado: Conectado como " + miNombre + "\n";
+    if (info) res += "Info usuario: " + JSON.stringify(info).slice(0, 500) + "\n";
+    if (perms) res += "Permisos: " + JSON.stringify(perms).slice(0, 500) + "\n";
+    res += "Secciones disponibles: Consultas (Multas de Transito por Dominio, Multas de Catastro por Padron, Multas de Bromatologia por CUIT), Tramites, Turnos, Empleados";
+    return res;
+  } catch(e) { return "Error conectando con CIDITUD: " + e.message; }
+}
+
+/* ══ DEPORTES ══ */
+async function buscarDeportes(query) {
+  // 1. Intentar ESPN API para futbol argentino
+  try {
+    var endpoints = [
+      "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard",
+      "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.nacional.b/scoreboard"
+    ];
+    for (var i = 0; i < endpoints.length; i++) {
+      var r = await fetch(endpoints[i] + "?lang=es&region=ar");
+      if (!r.ok) continue;
+      var d = await r.json();
+      if (!d.events || !d.events.length) continue;
+      var qt = query.toLowerCase();
+      var relevant = d.events.filter(function(e) {
+        return e.name.toLowerCase().includes("san mart") ||
+               e.name.toLowerCase().includes("tucum") ||
+               qt.split(" ").some(function(w) { return w.length > 3 && e.name.toLowerCase().includes(w); });
+      });
+      if (relevant.length > 0) {
+        var res = relevant.map(function(e) {
+          var comp = e.competitions && e.competitions[0];
+          var scores = comp ? comp.competitors.map(function(c) {
+            return c.team.displayName + " " + (c.score || 0);
+          }).join(" - ") : e.name;
+          var status = comp && comp.status ? comp.status.type.description : "";
+          return scores + " (" + status + ")";
+        }).join("\n");
+        return "Resultados futbol argentino:\n" + res;
+      }
+      // Si no hay relevante, devolver todos los resultados del dia
+      var todos = d.events.slice(0,5).map(function(e) {
+        var comp = e.competitions && e.competitions[0];
+        var scores = comp ? comp.competitors.map(function(c) {
+          return c.team.displayName + " " + (c.score || 0);
+        }).join(" - ") : e.name;
+        return scores;
+      }).join("\n");
+      if (todos) return "Partidos del dia:\n" + todos;
+    }
+  } catch(e) {}
+
+  // 2. Intentar TyC Sports via proxy
+  try {
+    var tycUrl = "https://www.tycsports.com/futbol-argentino/primera-nacional.html";
+    var r2 = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(tycUrl), {signal: AbortSignal.timeout(5000)});
+    var html = await r2.text();
+    var clean = html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"")
+      .replace(/<[^>]+>/g," ").replace(/\s+/g," ");
+    var terms = query.toLowerCase().split(" ").filter(function(w){ return w.length > 3; });
+    var sentences = clean.split(/[.!\n]+/).filter(function(s) {
+      return terms.some(function(t){ return s.toLowerCase().includes(t); });
+    }).slice(0,5);
+    if (sentences.length > 0) return "Informacion de TyC Sports:\n" + sentences.join(". ");
+  } catch(e) {}
+
+  // 3. Fallback a Google CSE general
+  return await buscarGoogle(query, false);
 }
 
 /* ══ GOOGLE CALENDAR ══ */
@@ -600,8 +706,16 @@ function buildSys(ctx) {
     "Para cualquier cargo politico actual, buscar primero con BUSCAR_WEB.\n\n" +
     "TRANSITO: no hay datos en tiempo real. Informar horarios pico habituales (7-9hs, 12-14hs, 17-20hs).\n\n" +
     "CUANDO BUSCAR (incluir la etiqueta SIN pedir permiso):\n" +
-    "- Noticias, deportes, resultados, cargos actuales: <BUSCAR_WEB>terminos</BUSCAR_WEB>\n" +
-    "- Info municipal, tramites, salud publica, actividades: <BUSCAR_MUNI>tema</BUSCAR_MUNI>\n\n" +
+    "- Noticias, politicos actuales: <BUSCAR_WEB>terminos</BUSCAR_WEB>\n" +
+    "- DEPORTES, partidos, resultados: <BUSCAR_DEPORTE>nombre equipo y fecha</BUSCAR_DEPORTE>\n" +
+    "- Info general municipio, salud publica, actividades culturales, calles: <BUSCAR_MUNI>tema</BUSCAR_MUNI>\n" +
+    "- Tramites municipales, requisitos, pasos, costos: <BUSCAR_TRAMITE>nombre del tramite</BUSCAR_TRAMITE>\n" +
+    "- Datos personales del usuario en CIDITUD (multas, turnos, tramites propios): <BUSCAR_CIDITUD>consulta</BUSCAR_CIDITUD>\n\n" +
+    "CIDITUD - Portal Ciudad Digital SMT (cidituc.smt.gob.ar):\n" +
+    "- Estado: " + (ciditudToken ? "CONECTADO como " + miNombre : "no configurado") + "\n" +
+    "- CUIL: " + (miCuil || "no configurado") + "\n" +
+    "- Secciones disponibles: Consultas (Multas Transito por dominio, Multas Catastro por padron, Multas Bromatologia por CUIT), Tramites, Turnos, Empleados\n\n" +
+    "GUIA DE TRAMITES: https://guiadetramites.smt.gob.ar - tiene informacion detallada de tramites municipales\n\n" +
     "INSTRUCCIONES:\n" +
     "1. AGENDA: incluir texto Y tag. Ej: 'Agendado para el lunes.' <AGENDA>{\"item\":\"evento\",\"dt\":\"YYYY-MM-DDTHH:MM\"}</AGENDA>\n" +
     "2. MAIL: <EMAIL>{\"to\":\"mail\",\"subject\":\"asunto\",\"body\":\"cuerpo\"}</EMAIL>\n" +
@@ -649,22 +763,46 @@ async function enviar(texto) {
   try {
     var reply = await llamarGroq([{role:"system", content:buildSys(null)}].concat(historial));
 
-    var bwM = reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
-    var bmM = reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
+    var bwM  = reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
+    var bmM  = reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
+    var bdM  = reply.match(/<BUSCAR_DEPORTE>([\s\S]*?)<\/BUSCAR_DEPORTE>/);
+    var btM  = reply.match(/<BUSCAR_TRAMITE>([\s\S]*?)<\/BUSCAR_TRAMITE>/);
+    var bcM  = reply.match(/<BUSCAR_CIDITUD>([\s\S]*?)<\/BUSCAR_CIDITUD>/);
 
-    if (bwM || bmM) {
+    if (bwM || bmM || bdM || btM || bcM) {
       qTyping();
       var ctx = "";
-      if (bmM) {
+
+      if (bcM) {
+        var q = bcM[1].trim();
+        addMsg("assistant", "Consultando tu cuenta en CIDITUD...", {searching:true});
+        ctx = await ciditudGetInfo();
+        if (q && q.length > 3) ctx += "\nConsulta especifica: " + q;
+
+      } else if (bdM) {
+        var q = bdM[1].trim();
+        addMsg("assistant", "Buscando resultados de \"" + q + "\"...", {searching:true});
+        ctx = await buscarDeportes(q);
+
+      } else if (btM) {
+        var q = btM[1].trim();
+        addMsg("assistant", "Buscando tramite \"" + q + "\" en guiadetramites.smt.gob.ar...", {searching:true});
+        ctx = await buscarGoogle(q + " tramite requisitos", true);
+        if (!ctx) ctx = await buscarGoogle(q + " tramite municipalidad Tucuman", false);
+
+      } else if (bmM) {
         var q = bmM[1].trim();
         addMsg("assistant", "Buscando \"" + q + "\" en smt.gob.ar...", {searching:true});
         ctx = await buscarGoogle(q, true);
+
       } else {
         var q = bwM[1].trim();
         addMsg("assistant", "Buscando informacion sobre \"" + q + "\"...", {searching:true});
         ctx = await buscarGoogle(q, false);
+        if (!ctx) ctx = await buscarWiki(q);
       }
-      if (!ctx) ctx = "La busqueda no encontro resultados especificos. IMPORTANTE: NO digas 'puedo buscar' ni 'podria buscar'. Responde directamente con lo que sabes sobre el tema. Si no tenes informacion actual, decilo en una sola oracion concreta y ofrece informacion relacionada que si conozcas.";
+
+      if (!ctx) ctx = "La busqueda no encontro resultados. Responde con lo que sabes de forma directa. NO digas 'puedo buscar'. Si no tenes datos actuales, decilo en una oracion y da informacion relacionada util.";
       setSt("AURI esta procesando...");
       addTyping();
       reply = await llamarGroq([{role:"system", content:buildSys(ctx)}].concat(historial));
@@ -707,7 +845,10 @@ async function enviar(texto) {
 
     // Limpiar tags sobrantes
     reply = reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g, "")
-                 .replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g, "").trim();
+                 .replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g, "")
+                 .replace(/<BUSCAR_DEPORTE>[\s\S]*?<\/BUSCAR_DEPORTE>/g, "")
+                 .replace(/<BUSCAR_TRAMITE>[\s\S]*?<\/BUSCAR_TRAMITE>/g, "")
+                 .replace(/<BUSCAR_CIDITUD>[\s\S]*?<\/BUSCAR_CIDITUD>/g, "").trim();
 
     // Garantizar texto visible
     if (!reply) {
