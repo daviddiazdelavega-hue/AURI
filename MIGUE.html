@@ -239,6 +239,11 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   <input class="s-inp mono" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
 
   <div class="s-sep"></div>
+  <div class="s-sec">Google Custom Search (obligatorio para búsquedas)</div>
+  <div class="s-lbl">API Key de Google Cloud — gratis en console.cloud.google.com</div>
+  <input class="s-inp mono" id="gcse-key" type="password" placeholder="AIza..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+
+  <div class="s-sep"></div>
   <div class="s-sec">Tu perfil</div>
   <div class="s-lbl">Nombre (AURI te llamará así)</div>
   <input class="s-inp" id="mi-nombre" type="text" placeholder="Tu nombre"/>
@@ -316,25 +321,31 @@ let apiKey="",miNombre="",miEmail="",miWA="";
 let climaActual=null,pronostico=[],agenda=[],historial=[],vozSel=null;
 
 function init(){
-  apiKey  =localStorage.getItem("auri_groq")  ||"";
-  miNombre=localStorage.getItem("auri_nombre")||"";
-  miEmail =localStorage.getItem("auri_email") ||"";
-  miWA    =localStorage.getItem("auri_wa")    ||"";
+  apiKey  =localStorage.getItem("auri_groq")    ||"";
+  miNombre=localStorage.getItem("auri_nombre")  ||"";
+  miEmail =localStorage.getItem("auri_email")   ||"";
+  miWA    =localStorage.getItem("auri_wa")      ||"";
+  const gcseKey=localStorage.getItem("auri_gcse_key")||"";
   if(apiKey){mostrarApp();return;}
   if(miNombre)document.getElementById("mi-nombre").value=miNombre;
   if(miEmail) document.getElementById("mi-email").value=miEmail;
   if(miWA)    document.getElementById("mi-wa").value=miWA;
+  if(gcseKey) document.getElementById("gcse-key").value=gcseKey;
   document.getElementById("groq-key").addEventListener("keydown",e=>{if(e.key==="Enter")guardarConfig();});
 }
 function guardarConfig(){
   const key=document.getElementById("groq-key").value.trim();
-  if(!key.startsWith("gsk_")){document.getElementById("serr").textContent="La API key debe comenzar con gsk_";return;}
+  if(!key.startsWith("gsk_")){document.getElementById("serr").textContent="La API key de Groq debe comenzar con gsk_";return;}
+  const gcseKey=document.getElementById("gcse-key").value.trim();
   apiKey=key;
   miNombre=document.getElementById("mi-nombre").value.trim()||"Usuario";
   miEmail =document.getElementById("mi-email").value.trim();
   miWA    =document.getElementById("mi-wa").value.trim();
-  localStorage.setItem("auri_groq",apiKey);localStorage.setItem("auri_nombre",miNombre);
-  localStorage.setItem("auri_email",miEmail);localStorage.setItem("auri_wa",miWA);
+  localStorage.setItem("auri_groq",apiKey);
+  localStorage.setItem("auri_gcse_key",gcseKey);
+  localStorage.setItem("auri_nombre",miNombre);
+  localStorage.setItem("auri_email",miEmail);
+  localStorage.setItem("auri_wa",miWA);
   mostrarApp();
 }
 function mostrarApp(){
@@ -401,7 +412,26 @@ function buildPronostico(){
   return res;
 }
 
-/* BÚSQUEDAS */
+/* ══ GOOGLE CUSTOM SEARCH ══ */
+const GCSE_KEY = localStorage.getItem("auri_gcse_key") || "";
+const GCSE_CX  = "57eff6debc2ae4eb7";
+
+async function buscarGoogle(q, soloMuni=false){
+  const key = localStorage.getItem("auri_gcse_key") || "";
+  if(!key) return await buscarWikipedia(q);
+  try{
+    const query = soloMuni ? `${q} site:smt.gob.ar` : q;
+    const url = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${GCSE_CX}&q=${encodeURIComponent(query)}&lr=lang_es&num=5`;
+    const r = await fetch(url, {signal:AbortSignal.timeout(6000)});
+    const d = await r.json();
+    if(!d.items||!d.items.length) return "";
+    const res = d.items.map(item=>
+      `• ${item.title}: ${(item.snippet||"").replace(/\n/g," ").slice(0,200)}`
+    ).join("\n");
+    return `Resultados de Google para "${q}":\n${res}`;
+  }catch(e){return await buscarWikipedia(q);}
+}
+
 async function buscarWikipedia(q){
   try{
     const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.slice(0,80))}`);
@@ -409,31 +439,19 @@ async function buscarWikipedia(q){
     return d.extract?`Wikipedia "${q}": ${d.extract.slice(0,1000)}`:"";
   }catch(e){return"";}
 }
-async function buscarMunicipalidad(q){
+
+/* ══ GOOGLE CALENDAR ══ */
+function abrirGoogleCalendar(item, dt){
   try{
-    const r=await fetch(PROXY+encodeURIComponent(`https://www.smt.gob.ar/?s=${encodeURIComponent(q)}`),
-      {signal:AbortSignal.timeout(6000)});
-    const html=await r.text();
-    const txt=html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"")
-      .replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
-    const palabras=q.toLowerCase().split(" ").filter(p=>p.length>3);
-    const ors=txt.split(/[.!?]+/).filter(s=>palabras.some(p=>s.toLowerCase().includes(p))).slice(0,10);
-    return ors.length?`Información de smt.gob.ar sobre "${q}": ${ors.join(". ")}.`:"";
-  }catch(e){return"";}
-}
-async function buscarNoticias(q){
-  try{
-    const url=`https://news.google.com/rss/search?q=${encodeURIComponent(q+" Argentina")}&hl=es-419&gl=AR&ceid=AR:es`;
-    const r=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(6000)});
-    const xml=await r.text();
-    const items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];
-    const res=items.slice(0,5).map(item=>{
-      const t=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
-      const d=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
-      return`• ${t.trim()}: ${d.replace(/<[^>]+>/g,"").trim().slice(0,150)}`;
-    }).filter(s=>s.length>5).join("\n");
-    return res?`Noticias sobre "${q}":\n${res}`:"";
-  }catch(e){return"";}
+    const inicio = new Date(dt);
+    const fin    = new Date(inicio.getTime() + 60*60*1000); // +1 hora
+    const fmt = d => d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+    const url = `https://calendar.google.com/calendar/r/eventedit?`+
+      `text=${encodeURIComponent(item)}`+
+      `&dates=${fmt(inicio)}/${fmt(fin)}`+
+      `&details=${encodeURIComponent("Agendado por AURI - Asistente Municipal SMT")}`;
+    window.open(url, "_blank");
+  }catch(e){console.error(e);}
 }
 
 /* AGENDA */
@@ -448,9 +466,12 @@ function renderAg(){
   const el=document.getElementById("aglist");
   if(!agenda.length){el.innerHTML='<div class="agempty">Sin eventos. Pedile a AURI que agregue uno.</div>';return;}
   el.innerHTML=[...agenda].sort((a,b)=>new Date(a.dt)-new Date(b.dt)).map(a=>
-    `<div class="agitem"><span class="agtext">${a.item}</span>
-    <span class="agtime">${fdt(a.dt)}</span>
-    <button class="agdel" onclick="borrarAg('${a.id}')">×</button></div>`).join("");
+    `<div class="agitem">
+      <span class="agtext">${a.item}</span>
+      <span class="agtime">${fdt(a.dt)}</span>
+      <button onclick="abrirGoogleCalendar('${a.item.replace(/'/g,"\\'")}','${a.dt}')" title="Agregar a Google Calendar" style="background:none;border:none;cursor:pointer;font-size:14px">📆</button>
+      <button class="agdel" onclick="borrarAg('${a.id}')">×</button>
+    </div>`).join("");
 }
 function borrarAg(id){agenda=agenda.filter(a=>a.id!==id);guardarAg();renderAg();}
 function fdt(dt){try{return new Date(dt).toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return dt||"";}}
@@ -556,13 +577,15 @@ Para lo que viole restricciones: "Eso está fuera de mis funciones, ${miNombre}.
 CUÁNDO BUSCAR — incluí la etiqueta DIRECTAMENTE sin preguntar permiso:
 - Noticias actuales, deportes, resultados de partidos → <BUSCAR_WEB>términos</BUSCAR_WEB>
 - Servicios municipales, trámites, dependencias, salud pública, actividades → <BUSCAR_MUNI>tema</BUSCAR_MUNI>
+- CARGOS POLÍTICOS ACTUALES (presidente, gobernador, intendente, ministro, etc.) → SIEMPRE <BUSCAR_WEB>cargo actual Argentina</BUSCAR_WEB>. NUNCA respondas de memoria quién ocupa un cargo político hoy. El presidente actual de Argentina es Javier Milei desde diciembre 2023, Alberto Fernández ya NO es presidente.
 
 INSTRUCCIONES ESPECIALES:
-1. Agenda: <AGENDA>{"item":"descripción","dt":"YYYY-MM-DDTHH:MM"}</AGENDA>
+1. Agenda: SIEMPRE incluí texto de confirmación Y el tag. Ejemplo: "Listo, ${miNombre}, agendé tu reunión con el Dr. Balardini para mañana a las 10." <AGENDA>{"item":"Reunión con el Dr. Balardini","dt":"2026-05-18T10:00"}</AGENDA>
 2. Mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo completo"}</EMAIL>
-3. WhatsApp: <WA>{"body":"mensaje completo"}</WA>
+3. WhatsApp: SIEMPRE incluí texto de confirmación Y el tag. Ejemplo: "Acá está el mensaje listo para enviar, ${miNombre}." <WA>{"body":"mensaje completo"}</WA>
 4. Nunca repetir información dos veces en la misma respuesta
-5. Nunca mencionar que sos una IA salvo que te lo pregunten directamente`;
+5. Nunca mencionar que sos una IA salvo que te lo pregunten directamente
+6. Cada respuesta DEBE tener texto visible. Nunca respondas solo con tags sin texto.`;
 }
 
 /* GROQ */
@@ -594,16 +617,16 @@ async function enviar(texto){
       if(bmM){
         const q=bmM[1].trim();
         addMsg("assistant",`🔍 Buscando "${q}" en smt.gob.ar...`,{searching:true});
-        ctx=await buscarMunicipalidad(q);
-        if(!ctx)ctx=await buscarWikipedia(q);
+        ctx=await buscarGoogle(q, true);
+        if(!ctx) ctx=await buscarGoogle(q, false);
       }else{
         const q=bwM[1].trim();
         const esDeporte=/fútbol|futbol|partido|resultado|gol|liga|torneo|deporte|moto|gp|racing|river|boca|atletico|basket|tenis|rugby|san martín|atletico tucuman/i.test(q);
         addMsg("assistant",`🔍 Buscando ${esDeporte?"resultados de":"información sobre"} "${q}"...`,{searching:true});
-        ctx=await buscarNoticias(q);
-        if(!ctx)ctx=await buscarWikipedia(q);
+        ctx=await buscarGoogle(q, false);
+        if(!ctx) ctx=await buscarWikipedia(q);
       }
-      if(!ctx)ctx=`No se encontraron resultados en internet para esta búsqueda. Respondé con tu conocimiento disponible de forma directa, sin pedir al usuario que busque en otro lugar.`;
+      if(!ctx)ctx=`No se encontraron resultados. Respondé con tu conocimiento disponible de forma directa y concreta.`;
       setSt("AURI está procesando...");addTyping();
       reply=await llamarGroq([{role:"system",content:buildSys(ctx)},...historial]);
     }
@@ -621,6 +644,13 @@ async function enviar(texto){
     const wM=reply.match(/<WA>([\s\S]*?)<\/WA>/);
     if(wM){try{wo=JSON.parse(wM[1]);}catch(e){}reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
     reply=reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g,"").replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g,"").trim();
+    // Si el reply quedó vacío después de procesar los tags, generar confirmación automática
+    if(!reply){
+      if(eo) reply=`Acá está el borrador del mail, ${miNombre}. Revisalo y envialo cuando quieras.`;
+      else if(wo) reply=`Acá está el mensaje listo para enviar por WhatsApp, ${miNombre}.`;
+      else if(agenda.length){const ult=agenda[agenda.length-1];reply=`Listo, ${miNombre}. Agendé "${ult.item}" para el ${fdt(ult.dt)}. Tocá 📆 en la agenda para abrirlo en Google Calendar.`;}
+      else reply=`Listo, ${miNombre}.`;
+    }
     historial.push({role:"assistant",content:reply});
     qTyping();
     const extra={};if(eo)extra.email=eo;if(wo)extra.wa=wo;
