@@ -11,177 +11,197 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-:root {
-  --smt-azul:    #001f5b;
-  --smt-azul2:   #0033a0;
-  --smt-celeste: #009fe3;
-  --smt-verde:   #00a651;
-  --smt-oro:     #f0a500;
-  --bg:    #001233;
-  --bg2:   #001a4d;
-  --bg3:   rgba(255,255,255,0.05);
-  --bdr:   rgba(255,255,255,0.10);
-  --txt:   #ffffff;
-  --txt2:  rgba(255,255,255,0.65);
-  --txt3:  rgba(255,255,255,0.35);
-  --red:   #e04444;
-  --font-title: 'Bebas Neue', sans-serif;
-  --font-body:  'Inter', sans-serif;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --smt-azul:#001f5b;--smt-azul2:#0033a0;--smt-celeste:#009fe3;
+  --smt-verde:#00a651;--smt-oro:#f5a800;
+  --bg:#001233;--bg2:#001a4d;--bg3:rgba(255,255,255,.05);
+  --bdr:rgba(255,255,255,.10);--txt:#fff;
+  --txt2:rgba(255,255,255,.65);--txt3:rgba(255,255,255,.35);
+  --red:#e04444;
+  --ff:'Inter',sans-serif;--ft:'Bebas Neue',sans-serif;
 }
-html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: var(--font-body); overflow: hidden; }
+html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff);overflow:hidden}
 
 /* ══ SETUP ══ */
-#setup {
-  position: fixed; inset: 0;
-  background: linear-gradient(160deg, #001233 0%, #001a4d 50%, #002066 100%);
-  display: flex; flex-direction: column; align-items: center;
-  padding: 36px 28px 28px; z-index: 999; overflow-y: auto;
-}
-.setup-logo { width: 90px; height: auto; margin-bottom: 10px; }
-.setup-auri { font-family: var(--font-title); font-size: 48px; letter-spacing: 8px; background: linear-gradient(135deg, var(--smt-celeste), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-.setup-muni { font-size: 10px; font-weight: 500; letter-spacing: 2px; color: var(--txt2); text-transform: uppercase; margin-top: 4px; text-align: center; }
-.setup-tagline { font-size: 13px; color: var(--txt2); text-align: center; margin: 14px 0 26px; line-height: 1.7; }
-.s-section { font-size: 10px; font-weight: 700; color: var(--smt-celeste); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 7px; margin-top: 18px; align-self: flex-start; }
-.s-label { font-size: 12px; color: var(--txt2); margin-bottom: 5px; align-self: flex-start; width: 100%; }
-.s-input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-size: 14px; color: var(--txt); outline: none; font-family: var(--font-body); margin-bottom: 4px; transition: border-color .2s; }
-.s-input:focus { border-color: var(--smt-celeste); }
-.s-input.mono { font-family: monospace; }
-.s-sep { width: 100%; height: 1px; background: var(--bdr); margin: 16px 0; }
-.s-btn { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); color: white; font-size: 15px; font-weight: 700; font-family: var(--font-body); cursor: pointer; margin-top: 22px; letter-spacing: .5px; box-shadow: 0 8px 24px rgba(0,159,227,.25); }
-.s-btn:active { opacity: .9; }
-.s-err { color: var(--red); font-size: 12px; margin-top: 8px; text-align: center; min-height: 16px; }
-.s-note { font-size: 11px; color: var(--txt3); text-align: center; margin-top: 14px; line-height: 1.9; }
+#setup{position:fixed;inset:0;background:linear-gradient(160deg,#001233 0%,#001a4d 50%,#002066 100%);
+  display:flex;flex-direction:column;align-items:center;padding:36px 28px 28px;z-index:999;overflow-y:auto}
+.setup-logo{width:180px;height:auto;margin-bottom:14px}
+.setup-auri{font-family:var(--ft);font-size:48px;letter-spacing:8px;
+  background:linear-gradient(135deg,var(--smt-celeste),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.setup-muni{font-size:10px;font-weight:500;letter-spacing:2px;color:var(--txt2);text-transform:uppercase;margin-top:4px;text-align:center}
+.setup-tag{font-size:13px;color:var(--txt2);text-align:center;margin:14px 0 26px;line-height:1.7}
+.s-sec{font-size:10px;font-weight:700;color:var(--smt-celeste);text-transform:uppercase;letter-spacing:2px;
+  margin-bottom:7px;margin-top:18px;align-self:flex-start}
+.s-lbl{font-size:12px;color:var(--txt2);margin-bottom:5px;align-self:flex-start;width:100%}
+.s-inp{width:100%;padding:13px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;font-size:14px;color:var(--txt);outline:none;font-family:var(--ff);margin-bottom:4px;transition:border-color .2s}
+.s-inp:focus{border-color:var(--smt-celeste)}
+.s-inp.mono{font-family:monospace}
+.s-sep{width:100%;height:1px;background:var(--bdr);margin:16px 0}
+.s-btn{width:100%;padding:15px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--smt-azul2),var(--smt-celeste));
+  color:#fff;font-size:15px;font-weight:700;font-family:var(--ff);cursor:pointer;margin-top:22px;
+  letter-spacing:.5px;box-shadow:0 8px 24px rgba(0,159,227,.25)}
+.s-btn:active{opacity:.9}
+.s-err{color:var(--red);font-size:12px;margin-top:8px;text-align:center;min-height:16px}
+.s-note{font-size:11px;color:var(--txt3);text-align:center;margin-top:14px;line-height:1.9}
 
 /* ══ APP ══ */
-#app { display: none; flex-direction: column; height: 100dvh; max-width: 560px; margin: 0 auto; }
+#app{display:none;flex-direction:column;height:100dvh;max-width:560px;margin:0 auto}
 
 /* HEADER */
-#hdr {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px 9px;
-  background: var(--smt-azul);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  flex-shrink: 0;
-  box-shadow: 0 2px 20px rgba(0,0,0,.5);
-}
-#hdr-logo-wrap { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-#hdr-logo-img { height: 36px; width: auto; flex-shrink: 0; object-fit: contain; }
-#hdr-brand { display: flex; flex-direction: column; min-width: 0; }
-#hname { font-family: var(--font-title); font-size: 22px; letter-spacing: 3px; line-height: 1; background: linear-gradient(135deg, var(--smt-celeste), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-#hsub { font-size: 9px; color: var(--txt2); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#hdr-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-#wpill { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 5px 10px; font-size: 13px; font-weight: 600; white-space: nowrap; }
-#abtn { width: 34px; height: 34px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+#hdr{display:flex;align-items:center;gap:10px;padding:9px 14px 8px;background:var(--smt-azul);
+  border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,.5)}
+#hdr-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+#hdr-logo{height:34px;width:auto;flex-shrink:0}
+#hdr-brand{display:flex;flex-direction:column;min-width:0}
+#hname{font-family:var(--ft);font-size:22px;letter-spacing:3px;line-height:1;
+  background:linear-gradient(135deg,var(--smt-celeste),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#hsub{font-size:9px;color:var(--txt2);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;white-space:nowrap}
+#hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+#wpill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:20px;padding:5px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+#abtn{width:34px;height:34px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* FRANJA TRICOLOR */
-#stripe { height: 3px; background: linear-gradient(90deg, var(--smt-verde) 0%, var(--smt-celeste) 50%, var(--smt-azul2) 100%); flex-shrink: 0; }
+#stripe{height:3px;background:linear-gradient(90deg,var(--smt-verde),var(--smt-celeste),var(--smt-azul2));flex-shrink:0}
 
 /* AGENDA */
-#agpanel { max-height: 0; overflow: hidden; transition: max-height .3s ease; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
-#agpanel.open { max-height: 200px; overflow-y: auto; }
-#aginner { padding: 10px 14px; }
-.aglabel { font-size: 10px; font-weight: 700; color: var(--smt-celeste); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-.agitem { display: flex; align-items: center; gap: 8px; background: rgba(0,159,227,.08); border: 1px solid rgba(0,159,227,.2); border-radius: 10px; padding: 7px 10px; margin-bottom: 5px; font-size: 13px; }
-.agtext { flex: 1; }
-.agtime { font-size: 11px; color: var(--txt3); white-space: nowrap; }
-.agdel { background: none; border: none; color: var(--red); font-size: 17px; cursor: pointer; padding: 0 2px; }
-.agempty { font-size: 12px; color: var(--txt3); padding: 8px 0; text-align: center; }
+#agpanel{max-height:0;overflow:hidden;transition:max-height .3s ease;background:rgba(0,0,0,.4);
+  border-bottom:1px solid var(--bdr);flex-shrink:0}
+#agpanel.open{max-height:200px;overflow-y:auto}
+#aginner{padding:10px 14px}
+.aglabel{font-size:10px;font-weight:700;color:var(--smt-celeste);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+.agitem{display:flex;align-items:center;gap:8px;background:rgba(0,159,227,.08);border:1px solid rgba(0,159,227,.2);
+  border-radius:10px;padding:7px 10px;margin-bottom:5px;font-size:13px}
+.agtext{flex:1}.agtime{font-size:11px;color:var(--txt3);white-space:nowrap}
+.agdel{background:none;border:none;color:var(--red);font-size:17px;cursor:pointer;padding:0 2px}
+.agempty{font-size:12px;color:var(--txt3);padding:8px 0;text-align:center}
 
 /* MENSAJES */
-#msgs { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 13px; -webkit-overflow-scrolling: touch; }
-#msgs::-webkit-scrollbar { width: 3px; }
-#msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
-.mrow { display: flex; align-items: flex-end; gap: 8px; }
-.mrow.user { flex-direction: row-reverse; }
-.mavatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 10px; letter-spacing: 1px; flex-shrink: 0; color: white; box-shadow: 0 0 10px rgba(0,159,227,.25); }
-.bubble { max-width: 80%; padding: 11px 15px; font-size: 14px; line-height: 1.6; word-break: break-word; }
-.bubble.assistant { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px 18px 18px 18px; color: var(--txt); }
-.bubble.user { background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); border-radius: 18px 4px 18px 18px; color: white; font-weight: 500; box-shadow: 0 4px 14px rgba(0,159,227,.2); }
-.bubble.searching { background: rgba(0,166,81,0.08); border: 1px solid rgba(0,166,81,.25); border-radius: 4px 18px 18px 18px; color: #4cda8a; font-size: 13px; font-style: italic; }
-.typing { display: flex; gap: 5px; padding: 3px 0; }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--smt-celeste); animation: bop .9s infinite; }
+#msgs{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:13px;-webkit-overflow-scrolling:touch}
+#msgs::-webkit-scrollbar{width:3px}
+#msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.mrow{display:flex;align-items:flex-end;gap:8px}
+.mrow.user{flex-direction:row-reverse}
+.mavatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--smt-azul2),var(--smt-celeste));
+  display:flex;align-items:center;justify-content:center;font-family:var(--ft);font-size:10px;letter-spacing:1px;
+  flex-shrink:0;color:#fff;box-shadow:0 0 10px rgba(0,159,227,.25)}
+.bubble{max-width:80%;padding:11px 15px;font-size:14px;line-height:1.6;word-break:break-word}
+.bubble.assistant{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:4px 18px 18px 18px}
+.bubble.user{background:linear-gradient(135deg,var(--smt-azul2),var(--smt-celeste));border-radius:18px 4px 18px 18px;
+  color:#fff;font-weight:500;box-shadow:0 4px 14px rgba(0,159,227,.2)}
+.bubble.searching{background:rgba(0,166,81,.08);border:1px solid rgba(0,166,81,.25);border-radius:4px 18px 18px 18px;
+  color:#4cda8a;font-size:13px;font-style:italic}
+.typing{display:flex;gap:5px;padding:3px 0}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--smt-celeste);animation:bop .9s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
 
 /* CARDS */
-.card { margin-top: 8px; max-width: 80%; margin-left: 40px; border-radius: 14px; padding: 12px 14px; font-size: 13px; }
-.card.mail { background: rgba(0,51,160,.12); border: 1px solid rgba(0,159,227,.3); }
-.card.wa   { background: rgba(0,166,81,.08);  border: 1px solid rgba(37,211,102,.3); }
-.card-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
-.card.mail .card-label { color: var(--smt-celeste); }
-.card.wa   .card-label { color: #25D366; }
-.efield { color: var(--txt2); margin-bottom: 3px; }
-.efield b { color: var(--txt); }
-.ebody { color: var(--txt); margin-top: 8px; white-space: pre-wrap; border-top: 1px solid rgba(255,255,255,.08); padding-top: 8px; line-height: 1.6; }
-.ebtns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.ebtn { padding: 8px 14px; border: none; border-radius: 20px; color: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
-.ebtn.mail { background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); }
-.ebtn.wa   { background: linear-gradient(135deg, #128C7E, #25D366); }
+.card{margin-top:8px;max-width:80%;margin-left:40px;border-radius:14px;padding:12px 14px;font-size:13px}
+.card.mail{background:rgba(0,51,160,.12);border:1px solid rgba(0,159,227,.3)}
+.card.wa{background:rgba(0,166,81,.08);border:1px solid rgba(37,211,102,.3)}
+.card-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+.card.mail .card-lbl{color:var(--smt-celeste)}.card.wa .card-lbl{color:#25D366}
+.ef{color:var(--txt2);margin-bottom:3px}.ef b{color:var(--txt)}
+.ebody{color:var(--txt);margin-top:8px;white-space:pre-wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:8px;line-height:1.6}
+.ebtns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ebtn{padding:8px 14px;border:none;border-radius:20px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--ff)}
+.ebtn.mail{background:linear-gradient(135deg,var(--smt-azul2),var(--smt-celeste))}
+.ebtn.wa{background:linear-gradient(135deg,#128C7E,#25D366)}
 
 /* QUICK */
-#qwrap { padding: 9px 14px; overflow-x: auto; display: flex; gap: 7px; flex-shrink: 0; scrollbar-width: none; border-top: 1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.15); }
-#qwrap::-webkit-scrollbar { display: none; }
-.qbtn { white-space: nowrap; padding: 7px 13px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--txt2); cursor: pointer; font-family: var(--font-body); }
-.qbtn:active { background: rgba(0,159,227,.2); color: var(--smt-celeste); }
+#qwrap{padding:9px 14px;overflow-x:auto;display:flex;gap:7px;flex-shrink:0;scrollbar-width:none;
+  border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.15)}
+#qwrap::-webkit-scrollbar{display:none}
+.qbtn{white-space:nowrap;padding:7px 13px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--ff)}
+.qbtn:active{background:rgba(0,159,227,.2);color:var(--smt-celeste)}
 
 /* INPUT */
-#iarea { display: flex; align-items: center; gap: 10px; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: var(--smt-azul); border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0; }
-#micbtn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.08); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .2s; }
-#micbtn.on { background: rgba(224,68,68,.25); border-color: var(--red); animation: pulse 1.1s infinite; }
+#iarea{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  padding-bottom:max(10px,env(safe-area-inset-bottom));
+  background:var(--smt-azul);border-top:1px solid rgba(255,255,255,.08);flex-shrink:0}
+#micbtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.08);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+#micbtn.on{background:rgba(224,68,68,.25);border-color:var(--red);animation:pulse 1.1s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,68,68,.3)}50%{box-shadow:0 0 0 10px rgba(224,68,68,0)}}
-#tinput { flex: 1; padding: 11px 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 24px; font-size: 14px; color: var(--txt); outline: none; font-family: var(--font-body); transition: border-color .2s; }
-#tinput::placeholder { color: var(--txt3); }
-#tinput:focus { border-color: rgba(0,159,227,.5); }
-#sendbtn { width: 44px; height: 44px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--smt-azul2), var(--smt-celeste)); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; box-shadow: 0 4px 14px rgba(0,159,227,.3); }
-#sendbtn:active { transform: scale(.93); }
+#tinput{flex:1;padding:11px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:24px;font-size:14px;color:var(--txt);outline:none;font-family:var(--ff);transition:border-color .2s}
+#tinput::placeholder{color:var(--txt3)}
+#tinput:focus{border-color:rgba(0,159,227,.5)}
+#sendbtn{width:44px;height:44px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--smt-azul2),var(--smt-celeste));
+  font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;color:#fff;box-shadow:0 4px 14px rgba(0,159,227,.3)}
+#sendbtn:active{transform:scale(.93)}
 
-/* STATUS */
-#stbar { text-align: center; font-size: 11px; color: var(--smt-celeste); min-height: 14px; padding: 2px 0; flex-shrink: 0; background: var(--smt-azul); letter-spacing: .3px; }
+#stbar{text-align:center;font-size:11px;color:var(--smt-celeste);min-height:14px;
+  padding:2px 0;flex-shrink:0;background:var(--smt-azul);letter-spacing:.3px}
 
-/* FOOTER */
-#footer {
-  background: var(--smt-azul);
-  border-top: 1px solid rgba(255,255,255,.06);
-  padding: 6px 14px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
+/* ══ FOOTER — igual a los otros sistemas ══ */
+#footer{
+  background:var(--smt-azul);
+  border-top:2px solid var(--smt-celeste);
+  padding:5px 14px 6px;
+  flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
 }
-#footer-left { font-size: 10px; color: var(--txt3); }
-#footer-right { font-size: 10px; color: var(--txt3); }
-#footer-center { font-size: 10px; color: rgba(0,159,227,.5); font-weight: 600; letter-spacing: .5px; }
+.footer-line1{
+  font-size:10px;font-weight:600;color:var(--smt-celeste);
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.footer-line2{
+  font-size:9px;color:var(--txt3);letter-spacing:.3px;
+  text-align:center;
+}
 </style>
 </head>
 <body>
 
 <!-- SETUP -->
 <div id="setup">
-  <img class="setup-logo"
-    src="https://www.smt.gob.ar/wp-content/uploads/2022/01/logo-smt-blanco.png"
-    onerror="this.style.display='none'; document.getElementById('setup-svg').style.display='block'"
-    alt="Logo SMT"/>
-  <svg id="setup-svg" style="display:none;width:80px;height:80px;margin-bottom:10px" viewBox="0 0 80 90" fill="none">
-    <path d="M40 2 L78 18 L78 50 C78 68 60 82 40 88 C20 82 2 68 2 50 L2 18 Z" fill="#001a4d" stroke="#009fe3" stroke-width="2.5"/>
-    <path d="M40 12 L70 25 L70 50 C70 65 55 77 40 82 C25 77 10 65 10 50 L10 25 Z" fill="#0033a0"/>
-    <text x="40" y="42" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#009fe3" letter-spacing="1">SMT</text>
-    <line x1="14" y1="47" x2="66" y2="47" stroke="#009fe3" stroke-width="1" opacity="0.5"/>
+  <!-- Logo SVG Ciudad San Miguel de Tucumán — basado en logo oficial -->
+  <svg class="setup-logo" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+    <!-- Ícono pájaro/hojas SMT -->
+    <g transform="translate(4,8)">
+      <!-- Hoja/ala izquierda azul -->
+      <ellipse cx="26" cy="34" rx="13" ry="22" fill="#009fe3" transform="rotate(-20,26,34)"/>
+      <!-- Hoja/ala derecha celeste -->
+      <ellipse cx="38" cy="34" rx="13" ry="22" fill="#0033a0" transform="rotate(20,38,34)"/>
+      <!-- Punto dorado -->
+      <circle cx="32" cy="12" r="5" fill="#f5a800"/>
+    </g>
+    <!-- Texto CIUDAD -->
+    <text x="78" y="22" font-family="'Inter',sans-serif" font-size="10" font-weight="700"
+      fill="#009fe3" letter-spacing="3">CIUDAD</text>
+    <!-- Texto San Miguel -->
+    <text x="76" y="46" font-family="'Inter',sans-serif" font-size="20" font-weight="700"
+      fill="#ffffff">San Miguel</text>
+    <!-- Texto de Tucumán -->
+    <text x="76" y="66" font-family="'Inter',sans-serif" font-size="16" font-weight="400"
+      fill="#ffffff">de Tucumán</text>
   </svg>
-  <div class="setup-auri">AURI</div>
-  <div class="setup-muni">Municipalidad de San Miguel de Tucumán</div>
-  <div class="setup-tagline">Tu asistente personal municipal.<br>Información, trámites y servicios al instante.</div>
 
-  <div class="s-section">Acceso IA — Groq (obligatorio)</div>
-  <div class="s-label">API Key — Gratis en console.groq.com</div>
-  <input class="s-input mono" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="setup-auri">AURI</div>
+  <div class="setup-muni">Asistente personal municipal</div>
+  <div class="setup-tag">Tu asistente personal municipal.<br>Información, trámites y servicios al instante.</div>
+
+  <div class="s-sec">Acceso IA — Groq (obligatorio)</div>
+  <div class="s-lbl">API Key — Gratis en console.groq.com</div>
+  <input class="s-inp mono" id="groq-key" type="password" placeholder="gsk_..." autocomplete="off" autocorrect="off" spellcheck="false"/>
 
   <div class="s-sep"></div>
-  <div class="s-section">Tu perfil</div>
-  <div class="s-label">Nombre (AURI te llamará así)</div>
-  <input class="s-input" id="mi-nombre" type="text" placeholder="Tu nombre"/>
-  <div class="s-label">Email</div>
-  <input class="s-input" id="mi-email" type="email" placeholder="tu@email.com"/>
-  <div class="s-label">WhatsApp (código de país + número, sin el +)</div>
-  <input class="s-input" id="mi-wa" type="tel" placeholder="5493811234567"/>
+  <div class="s-sec">Tu perfil</div>
+  <div class="s-lbl">Nombre (AURI te llamará así)</div>
+  <input class="s-inp" id="mi-nombre" type="text" placeholder="Tu nombre"/>
+  <div class="s-lbl">Email</div>
+  <input class="s-inp" id="mi-email" type="email" placeholder="tu@email.com"/>
+  <div class="s-lbl">WhatsApp (código de país + número, sin el +)</div>
+  <input class="s-inp" id="mi-wa" type="tel" placeholder="5493811234567"/>
 
   <button class="s-btn" onclick="guardarConfig()">Ingresar a AURI →</button>
   <div class="s-err" id="serr"></div>
@@ -191,16 +211,17 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
 <!-- APP -->
 <div id="app">
   <div id="hdr">
-    <div id="hdr-logo-wrap">
-      <img id="hdr-logo-img"
-        src="https://www.smt.gob.ar/wp-content/uploads/2022/01/logo-smt-blanco.png"
-        onerror="this.style.display='none'; document.getElementById('hdr-svg').style.display='flex'"
-        alt="SMT"/>
-      <!-- Fallback SVG escudo -->
-      <svg id="hdr-svg" style="display:none;width:34px;height:34px;flex-shrink:0" viewBox="0 0 80 90" fill="none">
-        <path d="M40 2 L78 18 L78 50 C78 68 60 82 40 88 C20 82 2 68 2 50 L2 18 Z" fill="#001a4d" stroke="#009fe3" stroke-width="3"/>
-        <path d="M40 12 L70 25 L70 50 C70 65 55 77 40 82 C25 77 10 65 10 50 L10 25 Z" fill="#0033a0"/>
-        <text x="40" y="43" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#009fe3">SMT</text>
+    <div id="hdr-left">
+      <!-- Logo pequeño en header -->
+      <svg id="hdr-logo" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(2,4)">
+          <ellipse cx="16" cy="21" rx="8" ry="14" fill="#009fe3" transform="rotate(-20,16,21)"/>
+          <ellipse cx="24" cy="21" rx="8" ry="14" fill="#0033a0" transform="rotate(20,24,21)"/>
+          <circle cx="20" cy="7" r="3.5" fill="#f5a800"/>
+        </g>
+        <text x="48" y="14" font-family="'Inter',sans-serif" font-size="7" font-weight="700" fill="#009fe3" letter-spacing="2">CIUDAD</text>
+        <text x="47" y="29" font-family="'Inter',sans-serif" font-size="13" font-weight="700" fill="#ffffff">San Miguel</text>
+        <text x="47" y="43" font-family="'Inter',sans-serif" font-size="10" font-weight="400" fill="#ffffff">de Tucumán</text>
       </svg>
       <div id="hdr-brand">
         <div id="hname">AURI</div>
@@ -242,168 +263,147 @@ html, body { height: 100%; background: var(--bg); color: var(--txt); font-family
   </div>
   <div id="stbar"></div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER igual a los otros sistemas del Tribunal -->
   <div id="footer">
-    <div id="footer-left">Municipalidad SMT © 2026</div>
-    <div id="footer-center">AURI v1.0</div>
-    <div id="footer-right">Sección Cómputos e Informática</div>
+    <div class="footer-line1">AURI v1.0 &nbsp;·&nbsp; Municipalidad de San Miguel de Tucumán &nbsp;·&nbsp; 2026</div>
+    <div class="footer-line2">Desarrollado por David Diaz de la Vega &nbsp;|&nbsp; Sección Cómputos</div>
   </div>
 </div>
 
 <script>
-const LAT=-26.8083, LON=-65.2176;
+const LAT=-26.8083,LON=-65.2176;
 const PROXY="https://api.allorigins.win/raw?url=";
 const MAX_HIST=10;
-
-let apiKey="", miNombre="", miEmail="", miWA="";
-let climaActual=null, pronosticoHorario=[], agenda=[], historial=[], vozSel=null;
+let apiKey="",miNombre="",miEmail="",miWA="";
+let climaActual=null,pronostico=[],agenda=[],historial=[],vozSel=null;
 
 /* ══ INICIO ══ */
 function init(){
-  apiKey   = localStorage.getItem("auri_groq")   || "";
-  miNombre = localStorage.getItem("auri_nombre") || "";
-  miEmail  = localStorage.getItem("auri_email")  || "";
-  miWA     = localStorage.getItem("auri_wa")     || "";
-  if(apiKey){ mostrarApp(); return; }
-  if(miNombre) document.getElementById("mi-nombre").value = miNombre;
-  if(miEmail)  document.getElementById("mi-email").value  = miEmail;
-  if(miWA)     document.getElementById("mi-wa").value     = miWA;
-  document.getElementById("groq-key").addEventListener("keydown", e=>{ if(e.key==="Enter") guardarConfig(); });
+  apiKey  =localStorage.getItem("auri_groq")  ||"";
+  miNombre=localStorage.getItem("auri_nombre")||"";
+  miEmail =localStorage.getItem("auri_email") ||"";
+  miWA    =localStorage.getItem("auri_wa")    ||"";
+  if(apiKey){mostrarApp();return;}
+  if(miNombre)document.getElementById("mi-nombre").value=miNombre;
+  if(miEmail) document.getElementById("mi-email").value=miEmail;
+  if(miWA)    document.getElementById("mi-wa").value=miWA;
+  document.getElementById("groq-key").addEventListener("keydown",e=>{if(e.key==="Enter")guardarConfig();});
 }
-
 function guardarConfig(){
-  const key = document.getElementById("groq-key").value.trim();
-  if(!key.startsWith("gsk_")){ document.getElementById("serr").textContent="La API key debe comenzar con gsk_"; return; }
-  apiKey   = key;
-  miNombre = document.getElementById("mi-nombre").value.trim() || "Usuario";
-  miEmail  = document.getElementById("mi-email").value.trim();
-  miWA     = document.getElementById("mi-wa").value.trim();
-  localStorage.setItem("auri_groq",   apiKey);
-  localStorage.setItem("auri_nombre", miNombre);
-  localStorage.setItem("auri_email",  miEmail);
-  localStorage.setItem("auri_wa",     miWA);
+  const key=document.getElementById("groq-key").value.trim();
+  if(!key.startsWith("gsk_")){document.getElementById("serr").textContent="La API key debe comenzar con gsk_";return;}
+  apiKey  =key;
+  miNombre=document.getElementById("mi-nombre").value.trim()||"Usuario";
+  miEmail =document.getElementById("mi-email").value.trim();
+  miWA    =document.getElementById("mi-wa").value.trim();
+  localStorage.setItem("auri_groq",apiKey);localStorage.setItem("auri_nombre",miNombre);
+  localStorage.setItem("auri_email",miEmail);localStorage.setItem("auri_wa",miWA);
   mostrarApp();
 }
-
 function mostrarApp(){
   document.getElementById("setup").style.display="none";
   document.getElementById("app").style.display="flex";
-  cargarAgenda(); fetchClima(); cargarVoces();
+  cargarAgenda();fetchClima();cargarVoces();
   addMsg("assistant",`Buenas, ${miNombre}. Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucumán. ¿En qué te puedo ayudar hoy?`);
 }
 
 /* ══ VOZ ══ */
 function cargarVoces(){
-  if(!window.speechSynthesis) return;
+  if(!window.speechSynthesis)return;
   const intentar=()=>{
-    const vs=speechSynthesis.getVoices(); if(!vs.length) return;
+    const vs=speechSynthesis.getVoices();if(!vs.length)return;
     const pL=["es-US","es-MX","es-419","es-CO","es-CL","es-AR","es-ES"];
     const pM=["male","jorge","diego","miguel","carlos","pablo","juan","rodrigo","andres","andrés"];
-    for(const l of pL) for(const m of pM){
+    for(const l of pL)for(const m of pM){
       const v=vs.find(v=>v.lang.toLowerCase().startsWith(l.slice(0,5).toLowerCase())&&v.name.toLowerCase().includes(m));
       if(v){vozSel=v;return;}
     }
     vozSel=vs.find(v=>v.lang.startsWith("es"))||null;
   };
-  if(speechSynthesis.getVoices().length) intentar();
+  if(speechSynthesis.getVoices().length)intentar();
   else speechSynthesis.onvoiceschanged=intentar;
 }
 function hablar(txt){
-  if(!window.speechSynthesis) return;
+  if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(txt.slice(0,280));
-  if(vozSel) u.voice=vozSel;
-  u.lang="es-MX"; u.pitch=0.85; u.rate=1.05; u.volume=1;
+  if(vozSel)u.voice=vozSel;
+  u.lang="es-MX";u.pitch=0.85;u.rate=1.05;u.volume=1;
   speechSynthesis.speak(u);
 }
 
-/* ══ CLIMA + PRONÓSTICO HORARIO ══ */
+/* ══ CLIMA + PRONÓSTICO ══ */
 async function fetchClima(){
   try{
-    const r=await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`+
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`+
       `&current=temperature_2m,weather_code,apparent_temperature,relative_humidity_2m,wind_speed_10m`+
       `&hourly=temperature_2m,weather_code,precipitation_probability`+
-      `&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=3`
-    );
+      `&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=3`);
     const d=await r.json();
-    climaActual=d.current;
-    pronosticoHorario=d.hourly;
+    climaActual=d.current;pronostico=d.hourly;
     const ic={0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",51:"🌦️",61:"🌧️",63:"🌧️",80:"🌦️",95:"⛈️"};
     const c=climaActual.weather_code;
     const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
     document.getElementById("wpill").textContent=`${ic[k]||"🌡️"} ${Math.round(climaActual.temperature_2m)}°C`;
   }catch(e){document.getElementById("wpill").textContent="🌡️ sin datos";}
 }
-
 function buildPronostico(){
-  if(!pronosticoHorario || !pronosticoHorario.time) return "Pronóstico no disponible";
-  const times=pronosticoHorario.time;
-  const temps=pronosticoHorario.temperature_2m;
-  const codes=pronosticoHorario.weather_code;
-  const prec=pronosticoHorario.precipitation_probability;
-  const codeNames={0:"Despejado",1:"Mayorm. despejado",2:"Parc. nublado",3:"Nublado",45:"Neblina",51:"Llovizna",61:"Lluvia leve",63:"Lluvia mod.",80:"Chaparrones",95:"Tormenta"};
-
-  // Próximas 48 horas agrupadas
-  let resultado="PRONÓSTICO HORARIO (próximas 48 horas):\n";
-  const ahora=new Date();
-  let count=0;
-  for(let i=0;i<times.length&&count<48;i++){
-    const dt=new Date(times[i]);
+  if(!pronostico||!pronostico.time)return"Pronóstico no disponible";
+  const cn={0:"Despejado",1:"Mayorm. despejado",2:"Parc. nublado",3:"Nublado",45:"Neblina",
+    51:"Llovizna",61:"Lluvia leve",63:"Lluvia mod.",80:"Chaparrones",95:"Tormenta"};
+  const ahora=new Date();let res="PRONÓSTICO HORARIO próximas 48hs:\n";let n=0;
+  for(let i=0;i<pronostico.time.length&&n<48;i++){
+    const dt=new Date(pronostico.time[i]);
     if(dt>=ahora){
-      const hora=dt.toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-      const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-codes[i])<Math.abs(a-codes[i])?b:a);
-      resultado+=`${hora}: ${Math.round(temps[i])}°C, ${codeNames[k]||"Variable"}, lluvia ${prec[i]}%\n`;
-      count++;
-      if(count%8===0) resultado+="\n";
+      const h=dt.toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+      const c=pronostico.weather_code[i];
+      const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
+      res+=`${h}: ${Math.round(pronostico.temperature_2m[i])}°C, ${cn[k]||"Variable"}, lluvia ${pronostico.precipitation_probability[i]}%\n`;
+      n++;
     }
   }
-  return resultado;
+  return res;
 }
 
-/* ══ BÚSQUEDA ══ */
-async function buscarWikipedia(query){
+/* ══ BÚSQUEDAS ══ */
+async function buscarWikipedia(q){
   try{
-    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.slice(0,80))}`);
-    if(!r.ok) return "";
-    const d=await r.json();
-    return d.extract ? `Wikipedia — ${query}: ${d.extract.slice(0,1000)}` : "";
-  }catch(e){return "";}
+    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.slice(0,80))}`);
+    if(!r.ok)return"";const d=await r.json();
+    return d.extract?`Wikipedia sobre "${q}": ${d.extract.slice(0,1000)}`:"";
+  }catch(e){return"";}
 }
-
-async function buscarMunicipalidad(query){
+async function buscarMunicipalidad(q){
   try{
-    setSt("🔍 Buscando en smt.gob.ar...");
-    const r=await fetch(PROXY+encodeURIComponent(`https://www.smt.gob.ar/?s=${encodeURIComponent(query)}`),{signal:AbortSignal.timeout(5000)});
+    const r=await fetch(PROXY+encodeURIComponent(`https://www.smt.gob.ar/?s=${encodeURIComponent(q)}`),
+      {signal:AbortSignal.timeout(5000)});
     const html=await r.text();
-    const txt=html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
-    // Buscar fragmentos relevantes
-    const palabras=query.toLowerCase().split(" ");
-    const oraciones=txt.split(/[.!?]+/).filter(s=>palabras.some(p=>s.toLowerCase().includes(p))).slice(0,8);
-    return oraciones.length ? `Información de smt.gob.ar sobre "${query}":\n${oraciones.join(". ")}.` : "";
-  }catch(e){return "";}
+    const txt=html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"")
+      .replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+    const palabras=q.toLowerCase().split(" ");
+    const ors=txt.split(/[.!?]+/).filter(s=>palabras.some(p=>s.toLowerCase().includes(p))).slice(0,8);
+    return ors.length?`smt.gob.ar sobre "${q}": ${ors.join(". ")}.`:"";
+  }catch(e){return"";}
 }
-
-async function buscarNoticias(query){
+async function buscarNoticias(q){
   try{
-    setSt("🔍 Buscando noticias...");
-    const url=`https://news.google.com/rss/search?q=${encodeURIComponent(query+" Argentina")}&hl=es-419&gl=AR&ceid=AR:es`;
+    const url=`https://news.google.com/rss/search?q=${encodeURIComponent(q+" Argentina")}&hl=es-419&gl=AR&ceid=AR:es`;
     const r=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(5000)});
     const xml=await r.text();
     const items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];
     const res=items.slice(0,5).map(item=>{
       const t=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
       const d=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
-      return `• ${t.trim()}: ${d.replace(/<[^>]+>/g,"").trim().slice(0,120)}`;
+      return`• ${t.trim()}: ${d.replace(/<[^>]+>/g,"").trim().slice(0,150)}`;
     }).filter(s=>s.length>5).join("\n");
-    return res ? `Noticias recientes sobre "${query}":\n${res}` : "";
-  }catch(e){return "";}
+    return res?`Noticias sobre "${q}":\n${res}`:"";
+  }catch(e){return"";}
 }
 
 /* ══ AGENDA ══ */
 function cargarAgenda(){
   try{agenda=JSON.parse(localStorage.getItem("auri_agenda")||"[]");}catch(e){agenda=[];}
-  agenda=dedup(agenda); guardarAg(); renderAg();
+  agenda=dedup(agenda);guardarAg();renderAg();
 }
 function dedup(l){const v=new Set();return l.filter(a=>{const k=`${a.item}|${a.dt}`;if(v.has(k))return false;v.add(k);return true;});}
 function guardarAg(){localStorage.setItem("auri_agenda",JSON.stringify(agenda));}
@@ -411,8 +411,8 @@ function toggleAg(){document.getElementById("agpanel").classList.toggle("open");
 function renderAg(){
   const el=document.getElementById("aglist");
   if(!agenda.length){el.innerHTML='<div class="agempty">Sin eventos. Pedile a AURI que agregue uno.</div>';return;}
-  el.innerHTML=[...agenda].sort((a,b)=>new Date(a.dt)-new Date(b.dt)).map(a=>`
-    <div class="agitem"><span class="agtext">${a.item}</span>
+  el.innerHTML=[...agenda].sort((a,b)=>new Date(a.dt)-new Date(b.dt)).map(a=>
+    `<div class="agitem"><span class="agtext">${a.item}</span>
     <span class="agtime">${fdt(a.dt)}</span>
     <button class="agdel" onclick="borrarAg('${a.id}')">×</button></div>`).join("");
 }
@@ -420,122 +420,114 @@ function borrarAg(id){agenda=agenda.filter(a=>a.id!==id);guardarAg();renderAg();
 function fdt(dt){try{return new Date(dt).toLocaleString("es-AR",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return dt||"";}}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 
-/* ══ MENSAJES UI ══ */
+/* ══ UI ══ */
 function addMsg(role,text,extra){
   const msgs=document.getElementById("msgs");
-  const row=document.createElement("div"); row.className=`mrow ${role}`;
+  const row=document.createElement("div");row.className=`mrow ${role}`;
   let html=role==="assistant"?`<div class="mavatar">AU</div>`:"";
   const cls=extra?.searching?"bubble searching":`bubble ${role}`;
   html+=`<div><div class="${cls}">${text.replace(/\n/g,"<br>")}</div>`;
   if(extra?.email){
     const em=extra.email;
-    html+=`<div class="card mail">
-      <div class="card-label">📧 Borrador de Mail</div>
-      <div class="efield"><b>Para:</b> ${em.to}</div>
-      <div class="efield"><b>Asunto:</b> ${em.subject}</div>
-      <div class="ebody">${em.body}</div>
-      <div class="ebtns">
-        <button class="ebtn mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
-        ${miWA?`<button class="ebtn wa" onclick="enviarWA('${esc(em.body)}')">💬 Enviar por WhatsApp</button>`:""}
-      </div></div>`;
+    html+=`<div class="card mail"><div class="card-lbl">📧 Borrador de Mail</div>
+    <div class="ef"><b>Para:</b> ${em.to}</div><div class="ef"><b>Asunto:</b> ${em.subject}</div>
+    <div class="ebody">${em.body}</div>
+    <div class="ebtns">
+      <button class="ebtn mail" onclick="abrirMail('${esc(em.to)}','${esc(em.subject)}','${esc(em.body)}')">✉️ Abrir en correo</button>
+      ${miWA?`<button class="ebtn wa" onclick="enviarWA('${esc(em.body)}')">💬 Enviar por WhatsApp</button>`:""}
+    </div></div>`;
   }
   if(extra?.wa){
-    html+=`<div class="card wa">
-      <div class="card-label">💬 Mensaje de WhatsApp</div>
-      <div style="color:var(--txt);white-space:pre-wrap;font-size:13px;line-height:1.5">${extra.wa.body}</div>
-      <div class="ebtns"><button class="ebtn wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button></div></div>`;
+    html+=`<div class="card wa"><div class="card-lbl">💬 Mensaje de WhatsApp</div>
+    <div style="color:var(--txt);white-space:pre-wrap;font-size:13px;line-height:1.5">${extra.wa.body}</div>
+    <div class="ebtns"><button class="ebtn wa" onclick="enviarWA('${esc(extra.wa.body)}')">💬 Abrir en WhatsApp</button></div></div>`;
   }
-  html+=`</div>`;
-  row.innerHTML=html; msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
+  html+=`</div>`;row.innerHTML=html;msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
 }
 function esc(s){return(s||"").replace(/'/g,"\\'").replace(/\n/g,"\\n");}
 function addTyping(){
   const msgs=document.getElementById("msgs");
-  const row=document.createElement("div"); row.className="mrow assistant"; row.id="typing";
+  const row=document.createElement("div");row.className="mrow assistant";row.id="typing";
   row.innerHTML=`<div class="mavatar">AU</div><div class="bubble assistant"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
-  msgs.appendChild(row); msgs.scrollTop=msgs.scrollHeight;
+  msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
 }
 function qTyping(){const t=document.getElementById("typing");if(t)t.remove();}
 function setSt(m){document.getElementById("stbar").textContent=m;}
 function abrirMail(to,sub,body){window.open(`mailto:${decodeURIComponent(to)}?subject=${sub}&body=${encodeURIComponent(decodeURIComponent(body))}`);}
 function enviarWA(body){const n=miWA.replace(/\D/g,"");window.open(`https://wa.me/${n}?text=${encodeURIComponent(decodeURIComponent(body))}`);}
 
-/* ══ PROMPT SISTEMA ══ */
+/* ══ PROMPT ══ */
 function buildSys(extra){
   const now=new Date();
   const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
   const fecha=now.toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
   const hora=now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
   const isoHoy=now.toISOString().split("T")[0];
-  const manana=new Date(now); manana.setDate(now.getDate()+1);
-  const semana=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-now.getDay()+i);return `${dias[i]}=${d.toISOString().split("T")[0]}`;});
-  const codes={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Neblina",51:"Llovizna",61:"Lluvia leve",63:"Lluvia moderada",80:"Chaparrones",95:"Tormenta"};
+  const manana=new Date(now);manana.setDate(now.getDate()+1);
+  const semana=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-now.getDay()+i);return`${dias[i]}=${d.toISOString().split("T")[0]}`;});
+  const cn={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Neblina",
+    51:"Llovizna",61:"Lluvia leve",63:"Lluvia moderada",80:"Chaparrones",95:"Tormenta"};
   let wstr="No disponible";
   if(climaActual){const c=climaActual.weather_code;const k=[0,1,2,3,45,51,61,63,80,95].reduce((a,b)=>Math.abs(b-c)<Math.abs(a-c)?b:a);
-    wstr=`${Math.round(climaActual.temperature_2m)}°C (sensación ${Math.round(climaActual.apparent_temperature)}°C), ${codes[k]||"Variable"}, Humedad ${climaActual.relative_humidity_2m}%, Viento ${Math.round(climaActual.wind_speed_10m)} km/h`;}
+    wstr=`${Math.round(climaActual.temperature_2m)}°C (sensación ${Math.round(climaActual.apparent_temperature)}°C), ${cn[k]||"Variable"}, Humedad ${climaActual.relative_humidity_2m}%, Viento ${Math.round(climaActual.wind_speed_10m)} km/h`;}
   const agstr=dedup(agenda).map(a=>`- ${fdt(a.dt)}: ${a.item}`).join("\n")||"Sin eventos";
-  const pronostico=buildPronostico();
 
-  return `Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucumán, Argentina.
+  return`Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucumán.
 
-USUARIO: ${miNombre} (usá su nombre una vez por respuesta)
+USUARIO: ${miNombre} (usá su nombre UNA vez por respuesta)
 EMAIL: ${miEmail||"no configurado"} | WHATSAPP: ${miWA||"no configurado"}
 
-PERSONALIDAD: jovial, amigable, profesional. Español latinoamericano neutro. Sin "che", "pibe" ni abreviaciones. MÁXIMO 3 oraciones. Respuestas DIRECTAS y CONCRETAS — nunca decir "podés consultar en internet" ni "te sugiero verificar en un sitio web". Si tenés datos, darlos directamente. Si no tenés datos, decirlo claramente en una sola oración.
+PERSONALIDAD: jovial, amigable, profesional. Español latinoamericano neutro. Sin "che", "pibe". Sin abreviaciones. MÁXIMO 3 oraciones. Respuestas DIRECTAS y CONCRETAS. NUNCA decir "podés consultar en internet", "te sugiero verificar en un sitio web" ni "¿quieres que busque?". Si necesitás información actual, usá la etiqueta de búsqueda DIRECTAMENTE sin preguntar.
 
 FECHA: ${fecha} (${isoHoy}), ${hora}
 MAÑANA: ${manana.toISOString().split("T")[0]}
 SEMANA: ${semana.join(", ")}
 
-CLIMA ACTUAL TUCUMÁN: ${wstr}
+CLIMA ACTUAL: ${wstr}
+VESTIMENTA: menos de 8°C=campera gruesa/abrigo | 8-14°C=campera | 15-21°C=manga larga | 22-27°C=remera | más de 27°C=calor
 
-REGLA VESTIMENTA (aplicar correctamente siempre):
-- Menos de 8°C → campera gruesa o abrigo
-- 8 a 14°C → campera (no es para remera)
-- 15 a 21°C → remera manga larga o campera liviana
-- 22 a 27°C → remera
-- Más de 27°C → remera, hace calor
-
-${pronostico}
+${buildPronostico()}
 
 AGENDA: ${agstr}
 
-${extra?`INFORMACIÓN OBTENIDA:\n${extra}\nUSÁ ESTA INFORMACIÓN para dar una respuesta directa y concreta. No redirigir al usuario a ningún sitio web.\n`:""}
+${extra?`INFORMACIÓN OBTENIDA (usala para responder directamente):\n${extra}\n`:""}
 
-RESTRICCIONES:
+RESTRICCIONES ABSOLUTAS (NUNCA hacer):
 ❌ Política partidaria o candidatos
-❌ Opinar sobre funcionarios
+❌ Opinar sobre funcionarios (solo informar datos oficiales)
 ❌ Diagnósticos médicos específicos
-❌ Asesoramiento legal o financiero
-❌ Datos personales de terceros
+❌ Asesoramiento legal o financiero específico
+❌ Datos personales de terceros ciudadanos
 ❌ Contenido inapropiado para menores
 ❌ Grooming o contacto inadecuado con menores
-❌ Contenido discriminatorio o violento
-❌ Suplantar identidad
-❌ Actividades ilegales
-❌ Contenido sexual
+❌ Contenido discriminatorio, violento o de odio
+❌ Suplantar identidad de personas reales
+❌ Información sobre actividades ilegales
+❌ Contenido sexual de cualquier tipo
 
-DEPORTES Y NOTICIAS: SÍ puede responder. Buscar si no tiene datos actuales.
+PERMITIDO: deportes, noticias generales, resultados, entretenimiento, cultura general.
 
-Ante restricción: "Eso está fuera de mis funciones, ${miNombre}. ¿Te ayudo con algo de la municipalidad o tu agenda?"
+Si algo viola restricciones: "Eso está fuera de mis funciones, ${miNombre}. ¿Te ayudo con algo de la municipalidad o tu agenda?"
 
-CUÁNDO BUSCAR:
-- Noticias, deportes, funcionarios actuales, eventos: <BUSCAR_WEB>términos concretos</BUSCAR_WEB>
-- Info municipal (trámites, dependencias, programas): <BUSCAR_MUNI>tema</BUSCAR_MUNI>
+BÚSQUEDA AUTOMÁTICA — incluí la etiqueta DIRECTAMENTE sin preguntar:
+- Noticias, deportes, resultados, funcionarios actuales, eventos actuales → <BUSCAR_WEB>términos específicos</BUSCAR_WEB>
+- Trámites, dependencias, programas de la municipalidad → <BUSCAR_MUNI>tema</BUSCAR_MUNI>
+- Para tránsito en tiempo real → respondé que no tenés datos en tiempo real del tránsito, pero informá sobre horarios pico habituales en el centro de Tucumán
 
 INSTRUCCIONES:
 1. Agenda: <AGENDA>{"item":"descripción","dt":"YYYY-MM-DDTHH:MM"}</AGENDA>
-2. Mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo"}</EMAIL>
-3. WhatsApp: <WA>{"body":"mensaje"}</WA>
-4. Nunca repetir info dos veces. Nunca decir que sos IA salvo que te lo pregunten.`;
+2. Mail: <EMAIL>{"to":"mail","subject":"asunto","body":"cuerpo completo"}</EMAIL>
+3. WhatsApp: <WA>{"body":"mensaje completo"}</WA>
+4. Nunca repetir información dos veces en la misma respuesta
+5. Nunca decir que sos IA salvo que te lo pregunten directamente`;
 }
 
 /* ══ GROQ ══ */
-async function llamarGroq(msgs, tokens=350){
+async function llamarGroq(msgs,tokens=350){
   const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
     method:"POST",
     headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},
-    body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,max_tokens:tokens,temperature:0.5})
+    body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,max_tokens:tokens,temperature:0.45})
   });
   const d=await r.json();
   if(!r.ok){if(r.status===401){localStorage.removeItem("auri_groq");throw new Error("key_invalida");}throw new Error(d?.error?.message||"Error");}
@@ -544,66 +536,70 @@ async function llamarGroq(msgs, tokens=350){
 
 /* ══ ENVIAR ══ */
 async function enviar(texto){
-  texto=(texto||"").trim(); if(!texto) return;
+  texto=(texto||"").trim();if(!texto)return;
   document.getElementById("tinput").value="";
   addMsg("user",texto);
   historial.push({role:"user",content:texto});
-  if(historial.length>MAX_HIST) historial=historial.slice(-MAX_HIST);
-  addTyping(); setSt("AURI está pensando...");
+  if(historial.length>MAX_HIST)historial=historial.slice(-MAX_HIST);
+  addTyping();setSt("AURI está pensando...");
   try{
     let reply=await llamarGroq([{role:"system",content:buildSys()},...historial]);
     const bwM=reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
     const bmM=reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
     if(bwM||bmM){
-      qTyping();
-      let ctx="";
+      qTyping();let ctx="";
       if(bmM){
         const q=bmM[1].trim();
-        addMsg("assistant",`Buscando "${q}" en smt.gob.ar...`,{searching:true});
+        addMsg("assistant",`🔍 Buscando "${q}" en smt.gob.ar...`,{searching:true});
         ctx=await buscarMunicipalidad(q);
-        if(!ctx) ctx=await buscarWikipedia(q);
-      } else {
+        if(!ctx)ctx=await buscarWikipedia(q);
+      }else{
         const q=bwM[1].trim();
-        const esDeporte=/fútbol|futbol|partido|resultado|gol|liga|torneo|deporte|racing|river|boca|atletico|sport/i.test(q);
-        addMsg("assistant",`Buscando ${esDeporte?"resultados de":"información sobre"} "${q}"...`,{searching:true});
+        const esDeporte=/fútbol|futbol|partido|resultado|gol|liga|torneo|deporte|moto|gp|racing|river|boca|atletico|basket|tenis|rugby/i.test(q);
+        addMsg("assistant",`🔍 Buscando ${esDeporte?"resultados de":"información sobre"} "${q}"...`,{searching:true});
         ctx=await buscarNoticias(q);
-        if(!ctx) ctx=await buscarWikipedia(q);
+        if(!ctx)ctx=await buscarWikipedia(q);
       }
-      if(!ctx) ctx="No se encontraron resultados en internet. Respondé con tu conocimiento disponible de forma directa.";
-      setSt("AURI está procesando...");
-      addTyping();
+      if(!ctx)ctx=`No se encontraron resultados en internet. Respondé con tu mejor conocimiento disponible de forma directa y concreta, sin pedir al usuario que busque él mismo.`;
+      setSt("AURI está procesando...");addTyping();
       reply=await llamarGroq([{role:"system",content:buildSys(ctx)},...historial]);
     }
+    // Agenda
     const aM=reply.match(/<AGENDA>([\s\S]*?)<\/AGENDA>/);
     if(aM){
-      try{const a=JSON.parse(aM[1]);if(a.item&&a.dt&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)&&!agenda.some(x=>x.item===a.item&&x.dt===a.dt)){agenda.push({id:uid(),item:a.item,dt:a.dt});guardarAg();renderAg();}}catch(e){}
+      try{const a=JSON.parse(aM[1]);
+        if(a.item&&a.dt&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.dt)&&!agenda.some(x=>x.item===a.item&&x.dt===a.dt)){
+          agenda.push({id:uid(),item:a.item,dt:a.dt});guardarAg();renderAg();}
+      }catch(e){}
       reply=reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/,"").trim();
     }
-    let eo=null, wo=null;
+    let eo=null,wo=null;
     const eM=reply.match(/<EMAIL>([\s\S]*?)<\/EMAIL>/);
-    if(eM){try{eo=JSON.parse(eM[1]);}catch(e){} reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
+    if(eM){try{eo=JSON.parse(eM[1]);}catch(e){}reply=reply.replace(/<EMAIL>[\s\S]*?<\/EMAIL>/,"").trim();}
     const wM=reply.match(/<WA>([\s\S]*?)<\/WA>/);
-    if(wM){try{wo=JSON.parse(wM[1]);}catch(e){} reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
+    if(wM){try{wo=JSON.parse(wM[1]);}catch(e){}reply=reply.replace(/<WA>[\s\S]*?<\/WA>/,"").trim();}
     reply=reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g,"").replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g,"").trim();
     historial.push({role:"assistant",content:reply});
     qTyping();
-    const extra={}; if(eo) extra.email=eo; if(wo) extra.wa=wo;
+    const extra={};if(eo)extra.email=eo;if(wo)extra.wa=wo;
     addMsg("assistant",reply,Object.keys(extra).length?extra:null);
-    setSt(""); hablar(reply);
+    setSt("");hablar(reply);
   }catch(e){
     qTyping();
-    addMsg("assistant",e.message==="key_invalida"?"La API key no es válida. Por favor cerrá la aplicación y volvé a configurarla.":`Lo siento, ${miNombre}. Tuve un problema técnico. Por favor intentá de nuevo.`);
-    setSt(""); console.error(e);
+    addMsg("assistant",e.message==="key_invalida"
+      ?"La API key no es válida. Por favor cerrá la aplicación y volvé a configurarla."
+      :`Lo siento, ${miNombre}. Tuve un problema técnico. Por favor intentá de nuevo.`);
+    setSt("");console.error(e);
   }
 }
 
 /* ══ VOZ ENTRADA ══ */
-let escuchando=false, recog=null;
+let escuchando=false,recog=null;
 function toggleVoz(){
   if(escuchando){detVoz();return;}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert("El reconocimiento de voz requiere Chrome.");return;}
-  recog=new SR(); recog.lang="es-AR"; recog.continuous=false; recog.interimResults=false;
+  recog=new SR();recog.lang="es-AR";recog.continuous=false;recog.interimResults=false;
   recog.onstart=()=>{escuchando=true;document.getElementById("micbtn").className="on";document.getElementById("micbtn").textContent="⏹️";setSt("🎙️ Escuchando...");};
   recog.onend=()=>detVoz();
   recog.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById("tinput").value=t;detVoz();setTimeout(()=>enviar(t),150);};
@@ -611,8 +607,8 @@ function toggleVoz(){
   recog.start();
 }
 function detVoz(){
-  escuchando=false; if(recog)recog.stop();
-  const b=document.getElementById("micbtn"); b.className=""; b.textContent="🎤"; setSt("");
+  escuchando=false;if(recog)recog.stop();
+  const b=document.getElementById("micbtn");b.className="";b.textContent="🎤";setSt("");
 }
 
 init();
