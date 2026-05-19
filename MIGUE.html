@@ -530,7 +530,46 @@ async function buscarDeportes(query) {
   return await buscarGoogle(query, false);
 }
 
-/* ══ GOOGLE CALENDAR ══ */
+/* ══ DETECCIÓN DE INTENCIÓN (sin Groq) ══ */
+function detectarIntencion(texto) {
+  var t = texto.toLowerCase();
+  if (/partido|resultado|gol|futbol|san mart|atletico|deporte|liga|torneo|moto|gp|tenis|basket|rugby/.test(t)) return "deporte";
+  if (/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro|permiso/.test(t)) return "tramite";
+  if (/actividad|cultural|evento|show|concierto|teatro|museo|agenda.*muni|muni.*agenda/.test(t)) return "municipal";
+  if (/salud|hospital|medico|doctor|turno.*salud|clinica|asistencia|enfermeria|otorrino|pediatra|guardia/.test(t)) return "salud";
+  if (/multa|infraccion|ciditud|mis tramites|mis turnos|mi cuenta|ciudad digital/.test(t)) return "ciditud";
+  if (/presidente|gobernador|ministro|funcionario|gobierno|intendente|quien.*es.*actual/.test(t)) return "politico";
+  if (/calle.*cortada|corte.*calle|transito|trafico|accidente.*via|obra.*vial/.test(t)) return "municipal";
+  return "general";
+}
+
+async function fetchContexto(intencion, texto) {
+  var ctx = "";
+  switch(intencion) {
+    case "deporte":
+      ctx = await buscarDeportes(texto);
+      break;
+    case "tramite":
+      ctx = await buscarGoogle(texto + " requisitos pasos costo", true);
+      if (!ctx) ctx = await buscarGoogle(texto + " tramite municipalidad Tucuman", false);
+      break;
+    case "municipal":
+    case "salud":
+      ctx = await buscarGoogle(texto, true);
+      if (!ctx) ctx = await buscarWiki(texto + " Tucuman");
+      break;
+    case "ciditud":
+      ctx = await ciditudGetInfo();
+      break;
+    case "politico":
+      ctx = await buscarGoogle(texto, false);
+      if (!ctx) ctx = await buscarWiki(texto);
+      break;
+    default:
+      break;
+  }
+  return ctx;
+}
 function abrirCalendar(item, dt) {
   try {
     var inicio = new Date(dt);
@@ -683,44 +722,44 @@ function buildSys(ctx) {
 
   var agstr = dedup(agenda).map(function(a) { return "- " + fdt(a.dt) + ": " + a.item; }).join("\n") || "Sin eventos";
 
-  var sys = "Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucuman (SMT), Argentina.\n\n" +
-    "USUARIO: " + miNombre + " (menciona su nombre UNA vez por respuesta)\n" +
-    "EMAIL: " + (miEmail||"no configurado") + " | WHATSAPP: " + (miWA||"no configurado") + "\n\n" +
-    "PERSONALIDAD: jovial, amigable, profesional. Espanol latinoamericano neutro. Sin 'che', 'pibe'. Sin abreviaciones. MAXIMO 3 oraciones. RESPUESTAS DIRECTAS.\n\n" +
-    "REGLA DE ORO: NUNCA preguntar si quiere que busques. NUNCA decir 'busca en internet'. Si necesitas info actual, usa la etiqueta de busqueda directamente.\n\n" +
-    "FECHA: " + fecha + " (" + isoHoy + "), " + hora + "\n" +
-    "MANANA: " + isoManana + "\n" +
+  // Solo proximas 12hs del pronostico para ahorrar tokens
+  var proxHoras = "";
+  if (pronostico && pronostico.time) {
+    var cn2 = {0:"Despejado",1:"Mayorm.despejado",2:"Parc.nublado",3:"Nublado",45:"Neblina",
+      51:"Llovizna",61:"Lluvia leve",63:"Lluvia mod.",80:"Chaparrones",95:"Tormenta"};
+    var ahora2 = new Date(); var n2 = 0;
+    for (var i2 = 0; i2 < pronostico.time.length && n2 < 12; i2++) {
+      var dt2 = new Date(pronostico.time[i2]);
+      if (dt2 >= ahora2) {
+        var h2 = dt2.toLocaleString("es-AR",{weekday:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+        var c2 = pronostico.weather_code[i2];
+        var k2 = [0,1,2,3,45,51,61,63,80,95].reduce(function(a,b){return Math.abs(b-c2)<Math.abs(a-c2)?b:a;});
+        proxHoras += h2 + ": " + Math.round(pronostico.temperature_2m[i2]) + "C " + (cn2[k2]||"Variable") + "\n";
+        n2++;
+      }
+    }
+  }
+
+  var sys = "Sos AURI, asistente personal e institucional de la Municipalidad de San Miguel de Tucuman (SMT).\n" +
+    "USUARIO: " + miNombre + " | EMAIL: " + (miEmail||"no config") + " | WA: " + (miWA||"no config") + "\n" +
+    "CUIL: " + (miCuil||"no config") + " | CIDITUD: " + (ciditudToken ? "CONECTADO" : "no config") + "\n\n" +
+    "PERSONALIDAD: jovial, amigable, profesional. Espanol neutro latinoamericano. Sin 'che','pibe'. Sin abreviaciones. MAX 3 oraciones. RESPUESTAS DIRECTAS Y CONCRETAS.\n\n" +
+    "FECHA: " + fecha + " (" + isoHoy + "), " + hora + " | MANANA: " + isoManana + "\n" +
     "SEMANA: " + semana.join(", ") + "\n\n" +
-    "CLIMA ACTUAL TUCUMAN: " + wstr + "\n" +
-    "VESTIMENTA: menos de 8C=abrigo | 8-14C=campera | 15-21C=manga larga | 22-27C=remera | mas de 27C=calor\n\n" +
-    getPronostico() + "\n\n" +
+    "CLIMA ACTUAL: " + wstr + "\n" +
+    "VESTIMENTA: <8C=abrigo | 8-14C=campera | 15-21C=manga larga | 22-27C=remera | >27C=calor\n" +
+    "PRONOSTICO 12hs:\n" + (proxHoras || "No disponible") + "\n" +
     "AGENDA: " + agstr + "\n\n" +
-    (ctx ? ("INFORMACION ENCONTRADA (usala para responder directamente):\n" + ctx + "\n\n") : "") +
-    "RESTRICCIONES - NUNCA hacer:\n" +
-    "NO: politica partidaria o candidatos | NO: opinar sobre funcionarios | NO: diagnosticos medicos\n" +
-    "NO: asesoramiento legal/financiero | NO: datos personales de terceros | NO: contenido para menores\n" +
-    "NO: grooming | NO: contenido discriminatorio o violento | NO: actividades ilegales | NO: contenido sexual\n" +
-    "SI PUEDE: servicios municipales de salud, hospitales, centros de salud, asistencia publica\n" +
-    "SI PUEDE: deportes, noticias, resultados de partidos, cultura general\n\n" +
-    "PRESIDENTE ACTUAL DE ARGENTINA: Javier Milei (asumio diciembre 2023). Alberto Fernandez YA NO es presidente.\n" +
-    "Para cualquier cargo politico actual, buscar primero con BUSCAR_WEB.\n\n" +
-    "TRANSITO: no hay datos en tiempo real. Informar horarios pico habituales (7-9hs, 12-14hs, 17-20hs).\n\n" +
-    "CUANDO BUSCAR (incluir la etiqueta SIN pedir permiso):\n" +
-    "- Noticias, politicos actuales: <BUSCAR_WEB>terminos</BUSCAR_WEB>\n" +
-    "- DEPORTES, partidos, resultados: <BUSCAR_DEPORTE>nombre equipo y fecha</BUSCAR_DEPORTE>\n" +
-    "- Info general municipio, salud publica, actividades culturales, calles: <BUSCAR_MUNI>tema</BUSCAR_MUNI>\n" +
-    "- Tramites municipales, requisitos, pasos, costos: <BUSCAR_TRAMITE>nombre del tramite</BUSCAR_TRAMITE>\n" +
-    "- Datos personales del usuario en CIDITUD (multas, turnos, tramites propios): <BUSCAR_CIDITUD>consulta</BUSCAR_CIDITUD>\n\n" +
-    "CIDITUD - Portal Ciudad Digital SMT (cidituc.smt.gob.ar):\n" +
-    "- Estado: " + (ciditudToken ? "CONECTADO como " + miNombre : "no configurado") + "\n" +
-    "- CUIL: " + (miCuil || "no configurado") + "\n" +
-    "- Secciones disponibles: Consultas (Multas Transito por dominio, Multas Catastro por padron, Multas Bromatologia por CUIT), Tramites, Turnos, Empleados\n\n" +
-    "GUIA DE TRAMITES: https://guiadetramites.smt.gob.ar - tiene informacion detallada de tramites municipales\n\n" +
+    (ctx ? ("DATOS OBTENIDOS (usa esta info para responder):\n" + ctx.slice(0,1500) + "\n\n") : "") +
+    "RESTRICCIONES: NO politica partidaria | NO opinar funcionarios | NO diagnosticos medicos | NO legal/financiero | NO datos terceros | NO menores | NO grooming | NO discriminacion | NO ilegales | NO sexual\n" +
+    "SI PUEDE: salud municipal, deportes, noticias, tramites, cultura general.\n" +
+    "PRESIDENTE ACTUAL ARGENTINA: Javier Milei (desde dic 2023). Alberto Fernandez fue expresidente.\n\n" +
     "INSTRUCCIONES:\n" +
-    "1. AGENDA: incluir texto Y tag. Ej: 'Agendado para el lunes.' <AGENDA>{\"item\":\"evento\",\"dt\":\"YYYY-MM-DDTHH:MM\"}</AGENDA>\n" +
+    "1. AGENDA+CALENDAR: texto confirmacion + <AGENDA>{\"item\":\"desc\",\"dt\":\"YYYY-MM-DDTHH:MM\"}</AGENDA>\n" +
     "2. MAIL: <EMAIL>{\"to\":\"mail\",\"subject\":\"asunto\",\"body\":\"cuerpo\"}</EMAIL>\n" +
     "3. WHATSAPP: <WA>{\"body\":\"mensaje\"}</WA>\n" +
-    "4. Nunca repetir info dos veces. Nunca decir que sos IA salvo que te lo pregunten. SIEMPRE incluir texto visible.";
+    "4. Si no hay datos actuales disponibles, decilo directamente en 1 oracion sin ofrecer buscar.\n" +
+    "5. SIEMPRE incluir texto visible. Nunca solo tags.";
 
   return sys;
 }
@@ -761,52 +800,26 @@ async function enviar(texto) {
   setSt("AURI esta pensando...");
 
   try {
-    var reply = await llamarGroq([{role:"system", content:buildSys(null)}].concat(historial));
+    // Detectar intención y buscar datos ANTES de llamar a Groq
+    var intencion = detectarIntencion(texto);
+    var ctx = "";
 
-    var bwM  = reply.match(/<BUSCAR_WEB>([\s\S]*?)<\/BUSCAR_WEB>/);
-    var bmM  = reply.match(/<BUSCAR_MUNI>([\s\S]*?)<\/BUSCAR_MUNI>/);
-    var bdM  = reply.match(/<BUSCAR_DEPORTE>([\s\S]*?)<\/BUSCAR_DEPORTE>/);
-    var btM  = reply.match(/<BUSCAR_TRAMITE>([\s\S]*?)<\/BUSCAR_TRAMITE>/);
-    var bcM  = reply.match(/<BUSCAR_CIDITUD>([\s\S]*?)<\/BUSCAR_CIDITUD>/);
-
-    if (bwM || bmM || bdM || btM || bcM) {
-      qTyping();
-      var ctx = "";
-
-      if (bcM) {
-        var q = bcM[1].trim();
-        addMsg("assistant", "Consultando tu cuenta en CIDITUD...", {searching:true});
-        ctx = await ciditudGetInfo();
-        if (q && q.length > 3) ctx += "\nConsulta especifica: " + q;
-
-      } else if (bdM) {
-        var q = bdM[1].trim();
-        addMsg("assistant", "Buscando resultados de \"" + q + "\"...", {searching:true});
-        ctx = await buscarDeportes(q);
-
-      } else if (btM) {
-        var q = btM[1].trim();
-        addMsg("assistant", "Buscando tramite \"" + q + "\" en guiadetramites.smt.gob.ar...", {searching:true});
-        ctx = await buscarGoogle(q + " tramite requisitos", true);
-        if (!ctx) ctx = await buscarGoogle(q + " tramite municipalidad Tucuman", false);
-
-      } else if (bmM) {
-        var q = bmM[1].trim();
-        addMsg("assistant", "Buscando \"" + q + "\" en smt.gob.ar...", {searching:true});
-        ctx = await buscarGoogle(q, true);
-
-      } else {
-        var q = bwM[1].trim();
-        addMsg("assistant", "Buscando informacion sobre \"" + q + "\"...", {searching:true});
-        ctx = await buscarGoogle(q, false);
-        if (!ctx) ctx = await buscarWiki(q);
-      }
-
-      if (!ctx) ctx = "La busqueda no encontro resultados. Responde con lo que sabes de forma directa. NO digas 'puedo buscar'. Si no tenes datos actuales, decilo en una oracion y da informacion relacionada util.";
-      setSt("AURI esta procesando...");
-      addTyping();
-      reply = await llamarGroq([{role:"system", content:buildSys(ctx)}].concat(historial));
+    if (intencion !== "general") {
+      var labelBusqueda = {
+        "deporte":  "Buscando resultados deportivos...",
+        "tramite":  "Buscando informacion del tramite en guiadetramites.smt.gob.ar...",
+        "municipal":"Buscando en smt.gob.ar...",
+        "salud":    "Buscando servicios de salud en smt.gob.ar...",
+        "ciditud":  "Consultando tu cuenta en CIDITUD...",
+        "politico": "Buscando informacion actualizada..."
+      };
+      setSt(labelBusqueda[intencion] || "Buscando...");
+      ctx = await fetchContexto(intencion, texto);
     }
+
+    // UNA sola llamada a Groq con todo el contexto
+    setSt("AURI esta pensando...");
+    var reply = await llamarGroq([{role:"system", content:buildSys(ctx)}].concat(historial));
 
     // Procesar AGENDA
     var aM = reply.match(/<AGENDA>([\s\S]*?)<\/AGENDA>/);
@@ -844,11 +857,9 @@ async function enviar(texto) {
     }
 
     // Limpiar tags sobrantes
-    reply = reply.replace(/<BUSCAR_WEB>[\s\S]*?<\/BUSCAR_WEB>/g, "")
-                 .replace(/<BUSCAR_MUNI>[\s\S]*?<\/BUSCAR_MUNI>/g, "")
-                 .replace(/<BUSCAR_DEPORTE>[\s\S]*?<\/BUSCAR_DEPORTE>/g, "")
-                 .replace(/<BUSCAR_TRAMITE>[\s\S]*?<\/BUSCAR_TRAMITE>/g, "")
-                 .replace(/<BUSCAR_CIDITUD>[\s\S]*?<\/BUSCAR_CIDITUD>/g, "").trim();
+    reply = reply.replace(/<AGENDA>[\s\S]*?<\/AGENDA>/g, "")
+                 .replace(/<EMAIL>[\s\S]*?<\/EMAIL>/g, "")
+                 .replace(/<WA>[\s\S]*?<\/WA>/g, "").trim();
 
     // Garantizar texto visible
     if (!reply) {
