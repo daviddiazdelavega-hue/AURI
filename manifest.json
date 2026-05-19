@@ -1,0 +1,22 @@
+{
+  "name": "AURI - Municipalidad SMT",
+  "short_name": "AURI",
+  "description": "Asistente Virtual Municipal de San Miguel de Tucumán",
+  "start_url": "/MIGUE/",
+  "display": "standalone",
+  "background_color": "#060d1a",
+  "theme_color": "#1C4EA0",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://smt.gob.ar/assets/img/muni/logo/Logo_SMT_neg_1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
