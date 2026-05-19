@@ -502,59 +502,107 @@ async function ciditudGetInfo() {
 }
 
 /* ══ DEPORTES ══ */
-async function buscarDeportes(query) {
-  var qt = query.toLowerCase();
+async function extraerTerminosDeporte(query) {
+  // Extraer nombre del equipo y formar consulta limpia
+  var t = query.toLowerCase();
+  var equipo = "";
+  if (t.includes("san mart")) equipo = "San Martín Tucumán";
+  else if (t.includes("atletico tucum")) equipo = "Atlético Tucumán";
+  else if (t.includes("river")) equipo = "River Plate";
+  else if (t.includes("boca")) equipo = "Boca Juniors";
+  else if (t.includes("racing")) equipo = "Racing Club";
+  else {
+    // Extraer palabras clave
+    var palabras = query.split(" ").filter(function(w) {
+      return w.length > 4 && !["salio","como","partido","resultado","ayer","hoy","gano","perdio","empato","jugo"].includes(w.toLowerCase());
+    });
+    equipo = palabras.slice(0,3).join(" ");
+  }
+  return equipo || query;
+}
 
-  // 1. ESPN API sin parametros extras
+async function buscarDeportes(query) {
+  var terminos = await extraerTerminosDeporte(query);
+
+  // 1. Google News RSS con terminos limpios
+  try {
+    var searchQ = terminos + " resultado partido";
+    var newsUrl = "https://news.google.com/rss/search?q=" +
+      encodeURIComponent(searchQ) + "&hl=es-419&gl=AR&ceid=AR:es";
+    var r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(newsUrl),
+      {signal: AbortSignal.timeout(7000)});
+    var xml = await r.text();
+    var items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+    var resultados = items.slice(0, 6).map(function(item) {
+      var t2 = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+               item.match(/<title>(.*?)<\/title>/) || [])[1] || "";
+      var desc = (item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
+                  item.match(/<description>(.*?)<\/description>/) || [])[1] || "";
+      return "• " + t2.trim() + ": " + desc.replace(/<[^>]+>/g,"").trim().slice(0,200);
+    }).filter(function(s){ return s.length > 10; }).join("\n");
+    if (resultados) return "Noticias deportivas sobre " + terminos + ":\n" + resultados;
+  } catch(e) {}
+
+  // 2. ESPN API
   var espnEndpoints = [
-    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard",
-    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.nacional.b/scoreboard"
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.1/scoreboard",
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard"
   ];
   for (var i = 0; i < espnEndpoints.length; i++) {
     try {
-      var r = await fetch(espnEndpoints[i]);
-      if (!r.ok) continue;
-      var d = await r.json();
+      var r2 = await fetch(espnEndpoints[i]);
+      if (!r2.ok) continue;
+      var d = await r2.json();
       if (!d.events || !d.events.length) continue;
+      var tLow = terminos.toLowerCase();
       var relevant = d.events.filter(function(e) {
-        var n = e.name.toLowerCase();
-        return n.includes("san mart") || n.includes("tucum") ||
-               qt.split(" ").some(function(w){ return w.length > 4 && n.includes(w); });
+        return tLow.split(" ").some(function(w){ return w.length>3 && e.name.toLowerCase().includes(w); });
       });
-      var lista = relevant.length > 0 ? relevant : d.events.slice(0, 5);
+      var lista = relevant.length > 0 ? relevant : d.events.slice(0,5);
       var res = lista.map(function(e) {
         var comp = e.competitions && e.competitions[0];
         if (!comp) return e.name;
         var scores = comp.competitors.map(function(c) {
-          return c.team.displayName + " " + (c.score || "0");
+          return c.team.displayName + " " + (c.score||"0");
         }).join(" - ");
         var estado = comp.status && comp.status.type ? comp.status.type.description : "";
         return scores + (estado ? " (" + estado + ")" : "");
       }).join("\n");
-      if (res) return "Resultados futbol argentino:\n" + res;
+      if (res) return "Resultados futbol:\n" + res;
     } catch(e) {}
   }
 
-  // 2. Google News RSS via proxy
-  try {
-    var newsUrl = "https://news.google.com/rss/search?q=" +
-      encodeURIComponent(query + " Argentina") + "&hl=es-419&gl=AR&ceid=AR:es";
-    var r2 = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(newsUrl),
-      {signal: AbortSignal.timeout(6000)});
-    var xml = await r2.text();
-    var items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
-    var res2 = items.slice(0, 5).map(function(item) {
-      var t = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
-               item.match(/<title>(.*?)<\/title>/) || [])[1] || "";
-      var desc = (item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
-                  item.match(/<description>(.*?)<\/description>/) || [])[1] || "";
-      return "• " + t.trim() + ": " + desc.replace(/<[^>]+>/g,"").trim().slice(0,150);
-    }).filter(function(s){ return s.length > 5; }).join("\n");
-    if (res2) return "Noticias sobre \"" + query + "\":\n" + res2;
-  } catch(e) {}
+  return "";
+}
 
-  // 3. Buscar en smt.gob.ar
-  return await buscarSMT(query);
+async function buscarActividadesSMT() {
+  // Usar feed RSS de smt.gob.ar (WordPress)
+  var feeds = [
+    "https://www.smt.gob.ar/feed/",
+    "https://www.smt.gob.ar/category/agenda/feed/",
+    "https://www.smt.gob.ar/category/cultura/feed/",
+    "https://www.smt.gob.ar/category/noticias/feed/"
+  ];
+  for (var i = 0; i < feeds.length; i++) {
+    try {
+      var r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(feeds[i]),
+        {signal: AbortSignal.timeout(7000)});
+      var xml = await r.text();
+      var items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+      if (!items.length) continue;
+      var noticias = items.slice(0,5).map(function(item) {
+        var titulo = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+                      item.match(/<title>(.*?)<\/title>/) || [])[1] || "";
+        var desc = (item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
+                    item.match(/<description>(.*?)<\/description>/) || [])[1] || "";
+        var fecha = (item.match(/<pubDate>(.*?)<\/pubDate>/) || [])[1] || "";
+        return "• " + titulo.trim() + (fecha ? " (" + fecha.slice(0,16) + ")" : "") +
+               ": " + desc.replace(/<[^>]+>/g,"").trim().slice(0,200);
+      }).filter(function(s){ return s.length > 10; }).join("\n");
+      if (noticias) return "Noticias y actividades de smt.gob.ar:\n" + noticias;
+    } catch(e) {}
+  }
+  return "";
 }
 
 /* ══ DETECCIÓN DE INTENCIÓN (sin Groq) ══ */
@@ -577,13 +625,16 @@ async function fetchContexto(intencion, texto) {
       ctx = await buscarDeportes(texto);
       break;
     case "tramite":
-      ctx = await buscarGoogle(texto + " requisitos pasos costo", true);
-      if (!ctx) ctx = await buscarGoogle(texto + " tramite municipalidad Tucuman", false);
+      ctx = await buscarSMT(texto + " tramite requisitos");
+      if (!ctx) ctx = await buscarWiki(texto + " Tucuman");
       break;
     case "municipal":
+      ctx = await buscarActividadesSMT();
+      if (!ctx) ctx = await buscarSMT(texto);
+      break;
     case "salud":
-      ctx = await buscarGoogle(texto, true);
-      if (!ctx) ctx = await buscarWiki(texto + " Tucuman");
+      ctx = await buscarSMT(texto + " salud municipalidad");
+      if (!ctx) ctx = await buscarActividadesSMT();
       break;
     case "ciditud":
       ctx = await ciditudGetInfo();
