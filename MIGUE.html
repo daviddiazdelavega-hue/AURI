@@ -248,7 +248,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   <div id="stb"></div>
 
   <div id="footer">
-    <div class="fl1">AURI v1.0 &nbsp;·&nbsp; Municipalidad de San Miguel de Tucumán &nbsp;·&nbsp; 2026</div>
+    <div class="fl1">AURI BETA v1.0.1 &nbsp;·&nbsp; Municipalidad de San Miguel de Tucumán &nbsp;·&nbsp; 2026</div>
     <div class="fl2">Desarrollado por David Díaz de la Vega &nbsp;|&nbsp; Sección Cómputos</div>
   </div>
 </div>
@@ -488,17 +488,33 @@ async function ciditudFetch(endpoint) {
 }
 
 async function ciditudGetInfo() {
+  var token = ciditudToken || localStorage.getItem("auri_ciditud_token") || "";
+  if (!token) return "CIDITUD no configurado. El usuario debe ingresar su token desde cidituc.smt.gob.ar";
+
   try {
+    // Verificar token activo
     var status = await ciditudFetch("/usuarios/authStatus");
-    if (!status) return "Token CIDITUD no disponible o expirado. El usuario debe renovarlo desde cidituc.smt.gob.ar";
+    if (!status) return "Token CIDITUD expirado. Ingresa a cidituc.smt.gob.ar, copiá el token nuevo desde DevTools → Aplicacion → localStorage → 'token' y actualizalo en la configuracion de AURI.";
+
+    // Obtener info del usuario
     var info = await ciditudFetch("/usuarios/informeCidituc");
-    var perms = await ciditudFetch("/usuarios/permisos/4/" + (miCuil ? miCuil.slice(-5) : "27202"));
-    var res = "CIDITUD - Ciudad Digital SMT\nEstado: Conectado como " + miNombre + "\n";
-    if (info) res += "Info usuario: " + JSON.stringify(info).slice(0, 500) + "\n";
-    if (perms) res += "Permisos: " + JSON.stringify(perms).slice(0, 500) + "\n";
-    res += "Secciones disponibles: Consultas (Multas de Transito por Dominio, Multas de Catastro por Padron, Multas de Bromatologia por CUIT), Tramites, Turnos, Empleados";
+
+    // Extraer ID del token JWT (payload es la segunda parte del token)
+    var userId = "27202"; // default del usuario actual
+    try {
+      var payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.id) userId = payload.id;
+    } catch(e) {}
+
+    var res = "CIDITUD Ciudad Digital SMT - CONECTADO\n";
+    res += "Usuario: " + miNombre + " | CUIL: " + (miCuil || "no config") + " | ID: " + userId + "\n";
+    if (info) res += "Datos: " + JSON.stringify(info).slice(0, 800) + "\n";
+    res += "Secciones disponibles: Consultas (Multas de Transito por Dominio, Multas de Catastro por Padron, Multas de Bromatologia por CUIT), Tramites, Turnos, Empleados\n";
+    res += "URL: https://cidituc.smt.gob.ar";
     return res;
-  } catch(e) { return "Error conectando con CIDITUD: " + e.message; }
+  } catch(e) {
+    return "Error conectando con CIDITUD: " + e.message + ". Verificar token.";
+  }
 }
 
 /* ══ DEPORTES ══ */
@@ -608,13 +624,14 @@ async function buscarActividadesSMT() {
 /* ══ DETECCIÓN DE INTENCIÓN (sin Groq) ══ */
 function detectarIntencion(texto) {
   var t = texto.toLowerCase();
-  if (/partido|resultado|gol|futbol|san mart|atletico|deporte|liga|torneo|moto|gp|tenis|basket|rugby/.test(t)) return "deporte";
-  if (/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro|permiso/.test(t)) return "tramite";
-  if (/actividad|cultural|evento|show|concierto|teatro|museo|agenda.*muni|muni.*agenda/.test(t)) return "municipal";
-  if (/salud|hospital|medico|doctor|turno.*salud|clinica|asistencia|enfermeria|otorrino|pediatra|guardia/.test(t)) return "salud";
-  if (/multa|infraccion|ciditud|mis tramites|mis turnos|mi cuenta|ciudad digital/.test(t)) return "ciditud";
-  if (/presidente|gobernador|ministro|funcionario|gobierno|intendente|quien.*es.*actual/.test(t)) return "politico";
-  if (/calle.*cortada|corte.*calle|transito|trafico|accidente.*via|obra.*vial/.test(t)) return "municipal";
+  if (/partido|resultado|gol|futbol|san mart|atletico tucum|deporte|liga|torneo|moto gp|tenis|basket|rugby|campeon|tabla de posiciones/.test(t)) return "deporte";
+  if (/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro vehicular|permiso de obra|carnet sanitario/.test(t)) return "tramite";
+  if (/actividad|cultural|evento|show|concierto|teatro|museo|espectaculo|que hay para hacer|que pasa en tucuman|que hace la muni/.test(t)) return "municipal";
+  if (/noticia|novedad|informacion municipal|comunicado|anuncio municipal/.test(t)) return "municipal";
+  if (/calle cortada|corte de calle|calles cortadas|hay cortes|trafico cortado|obra en la via|vialidad/.test(t)) return "municipal";
+  if (/salud|hospital|medico|doctor|turno medico|clinica|asistencia publica|enfermeria|otorrino|pediatra|guardia medica|centro de salud/.test(t)) return "salud";
+  if (/multa|infraccion|ciditud|mis tramites|mis turnos|mi cuenta|ciudad digital|mis datos municipales/.test(t)) return "ciditud";
+  if (/presidente|gobernador|ministro|funcionario actual|gobierno actual|intendente actual|quien es el actual/.test(t)) return "politico";
   return "general";
 }
 
@@ -625,15 +642,19 @@ async function fetchContexto(intencion, texto) {
       ctx = await buscarDeportes(texto);
       break;
     case "tramite":
-      ctx = await buscarSMT(texto + " tramite requisitos");
-      if (!ctx) ctx = await buscarWiki(texto + " Tucuman");
+      // Buscar primero en guia de tramites especifica
+      ctx = await buscarRSS([
+        "https://guiadetramites.smt.gob.ar/feed/",
+        "https://www.smt.gob.ar/category/tramites/feed/"
+      ], texto);
+      if (!ctx) ctx = await buscarSMT(texto + " tramite requisitos");
       break;
     case "municipal":
       ctx = await buscarActividadesSMT();
       if (!ctx) ctx = await buscarSMT(texto);
       break;
     case "salud":
-      ctx = await buscarSMT(texto + " salud municipalidad");
+      ctx = await buscarSMT("salud asistencia publica centros de salud municipalidad");
       if (!ctx) ctx = await buscarActividadesSMT();
       break;
     case "ciditud":
@@ -647,6 +668,35 @@ async function fetchContexto(intencion, texto) {
       break;
   }
   return ctx;
+}
+
+async function buscarRSS(urls, query) {
+  for (var i = 0; i < urls.length; i++) {
+    try {
+      var r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(urls[i]),
+        {signal: AbortSignal.timeout(7000)});
+      var xml = await r.text();
+      var items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+      if (!items.length) continue;
+      var palabras = (query || "").toLowerCase().split(" ").filter(function(w){ return w.length > 3; });
+      var relevantes = items.filter(function(item) {
+        var content = item.toLowerCase();
+        return !palabras.length || palabras.some(function(p){ return content.includes(p); });
+      });
+      var lista = relevantes.length > 0 ? relevantes.slice(0,5) : items.slice(0,5);
+      var res = lista.map(function(item) {
+        var t = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+                 item.match(/<title>(.*?)<\/title>/) || [])[1] || "";
+        var desc = (item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
+                    item.match(/<description>(.*?)<\/description>/) || [])[1] || "";
+        var fecha = (item.match(/<pubDate>(.*?)<\/pubDate>/) || [])[1] || "";
+        return "• " + t.trim() + (fecha?" ("+fecha.slice(0,16)+")":"") +
+               ": " + desc.replace(/<[^>]+>/g,"").trim().slice(0,300);
+      }).filter(function(s){ return s.length > 10; }).join("\n");
+      if (res) return "Informacion de " + urls[i].split("/")[2] + ":\n" + res;
+    } catch(e) {}
+  }
+  return "";
 }
 function abrirCalendar(item, dt) {
   try {
@@ -828,7 +878,7 @@ function buildSys(ctx) {
     "VESTIMENTA: <8C=abrigo | 8-14C=campera | 15-21C=manga larga | 22-27C=remera | >27C=calor\n" +
     "PRONOSTICO 12hs:\n" + (proxHoras || "No disponible") + "\n" +
     "AGENDA: " + agstr + "\n\n" +
-    (ctx ? ("DATOS OBTENIDOS (usa esta info para responder):\n" + ctx.slice(0,1500) + "\n\n") : "") +
+    (ctx ? ("DATOS OBTENIDOS (usa esta info para responder):\n" + ctx.slice(0,3000) + "\n\n") : "") +
     "RESTRICCIONES: NO politica partidaria | NO opinar funcionarios | NO diagnosticos medicos | NO legal/financiero | NO datos terceros | NO menores | NO grooming | NO discriminacion | NO ilegales | NO sexual\n" +
     "SI PUEDE: salud municipal, deportes, noticias, tramites, cultura general.\n" +
     "PRESIDENTE ACTUAL ARGENTINA: Javier Milei (desde dic 2023). Alberto Fernandez fue expresidente.\n\n" +
@@ -860,7 +910,20 @@ async function llamarGroq(msgs, tokens) {
   });
   var d = await r.json();
   if (!r.ok) {
-    if (r.status === 401) { localStorage.removeItem("auri_groq"); throw new Error("key_invalida"); }
+    if (r.status === 401) {
+      localStorage.removeItem("auri_groq");
+      throw new Error("key_invalida");
+    }
+    if (r.status === 429) {
+      // Extraer tiempo de espera del mensaje de error
+      var errMsg = d && d.error && d.error.message ? d.error.message : "";
+      var minutos = "unos minutos";
+      var match = errMsg.match(/try again in (\d+)m/);
+      var matchSec = errMsg.match(/try again in [\d.]+s/);
+      if (match) minutos = match[1] + " minutos";
+      else if (matchSec) minutos = "menos de 1 minuto";
+      throw new Error("limite_groq:" + minutos);
+    }
     throw new Error(d && d.error && d.error.message ? d.error.message : "Error de API");
   }
   return d.choices[0].message.content;
@@ -960,9 +1023,15 @@ async function enviar(texto) {
 
   } catch(e) {
     qTyping();
-    var msg = (e.message === "key_invalida")
-      ? "La API key no es valida. Cerra la aplicacion y vuelve a configurarla."
-      : "Lo siento, " + miNombre + ". Tuve un problema tecnico. Por favor intenta de nuevo.";
+    var msg = "";
+    if (e.message === "key_invalida") {
+      msg = "La API key de Groq no es valida. Por favor reconfigura AURI.";
+    } else if (e.message && e.message.startsWith("limite_groq:")) {
+      var espera = e.message.split(":")[1];
+      msg = "Limite de consultas alcanzado, " + miNombre + ". Por favor espera " + espera + " y vuelve a intentarlo. El limite se resetea automaticamente.";
+    } else {
+      msg = "Lo siento, " + miNombre + ". Tuve un problema tecnico. Por favor intenta de nuevo.";
+    }
     addMsg("assistant", msg);
     setSt("");
     console.error(e);
