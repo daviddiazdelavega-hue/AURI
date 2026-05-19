@@ -407,25 +407,56 @@ function getPronostico() {
 
 /* ══ BÚSQUEDA GOOGLE ══ */
 async function buscarGoogle(query, soloMuni) {
-  var key = gcseKey || localStorage.getItem("auri_gcse") || "";
-  if (!key) return buscarWiki(query);
-  try {
-    var q = soloMuni ? (query + " site:smt.gob.ar") : query;
-    var url = "https://www.googleapis.com/customsearch/v1?key=" + key +
-              "&cx=" + GCSE_CX + "&q=" + encodeURIComponent(q) + "&lr=lang_es&num=5";
-    var r = await fetch(url);
-    var d = await r.json();
-    if (!d.items || !d.items.length) {
-      if (soloMuni) return buscarGoogle(query, false);
-      return buscarWiki(query);
-    }
-    var res = d.items.map(function(item) {
-      return "- " + item.title + ": " + (item.snippet||"").replace(/\n/g," ").slice(0,200);
-    }).join("\n");
-    return "Resultados de Google para \"" + query + "\":\n" + res;
-  } catch(e) {
-    return buscarWiki(query);
+  // Buscar directo en smt.gob.ar via proxy (sin limite de cuota)
+  if (soloMuni) {
+    return await buscarSMT(query);
   }
+  // Para busqueda general, intentar con clave si hay
+  var key = gcseKey || localStorage.getItem("auri_gcse") || "";
+  if (key) {
+    try {
+      var url = "https://www.googleapis.com/customsearch/v1?key=" + key +
+                "&cx=" + GCSE_CX + "&q=" + encodeURIComponent(query) + "&lr=lang_es&num=5";
+      var r = await fetch(url);
+      if (r.ok) {
+        var d = await r.json();
+        if (d.items && d.items.length > 0) {
+          return d.items.map(function(item) {
+            return "- " + item.title + ": " + (item.snippet||"").replace(/\n/g," ").slice(0,200);
+          }).join("\n");
+        }
+      }
+    } catch(e) {}
+  }
+  return await buscarWiki(query);
+}
+
+async function buscarSMT(query) {
+  // Buscar directo en smt.gob.ar sin API key
+  var urls = [
+    "https://www.smt.gob.ar/?s=" + encodeURIComponent(query),
+    "https://guiadetramites.smt.gob.ar/?s=" + encodeURIComponent(query)
+  ];
+  for (var i = 0; i < urls.length; i++) {
+    try {
+      var r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(urls[i]),
+        {signal: AbortSignal.timeout(6000)});
+      var html = await r.text();
+      var clean = html
+        .replace(/<script[\s\S]*?<\/script>/gi, "")
+        .replace(/<style[\s\S]*?<\/style>/gi, "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ").trim();
+      var palabras = query.toLowerCase().split(" ").filter(function(w){ return w.length > 3; });
+      var oraciones = clean.split(/[.!\n]+/).filter(function(s) {
+        return palabras.some(function(p){ return s.toLowerCase().includes(p); });
+      }).slice(0, 8);
+      if (oraciones.length > 2) {
+        return "Informacion de smt.gob.ar sobre \"" + query + "\":\n" + oraciones.join(". ") + ".";
+      }
+    } catch(e) {}
+  }
+  return "";
 }
 
 async function buscarWiki(query) {
@@ -472,62 +503,58 @@ async function ciditudGetInfo() {
 
 /* ══ DEPORTES ══ */
 async function buscarDeportes(query) {
-  // 1. Intentar ESPN API para futbol argentino
-  try {
-    var endpoints = [
-      "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard",
-      "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.nacional.b/scoreboard"
-    ];
-    for (var i = 0; i < endpoints.length; i++) {
-      var r = await fetch(endpoints[i] + "?lang=es&region=ar");
+  var qt = query.toLowerCase();
+
+  // 1. ESPN API sin parametros extras
+  var espnEndpoints = [
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard",
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.nacional.b/scoreboard"
+  ];
+  for (var i = 0; i < espnEndpoints.length; i++) {
+    try {
+      var r = await fetch(espnEndpoints[i]);
       if (!r.ok) continue;
       var d = await r.json();
       if (!d.events || !d.events.length) continue;
-      var qt = query.toLowerCase();
       var relevant = d.events.filter(function(e) {
-        return e.name.toLowerCase().includes("san mart") ||
-               e.name.toLowerCase().includes("tucum") ||
-               qt.split(" ").some(function(w) { return w.length > 3 && e.name.toLowerCase().includes(w); });
+        var n = e.name.toLowerCase();
+        return n.includes("san mart") || n.includes("tucum") ||
+               qt.split(" ").some(function(w){ return w.length > 4 && n.includes(w); });
       });
-      if (relevant.length > 0) {
-        var res = relevant.map(function(e) {
-          var comp = e.competitions && e.competitions[0];
-          var scores = comp ? comp.competitors.map(function(c) {
-            return c.team.displayName + " " + (c.score || 0);
-          }).join(" - ") : e.name;
-          var status = comp && comp.status ? comp.status.type.description : "";
-          return scores + " (" + status + ")";
-        }).join("\n");
-        return "Resultados futbol argentino:\n" + res;
-      }
-      // Si no hay relevante, devolver todos los resultados del dia
-      var todos = d.events.slice(0,5).map(function(e) {
+      var lista = relevant.length > 0 ? relevant : d.events.slice(0, 5);
+      var res = lista.map(function(e) {
         var comp = e.competitions && e.competitions[0];
-        var scores = comp ? comp.competitors.map(function(c) {
-          return c.team.displayName + " " + (c.score || 0);
-        }).join(" - ") : e.name;
-        return scores;
+        if (!comp) return e.name;
+        var scores = comp.competitors.map(function(c) {
+          return c.team.displayName + " " + (c.score || "0");
+        }).join(" - ");
+        var estado = comp.status && comp.status.type ? comp.status.type.description : "";
+        return scores + (estado ? " (" + estado + ")" : "");
       }).join("\n");
-      if (todos) return "Partidos del dia:\n" + todos;
-    }
-  } catch(e) {}
+      if (res) return "Resultados futbol argentino:\n" + res;
+    } catch(e) {}
+  }
 
-  // 2. Intentar TyC Sports via proxy
+  // 2. Google News RSS via proxy
   try {
-    var tycUrl = "https://www.tycsports.com/futbol-argentino/primera-nacional.html";
-    var r2 = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(tycUrl), {signal: AbortSignal.timeout(5000)});
-    var html = await r2.text();
-    var clean = html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"")
-      .replace(/<[^>]+>/g," ").replace(/\s+/g," ");
-    var terms = query.toLowerCase().split(" ").filter(function(w){ return w.length > 3; });
-    var sentences = clean.split(/[.!\n]+/).filter(function(s) {
-      return terms.some(function(t){ return s.toLowerCase().includes(t); });
-    }).slice(0,5);
-    if (sentences.length > 0) return "Informacion de TyC Sports:\n" + sentences.join(". ");
+    var newsUrl = "https://news.google.com/rss/search?q=" +
+      encodeURIComponent(query + " Argentina") + "&hl=es-419&gl=AR&ceid=AR:es";
+    var r2 = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(newsUrl),
+      {signal: AbortSignal.timeout(6000)});
+    var xml = await r2.text();
+    var items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+    var res2 = items.slice(0, 5).map(function(item) {
+      var t = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+               item.match(/<title>(.*?)<\/title>/) || [])[1] || "";
+      var desc = (item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
+                  item.match(/<description>(.*?)<\/description>/) || [])[1] || "";
+      return "• " + t.trim() + ": " + desc.replace(/<[^>]+>/g,"").trim().slice(0,150);
+    }).filter(function(s){ return s.length > 5; }).join("\n");
+    if (res2) return "Noticias sobre \"" + query + "\":\n" + res2;
   } catch(e) {}
 
-  // 3. Fallback a Google CSE general
-  return await buscarGoogle(query, false);
+  // 3. Buscar en smt.gob.ar
+  return await buscarSMT(query);
 }
 
 /* ══ DETECCIÓN DE INTENCIÓN (sin Groq) ══ */
