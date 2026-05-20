@@ -2,7 +2,7 @@
   "name": "AURI - Municipalidad SMT",
   "short_name": "AURI",
   "description": "Asistente Virtual Municipal de San Miguel de Tucumán",
-  "start_url": "/MIGUE/",
+  "start_url": "/AURI/index.html",
   "display": "standalone",
   "background_color": "#060d1a",
   "theme_color": "#1C4EA0",
