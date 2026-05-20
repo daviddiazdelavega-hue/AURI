@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1C4EA0"/>
+      <stop offset="100%" stop-color="#060d1a"/>
+    </radialGradient>
+    <radialGradient id="orb" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#d4eef8"/>
+      <stop offset="30%" stop-color="#3FA2D8"/>
+      <stop offset="65%" stop-color="#1C4EA0"/>
+      <stop offset="100%" stop-color="#071830"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fondo cuadrado redondeado azul SMT -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Franja amarilla SMT arriba -->
+  <rect x="0" y="0" width="512" height="10" rx="5" fill="#F7C200"/>
+
+  <!-- Franja tricolor fina -->
+  <rect x="0" y="10" width="170" height="5" fill="#00a651"/>
+  <rect x="170" y="10" width="172" height="5" fill="#3FA2D8"/>
+  <rect x="342" y="10" width="170" height="5" fill="#1C4EA0"/>
+
+  <!-- Orb central - esfera AURI -->
+  <circle cx="256" cy="210" r="130" fill="url(#orb)" filter="url(#glow)"/>
+
+  <!-- Brillo del orb -->
+  <ellipse cx="218" cy="168" rx="45" ry="30" fill="rgba(255,255,255,0.18)" transform="rotate(-25 218 168)"/>
+
+  <!-- Texto AURI -->
+  <text x="256" y="408"
+    font-family="Arial Black, Arial, sans-serif"
+    font-size="88"
+    font-weight="900"
+    fill="white"
+    text-anchor="middle"
+    letter-spacing="12">AURI</text>
+
+  <!-- Subtexto SMT -->
+  <text x="256" y="458"
+    font-family="Arial, sans-serif"
+    font-size="24"
+    font-weight="400"
+    fill="rgba(255,255,255,0.55)"
+    text-anchor="middle"
+    letter-spacing="4">MUNICIPALIDAD SMT</text>
+
+  <!-- Franja amarilla abajo -->
+  <rect x="0" y="502" width="512" height="10" rx="5" fill="#F7C200"/>
+</svg>
