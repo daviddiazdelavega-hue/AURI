@@ -448,20 +448,18 @@ async function fetchClima(){
 }
 
 // BÚSQUEDAS
-var PROXIES=[
-  function(u){return"https://api.allorigins.win/raw?url="+encodeURIComponent(u);},
-  function(u){return"https://corsproxy.io/?url="+encodeURIComponent(u);},
-  function(u){return"https://api.codetabs.com/v1/proxy?quest="+encodeURIComponent(u);}
-];
+var PROXY_A="https://api.allorigins.win/raw?url=";
+var PROXY_B="https://corsproxy.io/?url=";
 async function proxyFetch(url,timeout){
-  timeout=timeout||7000;
-  for(var p=0;p<PROXIES.length;p++){
-    try{
-      var r=await fetch(PROXIES[p](url),{signal:AbortSignal.timeout(timeout)});
-      var txt=await r.text();
-      if(txt&&txt.length>100)return txt;
-    }catch(e){}
-  }return"";
+  timeout=timeout||4000;
+  return new Promise(function(resolve){
+    var done=false;var pending=2;
+    function ok(txt){if(!done&&txt&&txt.length>100){done=true;resolve(txt);}}
+    function fail(){pending--;if(pending===0&&!done){done=true;resolve("");}}
+    fetch(PROXY_A+encodeURIComponent(url),{signal:AbortSignal.timeout(timeout)}).then(function(r){return r.text();}).then(ok).catch(fail);
+    fetch(PROXY_B+encodeURIComponent(url),{signal:AbortSignal.timeout(timeout)}).then(function(r){return r.text();}).then(ok).catch(fail);
+    setTimeout(function(){if(!done){done=true;resolve("");}},timeout+500);
+  });
 }
 async function buscarGoogle(q,soloMuni){
   if(soloMuni)return await buscarSMT(q);
@@ -549,23 +547,32 @@ async function extraerTerminos(q){
 }
 async function buscarDeportes(q){
   var terminos=await extraerTerminos(q);
+  var tl=q.toLowerCase();
+  // Mundial 2026
+  var esMundial=/mundial|world cup|copa mundo|fifa/.test(tl);
   try{
-    var newsUrl="https://news.google.com/rss/search?q="+encodeURIComponent(terminos+" resultado partido")+"&hl=es-419&gl=AR&ceid=AR:es";
-    var r=await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(newsUrl),{signal:AbortSignal.timeout(7000)});
-    var xml=await r.text();var items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];
-    var res=items.slice(0,6).map(function(item){
-      var t2=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
-      var desc=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
-      return"• "+t2.trim()+": "+desc.replace(/<[^>]+>/g,"").trim().slice(0,200);
-    }).filter(function(s){return s.length>10;}).join("\n");
-    if(res)return"Noticias deportivas sobre "+terminos+":\n"+res;
+    var searchQ=esMundial?"FIFA World Cup 2026 resultado":terminos+" resultado partido";
+    var newsUrl="https://news.google.com/rss/search?q="+encodeURIComponent(searchQ)+"&hl=es-419&gl=AR&ceid=AR:es";
+    var xml=await proxyFetch(newsUrl,4000);
+    if(xml){
+      var items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];
+      var res=items.slice(0,6).map(function(item){
+        var t2=(item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||item.match(/<title>(.*?)<\/title>/)||[])[1]||"";
+        var desc=(item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/)||item.match(/<description>(.*?)<\/description>/)||[])[1]||"";
+        return"• "+t2.trim()+": "+desc.replace(/<[^>]+>/g,"").trim().slice(0,200);
+      }).filter(function(s){return s.length>10;}).join("\n");
+      if(res)return"Noticias deportivas:\n"+res;
+    }
   }catch(e){}
-  var espn=["https://site.api.espn.com/apis/site/v2/sports/soccer/arg.1/scoreboard","https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard"];
+  var espn=esMundial?
+    ["https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"]:
+    ["https://site.api.espn.com/apis/site/v2/sports/soccer/arg.1/scoreboard","https://site.api.espn.com/apis/site/v2/sports/soccer/arg.primera/scoreboard"];
   for(var i=0;i<espn.length;i++){
     try{
-      var r2=await fetch(espn[i]);if(!r2.ok)continue;var d=await r2.json();if(!d.events||!d.events.length)continue;
+      var r2=await fetch(espn[i],{signal:AbortSignal.timeout(4000)});if(!r2.ok)continue;
+      var d=await r2.json();if(!d.events||!d.events.length)continue;
       var tLow=terminos.toLowerCase();
-      var relevant=d.events.filter(function(e){return tLow.split(" ").some(function(w){return w.length>3&&e.name.toLowerCase().includes(w);});});
+      var relevant=esMundial?d.events:d.events.filter(function(e){return tLow.split(" ").some(function(w){return w.length>3&&e.name.toLowerCase().includes(w);});});
       var lista=relevant.length>0?relevant:d.events.slice(0,5);
       var resE=lista.map(function(e){
         var comp=e.competitions&&e.competitions[0];if(!comp)return e.name;
@@ -581,7 +588,7 @@ async function buscarDeportes(q){
 // INTENCIÓN
 function detectarIntencion(t){
   var tl=t.toLowerCase();
-  if(/partido|resultado|gol|futbol|san mart|atletico tucum|deporte|liga|torneo|tenis|basket|rugby|campeon|fixture|clasificacion/.test(tl))return"deporte";
+  if(/partido|resultado|gol|futbol|san mart|atletico tucum|deporte|liga|torneo|tenis|basket|rugby|campeon|fixture|clasificacion|mundial|world cup|copa mundo|fifa/.test(tl))return"deporte";
   if(/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro vehicular|permiso de obra|como hago|donde tramito|requisitos para/.test(tl))return"tramite";
   if(/actividad|cultural|evento|show|concierto|teatro|museo|espectaculo|que hay para hacer|que pasa en tucuman|agenda cultural|feria|exposicion|recital|festival/.test(tl))return"municipal";
   if(/noticia|novedad|informacion municipal|comunicado|anuncio municipal|que hizo la municipalidad|obras|municipalidad hoy/.test(tl))return"municipal";
@@ -600,8 +607,10 @@ async function fetchContexto(intencion,texto){
     case"municipal":
       var c2=await buscarActividadesSMT();
       if(c2)return c2;
-      var c2b=await buscarSMT(texto);
-      return c2b||"";
+      // Fallback: Google News RSS con términos de Tucumán
+      var c2b=await proxyFetch("https://news.google.com/rss/search?q="+encodeURIComponent("actividades culturales San Miguel Tucuman municipalidad")+"&hl=es-419&gl=AR&ceid=AR:es",4000);
+      if(c2b){var its=c2b.match(/<item>[\s\S]*?<\/item>/g)||[];var r2b=its.slice(0,5).map(function(it){var t=(it.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)||it.match(/<title>(.*?)<\/title>/)||[])[1]||"";return"• "+t.trim();}).filter(function(s){return s.length>5;}).join("\n");if(r2b)return"Novedades culturales Tucumán:\n"+r2b;}
+      return await buscarSMT(texto);
     case"salud":
       var c3=await buscarRSS(["https://www.smt.gob.ar/category/salud/feed/","https://www.smt.gob.ar/feed/"],"salud");
       return c3||await buscarSMT("salud asistencia publica centros municipalidad");
