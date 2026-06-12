@@ -8,8 +8,6 @@
 <title>AURI — Municipalidad de San Miguel de Tucumán</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="manifest" href="manifest.json">
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');</script>  
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -179,30 +177,33 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 .o-ring:nth-child(2){inset:-32px;animation-delay:1s}
 .o-ring:nth-child(3){inset:-48px;animation-delay:2s}
 @keyframes o-pulse{0%{opacity:.6;transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
-/* orb principal */
+/* orb principal — logo municipal */
 #orb{
   width:100%;height:100%;border-radius:50%;cursor:pointer;border:none;
-  background:radial-gradient(circle at 32% 28%,#c8eaf8,var(--celeste) 35%,var(--azul) 65%,#071830 100%);
-  box-shadow:0 0 60px rgba(63,162,216,.45),0 0 120px rgba(63,162,216,.18),inset 0 2px 12px rgba(255,255,255,.25);
-  position:relative;z-index:2;
-  animation:orb-breathe 4s ease-in-out infinite;
-  transition:all .3s}
-@keyframes orb-breathe{
-  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(63,162,216,.45),0 0 120px rgba(63,162,216,.18),inset 0 2px 12px rgba(255,255,255,.25)}
-  50%{transform:scale(1.04);box-shadow:0 0 80px rgba(63,162,216,.6),0 0 160px rgba(63,162,216,.25),inset 0 2px 12px rgba(255,255,255,.3)}
-}
+  background:transparent;padding:0;
+  position:relative;z-index:2;transition:all .3s}
+#orb-img{
+  width:100%;height:100%;object-fit:contain;display:block;
+  mix-blend-mode:screen;pointer-events:none;
+  animation:logo-float 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 24px rgba(247,194,0,.4)) drop-shadow(0 0 60px rgba(63,162,216,.3))}
+@keyframes logo-float{
+  0%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 24px rgba(247,194,0,.4)) drop-shadow(0 0 60px rgba(63,162,216,.3))}
+  50%{transform:translateY(-9px) scale(1.03);filter:drop-shadow(0 0 36px rgba(247,194,0,.65)) drop-shadow(0 0 90px rgba(63,162,216,.45))}}
 /* estado: escuchando */
-#orb.listening{
-  background:radial-gradient(circle at 32% 28%,#ffcccc,#e8504a 35%,#a81010 65%,#2a0000 100%);
-  animation:orb-listen 0.8s ease-in-out infinite;
-  box-shadow:0 0 60px rgba(220,50,50,.6),0 0 120px rgba(220,50,50,.25),inset 0 2px 12px rgba(255,255,255,.2)}
-#orb.listening ~ .o-ring{border-color:rgba(220,50,50,.3)}
-@keyframes orb-listen{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+#orb.listening #orb-img{
+  animation:logo-listen .8s ease-in-out infinite;
+  filter:drop-shadow(0 0 28px rgba(220,50,50,.75)) drop-shadow(0 0 70px rgba(220,50,50,.35))}
+#orb.listening~.o-ring{border-color:rgba(220,50,50,.3)}
+@keyframes logo-listen{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 /* estado: pensando */
-#orb.thinking{
-  animation:orb-think 2s linear infinite;
-  box-shadow:0 0 70px rgba(247,194,0,.45),0 0 140px rgba(247,194,0,.15),inset 0 2px 12px rgba(255,255,255,.25)}
-@keyframes orb-think{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(30deg)}}
+#orb.thinking #orb-img{
+  animation:logo-think 2s linear infinite;
+  filter:drop-shadow(0 0 36px rgba(247,194,0,.75)) drop-shadow(0 0 90px rgba(247,194,0,.3))}
+@keyframes logo-think{
+  0%{transform:rotate(-3deg) scale(1.01)}25%{transform:rotate(0deg) scale(1.03)}
+  50%{transform:rotate(3deg) scale(1.01)}75%{transform:rotate(0deg) scale(1.03)}
+  100%{transform:rotate(-3deg) scale(1.01)}}
 
 #orb-label{
   font-size:11px;font-weight:500;color:var(--txt2);
@@ -337,7 +338,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
         <div class="o-ring"></div>
         <div class="o-ring"></div>
         <div class="o-ring"></div>
-        <button id="orb" onclick="toggleVoz()"></button>
+        <button id="orb" onclick="toggleVoz()"><img id="orb-img" src="logo.png" alt="Logo SMT"/></button>
       </div>
       <div id="orb-label">Tocá para hablar</div>
     </div>
@@ -362,7 +363,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   </div>
 
   <div id="footer">
-    <div class="f1">AURI BETA v1.0.3 · Municipalidad de San Miguel de Tucumán · 2026</div>
+    <div class="f1">AURI BETA v1.0.4 · Municipalidad de San Miguel de Tucumán · 2026</div>
     <div class="f2">Desarrollado por David Díaz de la Vega | Sección Cómputos</div>
   </div>
 </div>
