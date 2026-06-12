@@ -107,16 +107,17 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 
 /* ── MAIN AREA ── */
 #main{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:space-between;padding:0 16px;overflow:hidden;position:relative}
+  justify-content:flex-end;padding:0 16px;overflow:hidden;position:relative;gap:6px}
 
 /* ── MENSAJES ── */
 #msgs{
   width:100%;max-width:560px;
   overflow-y:auto;flex-shrink:1;
-  padding:14px 0 8px;
-  display:flex;flex-direction:column;gap:10px;
+  padding:14px 0 4px;
+  display:none;flex-direction:column;gap:10px;
   -webkit-overflow-scrolling:touch;
   min-height:0}
+#msgs.open{display:flex}
 #msgs::-webkit-scrollbar{width:2px}
 #msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
 .mr{display:flex;align-items:flex-end;gap:7px}
@@ -161,8 +162,13 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 /* ── ORB CENTRAL ── */
 #orb-zone{
   display:flex;flex-direction:column;align-items:center;
-  justify-content:center;flex-shrink:0;gap:10px;
-  padding:10px 0}
+  justify-content:center;flex:1;gap:10px;
+  padding:10px 0;min-height:180px}
+/* cuando transcripción está abierta, orb vuelve a tamaño fijo */
+#msgs.open~#orb-zone{flex:0;padding:6px 0}
+#msgs.open~#orb-zone #orb-wrap{
+  width:clamp(100px,28vw,130px);
+  height:clamp(100px,28vw,130px)}
 #orb-wrap{
   position:relative;display:flex;align-items:center;
   justify-content:center;
@@ -209,6 +215,14 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   font-size:11px;font-weight:500;color:var(--txt2);
   letter-spacing:2px;text-transform:uppercase;text-align:center}
 
+/* ── BOTÓN TRANSCRIPCIÓN ── */
+#tbtn{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;color:rgba(255,255,255,.45);font-size:11px;font-weight:500;
+  padding:6px 16px;cursor:pointer;font-family:var(--ff);flex-shrink:0;
+  letter-spacing:.5px;transition:all .25s}
+#tbtn.active{background:rgba(63,162,216,.2);border-color:rgba(63,162,216,.35);color:var(--celeste)}
+
 /* ── CHIPS ── */
 #chips{
   width:100%;max-width:560px;flex-shrink:0;
@@ -253,14 +267,18 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 
 /* ── FOOTER ── */
 #footer{
-  flex-shrink:0;background:rgba(0,0,0,.5);
-  border-top:2px solid var(--amarillo);
-  padding:5px 14px 6px;
-  display:flex;flex-direction:column;align-items:center;gap:1px}
-.f1{font-size:9px;font-weight:700;color:var(--amarillo);
-  letter-spacing:1px;text-transform:uppercase;text-align:center}
-.f2{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.3px;
-  text-align:center;font-weight:300}
+  flex-shrink:0;
+  background:linear-gradient(135deg,rgba(6,13,26,.98),rgba(28,78,160,.35));
+  border-top:none;padding:7px 16px 9px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  position:relative;overflow:hidden}
+#footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--amarillo),var(--celeste),var(--azul),var(--celeste),var(--amarillo))}
+.f1{font-size:8px;font-weight:800;color:var(--amarillo);
+  letter-spacing:1.5px;text-transform:uppercase;text-align:center;opacity:.9}
+.f2{font-size:10px;color:rgba(255,255,255,.65);letter-spacing:.4px;
+  text-align:center;font-weight:400}
+.f2 b{color:var(--celeste);font-weight:700}
 </style>
 </head>
 <body>
@@ -332,6 +350,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 
   <div id="main">
     <div id="msgs"></div>
+    <button id="tbtn" onclick="toggleTranscript()">💬 Ver conversación</button>
 
     <div id="orb-zone">
       <div id="orb-wrap">
@@ -364,7 +383,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 
   <div id="footer">
     <div class="f1">AURI BETA v1.0.4 · Municipalidad de San Miguel de Tucumán · 2026</div>
-    <div class="f2">Desarrollado por David Díaz de la Vega | Sección Cómputos</div>
+    <div class="f2">Desarrollado por <b>David Díaz de la Vega</b> · Sección Cómputos · TMF</div>
   </div>
 </div>
 
@@ -405,7 +424,17 @@ function mostrarApp(){
   document.getElementById("setup").style.display="none";
   document.getElementById("app").style.display="flex";
   cargarAgenda();fetchClima();cargarVoces();
-  addMsg("assistant","Hola "+miNombre+". Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucuman. ¿En que te puedo ayudar?");
+  var bienvenida="Hola "+miNombre+". Soy AURI, tu asistente de la Municipalidad de San Miguel de Tucumán. ¿En qué te puedo ayudar?";
+  addMsg("assistant",bienvenida);
+  setTimeout(function(){hablar(bienvenida);},800);
+}
+function toggleTranscript(){
+  var msgs=document.getElementById("msgs");
+  var btn=document.getElementById("tbtn");
+  var open=msgs.classList.toggle("open");
+  btn.classList.toggle("active",open);
+  btn.textContent=open?"✕ Ocultar conversación":"💬 Ver conversación";
+  if(open)msgs.scrollTop=msgs.scrollHeight;
 }
 
 // VOZ
