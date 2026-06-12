@@ -427,7 +427,7 @@ function cargarVoces(){
 function hablar(txt){
   if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(txt.slice(0,280));
+  var u=new SpeechSynthesisUtterance(txt.slice(0,600));
   if(vozSel)u.voice=vozSel;u.lang="es-MX";u.pitch=0.85;u.rate=1.05;u.volume=1;
   speechSynthesis.speak(u);
 }
@@ -448,6 +448,21 @@ async function fetchClima(){
 }
 
 // BÚSQUEDAS
+var PROXIES=[
+  function(u){return"https://api.allorigins.win/raw?url="+encodeURIComponent(u);},
+  function(u){return"https://corsproxy.io/?url="+encodeURIComponent(u);},
+  function(u){return"https://api.codetabs.com/v1/proxy?quest="+encodeURIComponent(u);}
+];
+async function proxyFetch(url,timeout){
+  timeout=timeout||7000;
+  for(var p=0;p<PROXIES.length;p++){
+    try{
+      var r=await fetch(PROXIES[p](url),{signal:AbortSignal.timeout(timeout)});
+      var txt=await r.text();
+      if(txt&&txt.length>100)return txt;
+    }catch(e){}
+  }return"";
+}
 async function buscarGoogle(q,soloMuni){
   if(soloMuni)return await buscarSMT(q);
   var key=gcseKey||localStorage.getItem("auri_gcse")||"";
@@ -455,11 +470,14 @@ async function buscarGoogle(q,soloMuni){
   return await buscarWiki(q);
 }
 async function buscarSMT(q){
+  // Primero buscar en RSS (más confiable que scraping de JS)
+  var rss=await buscarRSS(["https://www.smt.gob.ar/feed/","https://guiadetramites.smt.gob.ar/feed/","https://www.smt.gob.ar/category/noticias/feed/"],q);
+  if(rss)return rss;
+  // Fallback: scraping con múltiples proxies
   var urls=["https://www.smt.gob.ar/?s="+encodeURIComponent(q),"https://guiadetramites.smt.gob.ar/?s="+encodeURIComponent(q)];
   for(var i=0;i<urls.length;i++){
     try{
-      var r=await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(urls[i]),{signal:AbortSignal.timeout(6000)});
-      var html=await r.text();
+      var html=await proxyFetch(urls[i],6000);if(!html)continue;
       var clean=html.replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
       var palabras=q.toLowerCase().split(" ").filter(function(w){return w.length>3;});
       var oraciones=clean.split(/[.!\n]+/).filter(function(s){return palabras.some(function(p){return s.toLowerCase().includes(p);});}).slice(0,8);
@@ -473,8 +491,8 @@ async function buscarWiki(q){
 async function buscarRSS(urls,q){
   for(var i=0;i<urls.length;i++){
     try{
-      var r=await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(urls[i]),{signal:AbortSignal.timeout(7000)});
-      var xml=await r.text();var items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];if(!items.length)continue;
+      var xml=await proxyFetch(urls[i],7000);if(!xml)continue;
+      var items=xml.match(/<item>[\s\S]*?<\/item>/g)||[];if(!items.length)continue;
       var palabras=(q||"").toLowerCase().split(" ").filter(function(w){return w.length>3;});
       var relevantes=items.filter(function(item){var c=item.toLowerCase();return!palabras.length||palabras.some(function(p){return c.includes(p);});});
       var lista=relevantes.length>0?relevantes.slice(0,5):items.slice(0,5);
@@ -489,7 +507,13 @@ async function buscarRSS(urls,q){
   }return"";
 }
 async function buscarActividadesSMT(){
-  return await buscarRSS(["https://www.smt.gob.ar/feed/","https://www.smt.gob.ar/category/agenda/feed/","https://www.smt.gob.ar/category/cultura/feed/","https://www.smt.gob.ar/category/noticias/feed/"],"");
+  return await buscarRSS([
+    "https://www.smt.gob.ar/feed/",
+    "https://www.smt.gob.ar/category/agenda/feed/",
+    "https://www.smt.gob.ar/category/cultura/feed/",
+    "https://www.smt.gob.ar/category/noticias/feed/",
+    "https://guiadetramites.smt.gob.ar/feed/"
+  ],"");
 }
 
 // CIDITUD
@@ -557,13 +581,13 @@ async function buscarDeportes(q){
 // INTENCIÓN
 function detectarIntencion(t){
   var tl=t.toLowerCase();
-  if(/partido|resultado|gol|futbol|san mart|atletico tucum|deporte|liga|torneo|tenis|basket|rugby|campeon/.test(tl))return"deporte";
-  if(/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro vehicular|permiso de obra/.test(tl))return"tramite";
-  if(/actividad|cultural|evento|show|concierto|teatro|museo|espectaculo|que hay para hacer|que pasa en tucuman/.test(tl))return"municipal";
-  if(/noticia|novedad|informacion municipal|comunicado|anuncio municipal/.test(tl))return"municipal";
-  if(/calle cortada|corte de calle|calles cortadas|hay cortes|trafico cortado/.test(tl))return"municipal";
-  if(/salud|hospital|medico|doctor|turno medico|clinica|asistencia publica|enfermeria|otorrino|pediatra|guardia|centro de salud/.test(tl))return"salud";
-  if(/multa|infraccion|ciditud|mis tramites|mis turnos|mi cuenta|ciudad digital/.test(tl))return"ciditud";
+  if(/partido|resultado|gol|futbol|san mart|atletico tucum|deporte|liga|torneo|tenis|basket|rugby|campeon|fixture|clasificacion/.test(tl))return"deporte";
+  if(/tramite|licencia|renovar|certificado|habilitacion|carnet|libre deuda|registro vehicular|permiso de obra|como hago|donde tramito|requisitos para/.test(tl))return"tramite";
+  if(/actividad|cultural|evento|show|concierto|teatro|museo|espectaculo|que hay para hacer|que pasa en tucuman|agenda cultural|feria|exposicion|recital|festival/.test(tl))return"municipal";
+  if(/noticia|novedad|informacion municipal|comunicado|anuncio municipal|que hizo la municipalidad|obras|municipalidad hoy/.test(tl))return"municipal";
+  if(/calle cortada|corte de calle|calles cortadas|hay cortes|trafico cortado|transito|colectivo|omnibus|horario colectivo/.test(tl))return"municipal";
+  if(/salud|hospital|medico|doctor|turno medico|clinica|asistencia publica|enfermeria|otorrino|pediatra|guardia|centro de salud|vacuna|farmacia municipal/.test(tl))return"salud";
+  if(/multa|infraccion|ciditud|mis tramites|mis turnos|mi cuenta|ciudad digital|mi deuda|pagar multa|consultar multa/.test(tl))return"ciditud";
   if(/presidente|gobernador|ministro|funcionario actual|gobierno actual|quien es el actual/.test(tl))return"politico";
   return"general";
 }
@@ -573,8 +597,14 @@ async function fetchContexto(intencion,texto){
     case"tramite":
       var c=await buscarRSS(["https://guiadetramites.smt.gob.ar/feed/","https://www.smt.gob.ar/category/tramites/feed/"],texto);
       return c||await buscarSMT(texto+" tramite requisitos");
-    case"municipal":var c2=await buscarActividadesSMT();return c2||await buscarSMT(texto);
-    case"salud":var c3=await buscarSMT("salud asistencia publica centros municipalidad");return c3||await buscarActividadesSMT();
+    case"municipal":
+      var c2=await buscarActividadesSMT();
+      if(c2)return c2;
+      var c2b=await buscarSMT(texto);
+      return c2b||"";
+    case"salud":
+      var c3=await buscarRSS(["https://www.smt.gob.ar/category/salud/feed/","https://www.smt.gob.ar/feed/"],"salud");
+      return c3||await buscarSMT("salud asistencia publica centros municipalidad");
     case"ciditud":return await ciditudGetInfo();
     case"politico":var c4=await buscarGoogle(texto,false);return c4||await buscarWiki(texto);
     default:return"";
