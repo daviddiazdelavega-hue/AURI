@@ -172,8 +172,9 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 #orb-wrap{
   position:relative;display:flex;align-items:center;
   justify-content:center;
-  width:clamp(150px,42vw,200px);
-  height:clamp(150px,42vw,200px)}
+  width:clamp(210px,62vw,270px);
+  height:clamp(210px,62vw,270px);
+  transition:width .4s ease,height .4s ease}
 /* anillos de fondo */
 .o-ring{
   position:absolute;border-radius:50%;
@@ -188,24 +189,39 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
   width:100%;height:100%;border-radius:50%;cursor:pointer;border:none;
   background:transparent;padding:0;
   position:relative;z-index:2;transition:all .3s}
+/* glow real detrás del logo */
+#orb-glow{
+  position:absolute;inset:5%;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,194,0,.45) 0%,rgba(63,162,216,.2) 45%,transparent 70%);
+  animation:glow-normal 4s ease-in-out infinite;
+  z-index:1;pointer-events:none;transition:background .4s}
+@keyframes glow-normal{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.18)}}
+#orb-glow.glow-listening{
+  background:radial-gradient(circle,rgba(255,60,60,.75) 0%,rgba(200,0,0,.35) 40%,transparent 70%);
+  animation:glow-listen .8s ease-in-out infinite}
+@keyframes glow-listen{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+#orb-glow.glow-thinking{
+  background:radial-gradient(circle,rgba(247,194,0,.85) 0%,rgba(247,150,0,.4) 40%,transparent 70%);
+  animation:glow-think 2s ease-in-out infinite}
+@keyframes glow-think{0%,100%{opacity:.8;transform:scale(1.05)}50%{opacity:1;transform:scale(1.25)}}
 #orb-img{
   width:100%;height:100%;object-fit:contain;display:block;
-  mix-blend-mode:screen;pointer-events:none;
+  mix-blend-mode:screen;pointer-events:none;position:relative;z-index:2;
   animation:logo-float 4s ease-in-out infinite;
-  filter:drop-shadow(0 0 24px rgba(247,194,0,.4)) drop-shadow(0 0 60px rgba(63,162,216,.3))}
+  filter:drop-shadow(0 0 18px rgba(247,194,0,.6)) drop-shadow(0 0 40px rgba(63,162,216,.4))}
 @keyframes logo-float{
-  0%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 24px rgba(247,194,0,.4)) drop-shadow(0 0 60px rgba(63,162,216,.3))}
-  50%{transform:translateY(-9px) scale(1.03);filter:drop-shadow(0 0 36px rgba(247,194,0,.65)) drop-shadow(0 0 90px rgba(63,162,216,.45))}}
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-10px) scale(1.04)}}
 /* estado: escuchando */
 #orb.listening #orb-img{
   animation:logo-listen .8s ease-in-out infinite;
-  filter:drop-shadow(0 0 28px rgba(220,50,50,.75)) drop-shadow(0 0 70px rgba(220,50,50,.35))}
-#orb.listening~.o-ring{border-color:rgba(220,50,50,.3)}
+  filter:drop-shadow(0 0 30px rgba(255,60,60,1)) drop-shadow(0 0 60px rgba(200,0,0,.7)) brightness(1.15)}
+#orb.listening~.o-ring{border-color:rgba(220,50,50,.45)}
 @keyframes logo-listen{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 /* estado: pensando */
 #orb.thinking #orb-img{
   animation:logo-think 2s linear infinite;
-  filter:drop-shadow(0 0 36px rgba(247,194,0,.75)) drop-shadow(0 0 90px rgba(247,194,0,.3))}
+  filter:drop-shadow(0 0 40px rgba(247,194,0,1)) drop-shadow(0 0 80px rgba(247,150,0,.7))}
 @keyframes logo-think{
   0%{transform:rotate(-3deg) scale(1.01)}25%{transform:rotate(0deg) scale(1.03)}
   50%{transform:rotate(3deg) scale(1.01)}75%{transform:rotate(0deg) scale(1.03)}
@@ -354,6 +370,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--ff
 
     <div id="orb-zone">
       <div id="orb-wrap">
+        <div id="orb-glow"></div>
         <div class="o-ring"></div>
         <div class="o-ring"></div>
         <div class="o-ring"></div>
@@ -695,8 +712,10 @@ function qTyping(){var t=document.getElementById("typing");if(t)t.remove();}
 function setSt(m){document.getElementById("stbar").textContent=m;}
 function setOrb(state){
   var o=document.getElementById("orb");
+  var glow=document.getElementById("orb-glow");
   var lbl=document.getElementById("orb-label");
   o.className=state||"";
+  if(glow)glow.className=state?"glow-"+state:"";
   if(state==="listening")lbl.textContent="Escuchando...";
   else if(state==="thinking")lbl.textContent="Procesando...";
   else lbl.textContent="Tocá para hablar";
@@ -730,6 +749,7 @@ function buildSys(ctx){
     "PRONOSTICO 12hs:\n"+(proxHoras||"No disponible")+"\n"+
     "AGENDA: "+agstr+"\n\n"+
     (ctx?("DATOS OBTENIDOS:\n"+ctx.slice(0,3000)+"\n\n"):"")+
+    "SITIOS OFICIALES SMT: Principal=smt.gob.ar | Tramites=guiadetramites.smt.gob.ar | Ciudad Digital=cidituc.smt.gob.ar | Noticias=smt.gob.ar/noticias | Agenda=smt.gob.ar/agenda | Bromatologia=smt.gob.ar/bromatologia | Catastro=smt.gob.ar/catastro | Salud=smt.gob.ar/salud\n"+
     "RESTRICCIONES: NO politica partidaria | NO opinar funcionarios | NO diagnosticos medicos | NO legal/financiero | NO datos terceros | NO menores | NO grooming | NO discriminacion | NO ilegales | NO sexual\n"+
     "SI PUEDE: salud municipal, deportes, noticias, tramites, cultura general.\n"+
     "PRESIDENTE ACTUAL ARGENTINA: Javier Milei (desde dic 2023).\n\n"+
